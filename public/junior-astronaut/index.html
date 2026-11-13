@@ -323,6 +323,7 @@ body {
 .badge-card .four i { position: absolute; right: -6px; bottom: -6px; width: 22px; height: 22px; border-radius: 50%; background: #4caf50; color: #fff; font-size: 13px; font-style: normal; display: grid; place-items: center; }
 .has-st .help-btn { bottom: 104px; }
 @media (max-width: 640px) { .map-hud { top: 62px; width: 96px; } #mmap { width: 96px; height: 96px; } .clist { display: none; position: absolute; top: 104px; right: 0; width: 170px; } .map-hud[dir="rtl"] .clist { right: auto; left: 0; } .clist.open { display: block; } .st-hud { flex-wrap: wrap; bottom: 10px; } .st-hud .st-ic { width: 44px; height: 44px; font-size: 26px; } }
+.sticker p.alt { font-size: 14.5px; font-weight: 600; color: #6a5a48; border-top: 2px dashed #efe1c4; padding-top: 6px; margin-top: 2px; }
 </style>
 
 
@@ -333,7 +334,7 @@ body {
     <div class="objective card" id="objective" hidden><div class="dot">!</div><div><div class="k" id="objK"></div><div class="t" id="objT"></div></div></div>
     <div class="tools">
       <button class="icon-btn" id="sndBtn" aria-label="Sound on or off">🔊</button>
-      <button class="icon-btn" id="voiceBtn" aria-pressed="false" hidden title="Read lines aloud">🗣️</button>
+      <button class="icon-btn" id="voiceBtn" aria-pressed="true" title="Read aloud / القراءة بصوت">🗣️</button>
       <button class="icon-btn" id="langBtn">عربي</button>
     </div>
   </div>
@@ -429,7 +430,7 @@ const TXT = {
   start: { en: 'Start the adventure', ar: 'ابدأ المغامرة' },
   controlsDesk: { en: '<span><b>WASD</b> walk</span><span><b>Drag</b> look around</span><span><b>E</b> interact</span><span><b>Space</b> jump</span>', ar: '<span><b>WASD</b> للمشي</span><span><b>اسحب</b> لتلفّ الكاميرا</span><span><b>E</b> للتفاعل</span><span><b>Space</b> للقفز</span>' },
   controlsTouch: { en: '<span><b>Joystick</b> walk</span><span><b>Drag</b> look around</span><span><b>Button</b> interact</span>', ar: '<span><b>عصا التحكم</b> للمشي</span><span><b>اسحب</b> لتلفّ الكاميرا</span><span><b>الزر</b> للتفاعل</span>' },
-  keysHint: { en: 'WASD walk · drag to look · E interact', ar: 'WASD للمشي · اسحب للنظر · E للتفاعل' },
+  keysHint: { en: 'WASD walk · tap twice to run · drag to look · E interact', ar: 'WASD للمشي · اضغط مرتين لتركض · اسحب للنظر · E للتفاعل' },
   objK: { en: 'Mission', ar: 'المهمة' },
   defaultName: { en: 'Explorer', ar: 'المستكشف' },
   obj_box: { en: 'A glowing box is waiting on your rug. Go and open it!', ar: 'في صندوق بيلمع على السجادة. روح افتحه!' },
@@ -534,21 +535,18 @@ const SFX = (() => {
   // ---------- catchy background songs (public-domain classics, played on a soft marimba, like many kid games do) ----------
   let want = null, mus = null, musG = null, musTimer = null;
   const mf = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  // original bouncy major-key songs (bright and happy, like popular kid games), marimba + bass + claps
+  const MEL = [[72, 1], [76, 1], [79, 1], [76, 1], [81, 1], [79, 1], [76, 1], [72, 1], [74, 1], [77, 1], [81, 1], [77, 1], [79, 3], [0, 1],
+    [76, 1], [79, 1], [84, 1], [79, 1], [81, 1], [79, 1], [76, 1], [74, 1], [72, 1], [74, 1], [76, 1], [79, 1], [84, 3], [0, 1]];
+  const BASS = [[48, 2], [55, 2], [48, 2], [55, 2], [50, 2], [57, 2], [43, 2], [50, 2], [48, 2], [55, 2], [53, 2], [57, 2], [48, 2], [55, 2], [48, 4]];
+  const DRUM = [[1, 2], [2, 2], [1, 1], [1, 1], [2, 2]];
+  const SPARK = [[0, 3], [96, 1], [0, 3], [91, 1], [0, 3], [93, 1], [0, 3], [91, 1]];
+  const up = (arr, n) => arr.map(([a, b]) => [a ? a + n : 0, b]);
   const SONGS = {
-    // Grieg, "Morning Mood" (1875): calm and sunny, for exploring the desert
-    morning: { step: 0.21, tracks: [
-      { inst: 'mallet', v: 0.07, notes: [[71, 1], [68, 1], [66, 1], [64, 1], [66, 1], [68, 1], [71, 1], [68, 1], [66, 1], [64, 1], [66, 1], [68, 1], [66, 1], [68, 1], [71, 1], [68, 1], [71, 1], [73, 1], [68, 1], [73, 1], [71, 1], [68, 1], [66, 1], [64, 3], [0, 4]] },
-      { inst: 'bass', v: 0.06, notes: [[40, 6], [47, 6], [40, 6], [45, 6], [40, 6]] },
-      { inst: 'mallet', v: 0.025, notes: [[0, 2], [76, 1], [0, 2], [80, 1], [0, 2], [76, 1], [0, 2], [80, 1], [0, 2], [76, 1], [0, 2], [81, 1], [0, 2], [80, 1], [0, 2], [76, 1], [0, 2], [76, 1], [0, 3]] },
-    ] },
-    // Mozart, "Rondo alla Turca" (1783): bouncy and catchy, for training
-    march: { step: 0.125, tracks: [
-      { inst: 'mallet', v: 0.075, notes: [[71, 1], [69, 1], [68, 1], [69, 1], [72, 4], [74, 1], [72, 1], [71, 1], [72, 1], [76, 4], [77, 1], [76, 1], [75, 1], [76, 1], [83, 1], [81, 1], [80, 1], [81, 1], [83, 1], [81, 1], [80, 1], [81, 1], [84, 4], [81, 2], [84, 2], [83, 2], [81, 2], [79, 2], [81, 2], [83, 2], [81, 2], [79, 2], [81, 2], [83, 2], [81, 2], [79, 2], [78, 2], [76, 4]] },
-      { inst: 'bass', v: 0.07, notes: [[45, 2], [64, 2], [45, 2], [64, 2], [45, 2], [64, 2], [40, 2], [64, 2], [45, 2], [64, 2], [45, 2], [64, 2], [40, 2], [59, 2], [45, 2], [64, 2], [48, 2], [64, 2], [48, 2], [64, 2], [43, 2], [62, 2], [43, 2], [62, 2], [48, 2], [64, 2], [48, 2], [64, 2], [40, 2], [59, 2], [45, 4]] },
-      { inst: 'drum', v: 0.05, notes: [[1, 2], [2, 2], [1, 2], [2, 2]] },
-    ] },
+    morning: { step: 0.2, tracks: [{ inst: 'mallet', v: 0.06, notes: up(MEL, 5) }, { inst: 'bass', v: 0.06, notes: up(BASS, 5) }, { inst: 'drum', v: 0.035, notes: DRUM }, { inst: 'mallet', v: 0.02, notes: up(SPARK, 5) }] },
+    march: { step: 0.15, tracks: [{ inst: 'mallet', v: 0.07, notes: MEL }, { inst: 'bass', v: 0.07, notes: BASS }, { inst: 'drum', v: 0.05, notes: DRUM }, { inst: 'mallet', v: 0.025, notes: SPARK }] },
   };
-  SONGS.party = { step: 0.105, tracks: SONGS.march.tracks };
+  SONGS.party = { step: 0.12, tracks: SONGS.march.tracks };
   function mallet(f, t0, d, v) {
     const o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), g2 = ac.createGain();
     o.type = 'sine'; o2.type = 'sine'; o.frequency.value = f; o2.frequency.value = f * 4; g2.gain.value = 0.18;
@@ -721,13 +719,16 @@ function makeGirl(o = {}) {
     const a = -0.95 + i * 0.38; const b = add(new T.SphereGeometry(0.1, 12, 8), hair, Math.sin(a) * 0.21, 0.19 - Math.abs(a) * 0.05, Math.cos(a) * 0.2, head);
     b.scale.set(0.95, 0.5, 0.42); b.rotation.set(-0.5, a, -a * 0.6);
   }
-  [-1, 1].forEach((s) => { const l = add(new T.SphereGeometry(0.1, 12, 10), hair, s * 0.235, -0.07, 0.04, head); l.scale.set(0.38, 1.25, 0.6); l.rotation.z = s * 0.12; });
-  const tail = new T.Group(); tail.position.set(0, 0.17, -0.24); head.add(tail);
-  add(new T.TorusGeometry(0.05, 0.022, 8, 16), orange, 0, 0, 0, tail).rotation.x = 0.5;
-  const t1 = add(new T.SphereGeometry(0.12, 14, 12), hair, 0, -0.07, -0.07, tail); t1.scale.set(0.95, 1.1, 0.9);
-  const tail2 = new T.Group(); tail2.position.set(0, -0.15, -0.1); tail.add(tail2);
-  add(new T.SphereGeometry(0.1, 14, 12), hair, 0, -0.05, -0.02, tail2).scale.set(0.9, 1.3, 0.85);
-  add(new T.SphereGeometry(0.06, 12, 10), hair, 0, -0.17, 0.01, tail2).scale.set(0.9, 1.4, 0.9);
+  // long side locks that fall past the ears
+  [-1, 1].forEach((s) => { const l = add(new T.SphereGeometry(0.1, 12, 10), hair, s * 0.235, -0.16, 0.02, head); l.scale.set(0.4, 2.0, 0.65); l.rotation.z = s * 0.1; });
+  // long loose hair down her back, in 3 soft pieces that swing when she moves
+  const tail = new T.Group(); tail.position.set(0, 0.02, -0.17); head.add(tail);
+  add(new T.SphereGeometry(0.2, 18, 14), hair, 0, -0.1, -0.03, tail).scale.set(1.25, 1.0, 0.55);
+  const tail2 = new T.Group(); tail2.position.set(0, -0.24, -0.02); tail.add(tail2);
+  add(new T.SphereGeometry(0.19, 18, 14), hair, 0, -0.09, -0.01, tail2).scale.set(1.2, 1.0, 0.45);
+  const tail3 = new T.Group(); tail3.position.set(0, -0.2, 0); tail2.add(tail3);
+  add(new T.SphereGeometry(0.17, 16, 12), hair, 0, -0.06, 0, tail3).scale.set(1.1, 0.8, 0.4);
+  [-1, 0, 1].forEach((s) => add(new T.SphereGeometry(0.07, 10, 8), hair, s * 0.11, -0.16, 0.01, tail3).scale.set(0.9, 1.4, 0.7));
   // face
   const eyes = new T.Group(); head.add(eyes);
   [-1, 1].forEach((s) => {
@@ -774,9 +775,9 @@ function makeGirl(o = {}) {
   };
   const lL = leg(-1), lR = leg(1);
   root.userData = {
-    body, hips, spine, neck, head, eyes, happyEyes, brows, smile, oMouth, tail, tail2, tip,
+    body, hips, spine, neck, head, eyes, happyEyes, brows, smile, oMouth, tail, tail2, tail3, tip,
     armL: aL.sh, armR: aR.sh, elbowL: aL.el, elbowR: aR.el, legL: lL.hp, legR: lR.hp, kneeL: lL.kn, kneeR: lR.kn, ankleL: lL.an, ankleR: lR.an,
-    phase: 0, reach: 0, blink: 0, air: 0, squash: 0, wasAir: false, ta: 0.35, tv: 0, look: 0, lookT: 0, lookTimer: 2, m: 0, expr: 'idle',
+    phase: 0, reach: 0, blink: 0, air: 0, squash: 0, wasAir: false, ta: 0.1, tv: 0, look: 0, lookT: 0, lookTimer: 2, m: 0, expr: 'idle',
   };
   return root;
 }
@@ -785,12 +786,12 @@ function animateGirl(g, speed, dt, air, time) {
   const u = g.userData, k = Math.min(1, dt * 12);
   u.m += (Math.min(1, speed / 1.4) - u.m) * Math.min(1, dt * 8);
   const m = u.m, run = Math.max(0, Math.min(1, (speed - 3.2) / 2.2));
-  u.phase += dt * (2.4 + speed * 2.05);
+  u.phase += dt * (speed > 0.2 ? speed * 4.2 / (1 + 0.45 * run) : 2.4);
   const s = Math.sin(u.phase), c = Math.cos(u.phase);
   u.air += ((air ? 1 : 0) - u.air) * Math.min(1, dt * 10);
   if (u.wasAir && !air) u.squash = 1; u.wasAir = air;
   u.squash = Math.max(0, u.squash - dt * 4);
-  const A = (0.5 + 0.3 * run) * m, gnd = 1 - u.air;
+  const A = (0.42 + 0.3 * run) * m, gnd = 1 - u.air;
   // legs: swing, knee bend while the leg moves forward, ankle keeps the foot flat
   const hL = s * A, hR = -s * A, kL = (Math.max(0, -c) * (0.95 + 0.5 * run) + 0.08) * m, kR = (Math.max(0, c) * (0.95 + 0.5 * run) + 0.08) * m;
   lerpTo(u.legL.rotation, 'x', gnd * hL + u.air * -0.75, k); lerpTo(u.legR.rotation, 'x', gnd * hR + u.air * -0.2, k);
@@ -805,9 +806,9 @@ function animateGirl(g, speed, dt, air, time) {
   lerpTo(u.elbowL.rotation, 'x', -(0.18 + 0.75 * run * m + Math.max(0, -s) * 0.35 * m), k);
   lerpTo(u.elbowR.rotation, 'x', u.reach > 0.01 ? 0 : -(0.18 + 0.75 * run * m + Math.max(0, s) * 0.35 * m), k);
   // body: bob twice per step, hip twist, counter-twist in the chest, lean when running, breathing when idle
-  u.body.position.y = gnd * (Math.abs(c) * 0.045 * m - 0.01 * m) + u.air * 0.05;
+  u.body.position.y = gnd * (Math.abs(c) * 0.03 * m - 0.01 * m) + u.air * 0.05;
   u.hips.position.x = (1 - m) * Math.sin(time * 0.8) * 0.012;
-  lerpTo(u.hips.rotation, 'y', s * 0.14 * m, k); lerpTo(u.spine.rotation, 'y', -s * 0.22 * m, k);
+  lerpTo(u.hips.rotation, 'y', s * 0.08 * m, k); lerpTo(u.spine.rotation, 'y', -s * 0.1 * m, k);
   lerpTo(u.spine.rotation, 'x', 0.05 * m + 0.2 * run - u.air * 0.1, k);
   lerpTo(u.spine.rotation, 'z', (1 - m) * Math.sin(time * 0.8) * 0.025, k);
   const breathe = 1 + Math.sin(time * 2.2) * 0.012 * (1 - m);
@@ -818,10 +819,12 @@ function animateGirl(g, speed, dt, air, time) {
   u.look += (u.lookT - u.look) * Math.min(1, dt * 3);
   if (!G.cine) { u.head.rotation.y = u.look * (1 - m); u.head.rotation.x = -u.spine.rotation.x * 0.6 + Math.sin(time * 1.3) * 0.02 * (1 - m); }
   u.head.rotation.z = Math.sin(time * 0.9) * 0.03 * (1 - m);
-  // ponytail on a little spring
-  const want = 0.35 + m * 0.35 + run * 0.3 + u.air * 0.6 - Math.abs(c) * 0.15 * m;
-  u.tv += (want - u.ta) * dt * 60; u.tv *= Math.pow(0.04, dt); u.ta += u.tv * dt;
-  u.tail.rotation.x = u.ta; u.tail.rotation.z = -s * 0.15 * m; u.tail2.rotation.x = (u.ta - 0.35) * 0.8;
+  // long hair on a soft spring: it flows back when she runs and swings with each step
+  const want = 0.12 + m * 0.25 + run * 0.35 + u.air * 0.5 - Math.abs(c) * 0.08 * m - (u.head.rotation.x || 0) * 0.5;
+  u.tv += (want - u.ta) * dt * 40; u.tv *= Math.pow(0.03, dt); u.ta += u.tv * dt;
+  u.tail.rotation.x = u.ta; u.tail.rotation.z = -s * 0.1 * m + Math.sin(time * 1.1) * 0.03 * (1 - m);
+  u.tail2.rotation.x = u.ta * 0.5 + u.tv * 0.04; u.tail2.rotation.z = -s * 0.08 * m;
+  u.tail3.rotation.x = u.ta * 0.4 + u.tv * 0.06; u.tail3.rotation.z = -Math.sin(u.phase - 0.8) * 0.1 * m;
   // expressions
   u.brows.forEach((b) => (b.position.y += ((u.expr === 'wow' ? 0.108 : u.expr === 'happy' ? 0.092 : 0.085) - b.position.y) * k));
   u.tip.material.emissiveIntensity = 0.6 + Math.sin(time * 4) * 0.4;
@@ -1118,8 +1121,8 @@ function setEnv(name) {
   } else if (name === 'desert') {
     scene.background = null; scene.fog = new T.Fog('#d6ecff', 90, 340);
     skyMat.uniforms.top.value.set('#2f8ff0'); skyMat.uniforms.bottom.value.set('#bfe6ff'); skyMat.uniforms.sunAmt.value = 1;
-    hemi.color.set(0xfff6e8); hemi.groundColor.set(0xd08a50); hemi.intensity = 0.6;
-    sun.color.set(0xffe6c4); sun.intensity = 1.05; sun.position.set(30, 26, 18); sun.target.position.set(0, 0, 0);
+    hemi.color.set(0xfff6e8); hemi.groundColor.set(0xd08a50); hemi.intensity = 0.5;
+    sun.color.set(0xffe6c4); sun.intensity = 0.85; sun.position.set(30, 26, 18); sun.target.position.set(0, 0, 0);
     skyMat.uniforms.sunDir.value.set(30, 26, 18).normalize();
     Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22 }); sun.shadow.camera.updateProjectionMatrix();
   } else if (name === 'academy') {
@@ -1149,8 +1152,12 @@ function updateSparks(dt) { for (const s of sparks) { if (!s.visible) continue; 
 
 // ============================== Input ==============================
 const keys = {}, stick = { x: 0, y: 0 };
+const lastTap = {}; let sprint = false;
+const MOVE_KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+addEventListener('keyup', (e) => { if (MOVE_KEYS.includes(e.code)) setTimeout(() => { if (!MOVE_KEYS.some((k) => keys[k])) sprint = false; }, 0); });
 addEventListener('keydown', (e) => {
   if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if (MOVE_KEYS.includes(e.code) && !e.repeat) { const now = performance.now(); if (now - (lastTap[e.code] || 0) < 320) sprint = true; lastTap[e.code] = now; }
   keys[e.code] = true;
   if (G.control && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
   if (G.dialog && ['Space', 'Enter', 'KeyE'].includes(e.code)) { e.preventDefault(); advanceDialog(); return; }
@@ -1178,7 +1185,7 @@ function updatePlayer(dt) {
   if (G.control) { if (keys.KeyW || keys.ArrowUp) iz += 1; if (keys.KeyS || keys.ArrowDown) iz -= 1; if (keys.KeyA || keys.ArrowLeft) ix -= 1; if (keys.KeyD || keys.ArrowRight) ix += 1; ix += stick.x; iz -= stick.y; }
   const l = Math.hypot(ix, iz); if (l > 1) { ix /= l; iz /= l; }
   if (!G.control) { P.vel.x = 0; P.vel.z = 0; }
-  const maxS = (keys.ShiftLeft || keys.ShiftRight ? 5.6 : 3.6) * (G.scene === 'bedroom' ? 0.65 : 1);
+  const maxS = (keys.ShiftLeft || keys.ShiftRight || sprint ? 5.6 : 3.6) * (G.scene === 'bedroom' ? 0.65 : 1);
   const fx = -Math.sin(camYaw), fz = -Math.cos(camYaw), rx = -fz, rz = fx;
   const tx = (fx * iz + rx * ix) * maxS, tz = (fz * iz + rz * ix) * maxS, k = Math.min(1, dt * (P.onGround ? 10 : 3));
   P.vel.x += (tx - P.vel.x) * k; P.vel.z += (tz - P.vel.z) * k;
@@ -1258,9 +1265,13 @@ function updateActionUI() {
 $('prompt').addEventListener('click', () => nearAction && nearAction.fn());
 
 // voice (tts capability, optional)
-let tts = null, voiceOn = false;
-function say(text, who) { if (!voiceOn || !tts) return; tts.speak(text.replace(/<[^>]+>/g, ''), { voice: who === 'nuri' ? 'airy' : 'buttery', language: LANG === 'ar' ? 'ar' : 'en' }).catch(() => {}); }
-$('voiceBtn').addEventListener('click', () => { voiceOn = !voiceOn; $('voiceBtn').setAttribute('aria-pressed', String(voiceOn)); if (!voiceOn) tts?.stop?.(); });
+let tts = null, voiceOn = true;
+const biP = (o) => { const other = LANG === 'ar' ? 'en' : 'ar'; const v = (x) => (typeof o[x] === 'function' ? o[x](playerName()) : o[x]); return `<p>${v(LANG)}</p><p class="alt" dir="${other === 'ar' ? 'rtl' : 'ltr'}">${v(other)}</p>`; };
+function speakWeb(text) { try { const ss = window.speechSynthesis; if (!ss) return; ss.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = LANG === 'ar' ? 'ar-SA' : 'en-US'; u.rate = 0.95; u.pitch = 1.1; const vs = ss.getVoices().filter((v) => v.lang && v.lang.toLowerCase().startsWith(LANG === 'ar' ? 'ar' : 'en')); if (vs.length) u.voice = vs.find((v) => /female|zira|samantha|google/i.test(v.name)) || vs[0]; ss.speak(u); } catch (e) {} }
+new MutationObserver(() => { const w = document.getElementById('stickerWrap'); if (!w || w.hidden || !voiceOn) return; const c = w.querySelector('.sticker'); if (!c || c.dataset.spoken) return; c.dataset.spoken = 1; const h = c.querySelector('h3'), p = c.querySelector('p:not(.alt)'); say(((h ? h.textContent + '. ' : '') + (p ? p.textContent : '')).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, ''), 'nuri'); }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
+function say(text, who) { if (!voiceOn) return; text = String(text).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\u2B50]/gu, ''); if (!tts) return speakWeb(text); tts.speak(text.replace(/<[^>]+>/g, ''), { voice: who === 'nuri' ? 'airy' : 'buttery', language: LANG === 'ar' ? 'ar' : 'en' }).catch(() => {}); }
+$('voiceBtn').hidden = false; $('voiceBtn').setAttribute('aria-pressed', 'true');
+$('voiceBtn').addEventListener('click', () => { voiceOn = !voiceOn; $('voiceBtn').setAttribute('aria-pressed', String(voiceOn)); if (!voiceOn) { tts?.stop?.(); try { speechSynthesis.cancel(); } catch (e) {} } });
 
 // dialogue: short lines that type in, no talking sounds, and a Skip button that skips the whole conversation
 let typeTimer = null;
@@ -1656,26 +1667,34 @@ const L1 = (() => {
   // the Academy
   const academy = new T.Group(); academy.position.set(POS.academy.x, dh(POS.academy.x, POS.academy.z) - 0.6, POS.academy.z); W.add(academy); academy.visible = false;
   const aw = mat(0xf4f1ea, { roughness: 0.35, metalness: 0.15 }), ao = mat(0xec8a3c, { roughness: 0.5 }), an = mat(0x1f3a68, { roughness: 0.5 });
-  mesh(new T.CylinderGeometry(11, 12.5, 3, 48), aw, 0, 1.5, 0, academy);
-  mesh(new T.SphereGeometry(8.5, 48, 20, 0, Math.PI * 2, 0, Math.PI / 2), toonM({ color: 0x9fd6ee, roughness: 0.12, metalness: 0.5 }), 0, 3, 0, academy);
-  mesh(new T.TorusGeometry(9.6, 0.4, 10, 64), ao, 0, 3.1, 0, academy).rotation.x = Math.PI / 2;
-  for (let i = 0; i < 8; i++) { const r = mesh(new T.TorusGeometry(8.52, 0.07, 6, 40, Math.PI), aw, 0, 3, 0, academy); r.rotation.y = i * Math.PI / 8; }
   const tipM = toonM({ color: 0x224455, emissive: 0x6fe0ff, emissiveIntensity: 1.6 });
-  [-1, 1].forEach((s) => { mesh(new T.CylinderGeometry(1.2, 1.5, 13, 20), aw, s * 12.5, 6.5, -2, academy); mesh(new T.CylinderGeometry(1.5, 1.5, 0.5, 20), an, s * 12.5, 10, -2, academy); mesh(new T.ConeGeometry(1.2, 2.2, 20), ao, s * 12.5, 14.1, -2, academy); mesh(new T.SphereGeometry(0.3, 10, 8), tipM, s * 12.5, 15.4, -2, academy, false); });
-  mesh(new T.CylinderGeometry(0.1, 0.16, 4, 8), aw, 0, 13.3, 0, academy); mesh(new T.SphereGeometry(0.35, 12, 10), tipM, 0, 15.5, 0, academy, false);
+  const glassM = toonM({ color: 0x7fc8ff, emissive: 0x4fa8ff, emissiveIntensity: 0.35 });
+  mesh(new T.BoxGeometry(20, 6.5, 15), aw, 0, 3.25, -0.5, academy);
+  mesh(new T.BoxGeometry(20.4, 0.5, 15.4), an, 0, 6.6, -0.5, academy);
+  mesh(new T.BoxGeometry(20.2, 0.6, 15.2), ao, 0, 1.0, -0.5, academy);
+  for (let i = 0; i < 7; i++) { if (i === 3) continue; mesh(new T.BoxGeometry(2.1, 3.2, 0.12), glassM, -8.1 + i * 2.7, 3.7, 7.02, academy, false); }
+  [-1, 1].forEach((s) => { for (let i = 0; i < 4; i++) { const w = mesh(new T.BoxGeometry(0.12, 2.6, 2.4), glassM, s * 10.02, 3.7, -6 + i * 3.4, academy, false); } });
+  // a second, taller block like a mission control tower (square, with a big screen window)
+  mesh(new T.BoxGeometry(7, 4.5, 6), aw, -5.5, 9.1, -3, academy); mesh(new T.BoxGeometry(6.2, 2.2, 0.12), glassM, -5.5, 9.5, 0.03, academy, false); mesh(new T.BoxGeometry(7.3, 0.4, 6.3), ao, -5.5, 11.5, -3, academy);
+  // roof dish
+  { const d = mesh(new T.SphereGeometry(1.8, 24, 10, 0, Math.PI * 2, 0, Math.PI / 3), mat(0xf4f1ea, { side: T.DoubleSide }), 5, 8.6, -3, academy); d.rotation.x = Math.PI * 0.72; mesh(new T.CylinderGeometry(0.15, 0.25, 1.6, 8), an, 5, 7.4, -3, academy); }
+  // a big rocket on its launch tower behind the building
+  { const rx = 13, rz = -11, y = dh(POS.academy.x + rx, POS.academy.z + rz) - academy.position.y;
+    mesh(new T.CylinderGeometry(1.1, 1.1, 11, 24), mat(0xfaf7f0), rx, y + 6.5, rz, academy); mesh(new T.ConeGeometry(1.1, 3, 24), ao, rx, y + 13.5, rz, academy);
+    mesh(new T.CylinderGeometry(1.12, 1.12, 0.8, 24), an, rx, y + 9, rz, academy); mesh(new T.CylinderGeometry(1.12, 1.12, 0.8, 24), an, rx, y + 3.5, rz, academy);
+    for (let i = 0; i < 4; i++) { const f = mesh(new T.BoxGeometry(0.15, 2.4, 1.4), ao, rx + Math.cos(i * Math.PI / 2) * 1.3, y + 1.9, rz + Math.sin(i * Math.PI / 2) * 1.3, academy); f.rotation.y = -i * Math.PI / 2; }
+    for (let i = 0; i < 5; i++) mesh(new T.BoxGeometry(1.4, 0.15, 1.4), mat(0xd8433a), rx + 2.6, y + 1 + i * 2.6, rz, academy);
+    [-1, 1].forEach((s) => mesh(new T.BoxGeometry(0.2, 13.5, 0.2), mat(0xd8433a), rx + 2.6 + s * 0.6, y + 6.75, rz, academy));
+  }
   mesh(new T.BoxGeometry(6, 5, 4), aw, 0, 2.5, 11, academy); mesh(new T.BoxGeometry(6.4, 0.5, 4.4), an, 0, 5.2, 11, academy);
   const doorM = toonM({ color: 0x103040, emissive: 0x6fe0ff, emissiveIntensity: 0.2 });
   mesh(new T.BoxGeometry(3.2, 3.8, 0.2), doorM, 0, 2.5, 13.05, academy, false);
-  mesh(new T.PlaneGeometry(1.5, 1.5), toonM({ map: patchTex, roughness: 0.6 }), 0, 6.4, 13.21, academy, false);
-  mesh(new T.BoxGeometry(2.2, 2.2, 0.3), aw, 0, 6.4, 13.0, academy);
   for (let i = 0; i < 6; i++) [-1, 1].forEach((s) => mesh(new T.SphereGeometry(0.16, 8, 6), tipM, s * 2.2, 0.75, 14.5 + i * 2.2, academy, false));
   // ---------- the training center outside: a NASA-style desert test base ----------
   const gyB = (lx, lz) => dh(POS.academy.x + lx, POS.academy.z + lz) - academy.position.y;
   const baseSolids = [];
   const addSolid = (lx, lz, r) => baseSolids.push({ x: POS.academy.x + lx, z: POS.academy.z + lz, r });
   // colored stripes and a big sign
-  mesh(new T.TorusGeometry(11.6, 0.35, 8, 64), an, 0, 0.9, 0, academy).rotation.x = Math.PI / 2;
-  for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; if (Math.abs(Math.sin(a / 2)) < 0.2) continue; const w = mesh(new T.BoxGeometry(1.4, 0.9, 0.12), toonM({ color: 0x8fd0ff, emissive: 0x6fb8ff, emissiveIntensity: 0.25 }), Math.sin(a) * 11.95, 2.1, Math.cos(a) * 11.95, academy, false); w.rotation.y = a; }
   const signTex = canvasTex(1024, 256, (c, w, h) => { c.fillStyle = '#1f3a68'; c.beginPath(); c.roundRect ? c.roundRect(8, 8, w - 16, h - 16, 40) : c.rect(8, 8, w - 16, h - 16); c.fill(); c.strokeStyle = '#ec8a3c'; c.lineWidth = 14; c.stroke(); c.drawImage(patchTex.image, 34, 48, 160, 160); c.fillStyle = '#fff'; c.font = '800 70px Nunito, sans-serif'; c.fillText('TRAINING', 220, 118); c.fillStyle = '#ffd27a'; c.font = '800 58px Nunito, sans-serif'; c.fillText('CENTER  🚀', 222, 194); });
   [-1, 1].forEach((s) => mesh(new T.CylinderGeometry(0.14, 0.14, 4, 8), an, s * 3.4, 7.6, 12.6, academy));
   mesh(new T.PlaneGeometry(7.4, 1.85), toonM({ map: signTex }), 0, 9.3, 12.75, academy, false);
@@ -1696,6 +1715,7 @@ const L1 = (() => {
   { const lx = 14, lz = 13, y = gyB(lx, lz); mesh(new T.CylinderGeometry(0.12, 0.3, 7, 6), an, lx, y + 3.5, lz, academy); const d = mesh(new T.SphereGeometry(1.6, 24, 10, 0, Math.PI * 2, 0, Math.PI / 3), mat(0xf4f1ea, { side: T.DoubleSide }), lx, y + 7.4, lz, academy); d.rotation.x = Math.PI * 0.75; mesh(new T.SphereGeometry(0.2, 10, 8), tipM, lx, y + 7.2, lz + 0.6, academy, false); addSolid(lx, lz, 0.6); }
   // banners on poles
   [[-6, 17, 0xec8a3c], [6, 17, 0x5fb8ff], [-9, 14.5, 0x9ccc3c], [9, 14.5, 0xffd27a]].forEach(([lx, lz, col]) => { const y = gyB(lx, lz); mesh(new T.CylinderGeometry(0.07, 0.07, 4.2, 6), an, lx, y + 2.1, lz, academy); const f = mesh(new T.PlaneGeometry(1.2, 1.8), mat(col, { side: T.DoubleSide }), lx + 0.62, y + 3.1, lz, academy, false); f.userData.flag = true; });
+  addSolid(13, -11, 1.6); addSolid(15.6, -11, 1);
   // a test rover that drives around the base (NASA tests Mars rovers in the Atacama)
   const rover = new T.Group(); academy.add(rover);
   { const body = mesh(new T.BoxGeometry(1.6, 0.45, 1.1), mat(0xf4f1ea), 0, 0.85, 0, rover); mesh(new T.BoxGeometry(1.2, 0.08, 0.9), panelM, 0, 1.12, 0, rover); mesh(new T.CylinderGeometry(0.05, 0.05, 0.9, 6), an, 0.55, 1.5, 0, rover); const head = mesh(new T.BoxGeometry(0.35, 0.22, 0.25), mat(0xf4f1ea), 0.55, 2.0, 0, rover); mesh(new T.CircleGeometry(0.07, 12), toonM({ color: 0x222222, emissive: 0x6fe0ff, emissiveIntensity: 1 }), 0.73, 2.0, 0, rover, false).rotation.y = Math.PI / 2; mesh(new T.CylinderGeometry(0.03, 0.03, 0.8, 4), an, -0.6, 1.5, 0.3, rover).rotation.z = 0.4; for (let i = 0; i < 3; i++) [-1, 1].forEach((s) => { const w = mesh(new T.CylinderGeometry(0.28, 0.28, 0.22, 14), mat(0x3a3f4a), -0.6 + i * 0.6, 0.3, s * 0.68, rover); w.rotation.x = Math.PI / 2; }); }
@@ -1860,7 +1880,7 @@ const L1 = (() => {
   function showSticker(k, label, onDone) {
     G.control = false; const st = STICK[k], w = $('stickerWrap');
     w.hidden = false; w.dir = LANG === 'ar' ? 'rtl' : 'ltr';
-    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${st.ic}</div><div class="stk">${label}</div><h3>${tr(st.t)}</h3><p>${tr(st.f)}</p><button class="btn green" id="stOk">${t('ok')}</button></div>`;
+    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${st.ic}</div><div class="stk">${label}</div><h3>${tr(st.t)}</h3>${biP(st.f)}<button class="btn green" id="stOk">${t('ok')}</button></div>`;
     nuri.userData.talk = 1.2; setExpr(nuri, 'happy');
     const ok = $('stOk'); ok.focus({ preventScroll: true });
     ok.onclick = () => { const c = w.querySelector('.sticker'); c.classList.add('fly'); setTimeout(() => { w.hidden = true; renderTray(); const s = $('tray').querySelectorAll('.slot2')[[...SPOTS, ...BONUS].indexOf(k)]; s && s.classList.add('pop'); onDone && onDone(); }, 420); };
@@ -2321,7 +2341,7 @@ const ACAD = (() => {
     S.sec = S.sec || {}; const first = !S.sec[s.k]; S.sec[s.k] = true; S.secT = { k: s.k, t: 0 };
     G.control = false; P.vel.set(0, 0, 0); P.speed = 0; SFX.sparkle(); setExpr(girl, 'wow');
     if (s.k === 'rocket') SFX.whoosh(2);
-    setTimeout(() => { if (!first) { setExpr(girl, 'happy'); giveControl(); return; } card(s.ic, tr(s.t), tr(s.f), `⭐ ${LANG === 'ar' ? 'سرّ' : 'Secret'} ${secFound()} / ${SEC.length}`, () => { setExpr(girl, 'happy'); giveControl(); }); }, s.k === 'rocket' ? 2400 : 1300);
+    setTimeout(() => { if (!first) { setExpr(girl, 'happy'); giveControl(); return; } card(s.ic, tr(s.t), biP(s.f), `⭐ ${LANG === 'ar' ? 'سرّ' : 'Secret'} ${secFound()} / ${SEC.length}`, () => { setExpr(girl, 'happy'); giveControl(); }); }, s.k === 'rocket' ? 2400 : 1300);
   }
   function secretUpdate(dt, time) {
     SEC.forEach((s, i) => { const sp = secSpark[i]; sp.visible = !(S.sec && S.sec[s.k]); sp.position.y = 2.3 + Math.sin(time * 2.5 + i) * 0.15; sp.material.rotation = Math.sin(time + i) * 0.3; });
@@ -2340,7 +2360,7 @@ const ACAD = (() => {
   }
   function card(ic, title, text, tag, onDone) {
     const w = $('stickerWrap'); w.hidden = false; w.dir = LANG === 'ar' ? 'rtl' : 'ltr'; G.control = false;
-    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${ic}</div><div class="stk">${tag}</div><h3>${title}</h3><p>${text}</p><button class="btn green" id="stOk">${t('ok')}</button></div>`;
+    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${ic}</div><div class="stk">${tag}</div><h3>${title}</h3>${text}<button class="btn green" id="stOk">${t('ok')}</button></div>`;
     $('stOk').focus({ preventScroll: true });
     $('stOk').onclick = () => { w.querySelector('.sticker').classList.add('fly'); setTimeout(() => { w.hidden = true; onDone(); }, 420); };
   }
@@ -2377,7 +2397,7 @@ const ACAD = (() => {
   }
   function showFact(k, onDone) {
     const w = $('stickerWrap'); w.hidden = false; w.dir = LANG === 'ar' ? 'rtl' : 'ltr'; G.control = false;
-    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${ST[k].ic}</div><div class="stk">${LANG === 'ar' ? 'هل تعلم؟' : 'Did you know?'}</div><h3>${tr(ST[k].t)}</h3><p>${tr(ST[k].fact)}</p><button class="btn green" id="stOk">${t('ok')}</button></div>`;
+    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${ST[k].ic}</div><div class="stk">${LANG === 'ar' ? 'هل تعلم؟' : 'Did you know?'}</div><h3>${tr(ST[k].t)}</h3>${biP(ST[k].fact)}<button class="btn green" id="stOk">${t('ok')}</button></div>`;
     $('stOk').focus({ preventScroll: true });
     $('stOk').onclick = () => { w.querySelector('.sticker').classList.add('fly'); setTimeout(() => { w.hidden = true; onDone(); }, 420); };
   }
@@ -2474,8 +2494,9 @@ const GUIDE = (() => {
   const N = 14, GAP = 1.5;
   const shape = new T.Shape(); shape.moveTo(0, 0.42); shape.lineTo(0.4, -0.05); shape.lineTo(0.22, -0.05); shape.lineTo(0, 0.2); shape.lineTo(-0.22, -0.05); shape.lineTo(-0.4, -0.05); shape.closePath();
   const geo = new T.ShapeGeometry(shape); geo.rotateX(Math.PI / 2);
-  const arrows = new T.InstancedMesh(geo, new T.MeshBasicMaterial({ color: 0xc6ff5a, transparent: true, opacity: 0.85, depthWrite: false, side: T.DoubleSide }), N);
-  arrows.frustumCulled = false; arrows.renderOrder = 2; scene.add(arrows); arrows.visible = false;
+  const arrows = new T.InstancedMesh(geo, new T.MeshBasicMaterial({ color: 0xff6a00, transparent: true, opacity: 0.95, depthWrite: false, side: T.DoubleSide }), N);
+  arrows.frustumCulled = false; arrows.renderOrder = 3; scene.add(arrows); arrows.visible = false;
+  const edge = new T.InstancedMesh(geo, new T.MeshBasicMaterial({ color: 0x1b1530, transparent: true, opacity: 0.85, depthWrite: false, side: T.DoubleSide }), N); edge.frustumCulled = false; edge.renderOrder = 2; scene.add(edge); edge.visible = false; const sc2 = new T.Vector3(), pos2 = new T.Vector3();
   const m4 = new T.Matrix4(), q = new T.Quaternion(), up = new T.Vector3(0, 1, 0), pos = new T.Vector3(), sc = new T.Vector3();
   const prov = () => (G.scene === 'level1' ? L1 : G.scene === 'academy' ? ACAD : null);
   const cv = $('mmap'), cx = cv.getContext('2d');
@@ -2516,19 +2537,19 @@ const GUIDE = (() => {
     hud.hidden = !show; if (show) { hud.dir = LANG === 'ar' ? 'rtl' : 'ltr'; draw(p, time); list(p); }
     // ground arrows from the player to the next goal
     const tg = p && G.control && !G.cine ? p.target() : null;
-    arrows.visible = !!tg; if (!tg) return;
+    arrows.visible = edge.visible = !!tg; if (!tg) return;
     const dx = tg.x - P.pos.x, dz = tg.z - P.pos.z, dist = Math.hypot(dx, dz);
-    if (dist < 2.6) { arrows.visible = false; return; }
+    if (dist < 2.6) { arrows.visible = edge.visible = false; return; }
     const ux = dx / dist, uz = dz / dist; q.setFromAxisAngle(up, Math.atan2(ux, uz));
     const span = Math.min(dist - 1.6, N * GAP), off = (time * 2.2) % GAP;
     for (let i = 0; i < N; i++) {
       const s = 1.2 + i * GAP + off, vis = s < span;
       const fadeIn = Math.min(1, (s - 1.2) / 1.2), fadeOut = Math.min(1, (span - s) / 2), a = vis ? Math.max(0.05, Math.min(fadeIn, fadeOut)) : 0;
       const x = P.pos.x + ux * s, z = P.pos.z + uz * s;
-      pos.set(x, groundY(x, z) + 0.07, z); sc.setScalar(a * (G.scene === 'academy' ? 0.8 : 1.1));
-      m4.compose(pos, q, sc); arrows.setMatrixAt(i, m4);
+      pos.set(x, groundY(x, z) + 0.07, z); sc.setScalar(a * (G.scene === 'academy' ? 0.9 : 1.4));
+      m4.compose(pos, q, sc); arrows.setMatrixAt(i, m4); pos2.copy(pos); pos2.y -= 0.02; sc2.copy(sc).multiplyScalar(1.3); m4.compose(pos2, q, sc2); edge.setMatrixAt(i, m4);
     }
-    arrows.instanceMatrix.needsUpdate = true;
+    arrows.instanceMatrix.needsUpdate = true; edge.instanceMatrix.needsUpdate = true;
   }
   return { update };
 })();
