@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lunar Night Shift</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Title screen -->
+      <section id="screen-title" class="screen active">
+        <h1 data-text="title">Lunar Night Shift</h1>
+        <p class="tagline" data-text="tagline"></p>
+        <button id="btn-start" class="btn" data-text="start"></button>
+        <button id="btn-lang" class="btn btn-small" data-text="language"></button>
+      </section>
+
+      <!-- Game screen (HUD + day panel), built in src/ui.js -->
+      <section id="screen-game" class="screen">
+        <header id="hud"></header>
+        <main id="base-view"></main>
+        <footer id="day-panel">
+          <button id="btn-end-day" class="btn" data-text="endDay"></button>
+        </footer>
+      </section>
+
+      <!-- Mission debrief, built in src/ui.js -->
+      <section id="screen-debrief" class="screen"></section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

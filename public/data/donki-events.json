@@ -1,0 +1,11 @@
+{
+  "_note": "Real space weather events from NASA DONKI (ccmc.gsfc.nasa.gov/tools/DONKI). Owner: science lead",
+  "_example": {
+    "id": "DONKI activity ID",
+    "type": "FLR | SEP | CME | GST",
+    "date": "YYYY-MM-DD",
+    "class": "e.g. X1.0 for flares",
+    "severity": 1
+  },
+  "events": []
+}

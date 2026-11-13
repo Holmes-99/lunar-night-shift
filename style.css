@@ -1,0 +1,108 @@
+:root {
+  --bg: #0b0e1a;
+  --panel: #161b2e;
+  --text: #e8ecf5;
+  --accent: #ffb547;
+  --danger: #ff5c5c;
+  --ok: #5cd68a;
+  font-family: "Trebuchet MS", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app {
+  width: min(1280px, 100vw);
+  aspect-ratio: 16 / 9;
+  max-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pixel art stays crisp when scaled */
+img {
+  image-rendering: pixelated;
+}
+
+.screen {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.screen.active {
+  display: flex;
+}
+
+h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  opacity: 0.85;
+}
+
+.btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn-small {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--text);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+#screen-game {
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+#hud,
+#day-panel {
+  width: 100%;
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+#base-view {
+  flex: 1;
+  width: 100%;
+}
+
+/* Night mode: ui.js adds this class to #app during the lunar night */
+#app.night {
+  filter: saturate(0.6) brightness(0.8);
+}
