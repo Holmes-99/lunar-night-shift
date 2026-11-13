@@ -3,32 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lunar Night Shift</title>
+    <title>Junior Astronaut Mission Trainer</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>" />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <div id="app">
-      <!-- Title screen -->
-      <section id="screen-title" class="screen active">
-        <h1 data-text="title">Lunar Night Shift</h1>
-        <p class="tagline" data-text="tagline"></p>
-        <button id="btn-start" class="btn" data-text="start"></button>
-        <button id="btn-lang" class="btn btn-small" data-text="language"></button>
-      </section>
-
-      <!-- Game screen (HUD + day panel), built in src/ui.js -->
-      <section id="screen-game" class="screen">
-        <header id="hud"></header>
-        <main id="base-view"></main>
-        <footer id="day-panel">
-          <button id="btn-end-day" class="btn" data-text="endDay"></button>
-        </footer>
-      </section>
-
-      <!-- Mission debrief, built in src/ui.js -->
-      <section id="screen-debrief" class="screen"></section>
+      <div id="scene"></div>
+      <div id="sky-bg"></div>
+      <div id="hud" class="hidden"></div>
+      <div id="topbar">
+        <button id="btn-lang" class="chip"></button>
+        <button id="btn-sound" class="chip">🔊</button>
+        <button id="btn-sources" class="chip">ⓘ</button>
+      </div>
+      <div id="ui"></div>
+      <div id="tardi" class="hidden">
+        <div id="tardi-bubble"></div>
+        <div id="tardi-body"></div>
+      </div>
+      <div id="modal" class="hidden"></div>
+      <div id="confetti"></div>
     </div>
-
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
