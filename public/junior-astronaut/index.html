@@ -1611,8 +1611,8 @@ const L1 = (() => {
   const solids = ENV.desert.userData.solids;
   const keep = [POS.dry, POS.dunes, { x: 22, z: -9 }, POS.plant, POS.door, LAGOON, { x: LAGOON.x + 6, z: LAGOON.z }, { x: LAGOON.x - 6, z: LAGOON.z }, { x: LAGOON.x, z: LAGOON.z + 6 }, { x: LAGOON.x, z: LAGOON.z - 6 }, ALMA, { x: ALMA.x - 6, z: ALMA.z }, { x: ALMA.x + 6, z: ALMA.z + 4 }];
   const inst = ENV.desert.children.find((o) => o.isInstancedMesh);
-  if (inst) { const m = new T.Matrix4(), p = new T.Vector3(), q = new T.Quaternion(), s = new T.Vector3(); for (let i = 0; i < inst.count; i++) { inst.getMatrixAt(i, m); m.decompose(p, q, s); if (keep.some((k) => Math.hypot(p.x - k.x, p.z - k.z) < 5.5) || Math.hypot(p.x - POS.academy.x, p.z - POS.academy.z) < 16) { s.set(0, 0, 0); m.compose(p, q, s); inst.setMatrixAt(i, m); } } inst.instanceMatrix.needsUpdate = true; }
-  for (let i = solids.length - 1; i >= 0; i--) { const s = solids[i]; if (Math.hypot(s.x - NURI_ROCK.x, s.z - NURI_ROCK.z) < 1) continue; if (keep.some((k) => Math.hypot(s.x - k.x, s.z - k.z) < 5.5) || Math.hypot(s.x - POS.academy.x, s.z - POS.academy.z) < 16) solids.splice(i, 1); }
+  if (inst) { const m = new T.Matrix4(), p = new T.Vector3(), q = new T.Quaternion(), s = new T.Vector3(); for (let i = 0; i < inst.count; i++) { inst.getMatrixAt(i, m); m.decompose(p, q, s); if (keep.some((k) => Math.hypot(p.x - k.x, p.z - k.z) < 5.5) || Math.hypot(p.x - POS.academy.x, p.z - POS.academy.z) < 25) { s.set(0, 0, 0); m.compose(p, q, s); inst.setMatrixAt(i, m); } } inst.instanceMatrix.needsUpdate = true; }
+  for (let i = solids.length - 1; i >= 0; i--) { const s = solids[i]; if (Math.hypot(s.x - NURI_ROCK.x, s.z - NURI_ROCK.z) < 1) continue; if (keep.some((k) => Math.hypot(s.x - k.x, s.z - k.z) < 5.5) || Math.hypot(s.x - POS.academy.x, s.z - POS.academy.z) < 25) solids.splice(i, 1); }
 
   function drape(x, z, size, tex) {
     const geo = new T.PlaneGeometry(size, size, 14, 14); geo.rotateX(-Math.PI / 2);
@@ -1669,13 +1669,50 @@ const L1 = (() => {
   mesh(new T.PlaneGeometry(1.5, 1.5), toonM({ map: patchTex, roughness: 0.6 }), 0, 6.4, 13.21, academy, false);
   mesh(new T.BoxGeometry(2.2, 2.2, 0.3), aw, 0, 6.4, 13.0, academy);
   for (let i = 0; i < 6; i++) [-1, 1].forEach((s) => mesh(new T.SphereGeometry(0.16, 8, 6), tipM, s * 2.2, 0.75, 14.5 + i * 2.2, academy, false));
+  // ---------- the training center outside: a NASA-style desert test base ----------
+  const gyB = (lx, lz) => dh(POS.academy.x + lx, POS.academy.z + lz) - academy.position.y;
+  const baseSolids = [];
+  const addSolid = (lx, lz, r) => baseSolids.push({ x: POS.academy.x + lx, z: POS.academy.z + lz, r });
+  // colored stripes and a big sign
+  mesh(new T.TorusGeometry(11.6, 0.35, 8, 64), an, 0, 0.9, 0, academy).rotation.x = Math.PI / 2;
+  for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; if (Math.abs(Math.sin(a / 2)) < 0.2) continue; const w = mesh(new T.BoxGeometry(1.4, 0.9, 0.12), toonM({ color: 0x8fd0ff, emissive: 0x6fb8ff, emissiveIntensity: 0.25 }), Math.sin(a) * 11.95, 2.1, Math.cos(a) * 11.95, academy, false); w.rotation.y = a; }
+  const signTex = canvasTex(1024, 256, (c, w, h) => { c.fillStyle = '#1f3a68'; c.beginPath(); c.roundRect ? c.roundRect(8, 8, w - 16, h - 16, 40) : c.rect(8, 8, w - 16, h - 16); c.fill(); c.strokeStyle = '#ec8a3c'; c.lineWidth = 14; c.stroke(); c.drawImage(patchTex.image, 34, 48, 160, 160); c.fillStyle = '#fff'; c.font = '800 70px Nunito, sans-serif'; c.fillText('TRAINING', 220, 118); c.fillStyle = '#ffd27a'; c.font = '800 58px Nunito, sans-serif'; c.fillText('CENTER  🚀', 222, 194); });
+  [-1, 1].forEach((s) => mesh(new T.CylinderGeometry(0.14, 0.14, 4, 8), an, s * 3.4, 7.6, 12.6, academy));
+  mesh(new T.PlaneGeometry(7.4, 1.85), toonM({ map: signTex }), 0, 9.3, 12.75, academy, false);
+  // a concrete pad and a striped walkway
+  const pad = mesh(new T.CircleGeometry(15.5, 64), mat(0xe9e1d2), 0, 0.62, 0, academy, false); pad.rotation.x = -Math.PI / 2;
+  for (let i = 0; i < 6; i++) { const st = mesh(new T.PlaneGeometry(4.2, 0.5), mat(i % 2 ? 0xec8a3c : 0xfff6e0), 0, gyB(0, 15 + i * 1.6) + 0.06, 15 + i * 1.6, academy, false); st.rotation.x = -Math.PI / 2; }
+  // solar panel farm
+  const solarTex = canvasTex(256, 128, (c, w, h) => { c.fillStyle = '#1b3a7a'; c.fillRect(0, 0, w, h); c.strokeStyle = '#8fb8ff'; c.lineWidth = 3; for (let i = 1; i < 6; i++) { c.beginPath(); c.moveTo(i * w / 6, 0); c.lineTo(i * w / 6, h); c.stroke(); } for (let j = 1; j < 3; j++) { c.beginPath(); c.moveTo(0, j * h / 3); c.lineTo(w, j * h / 3); c.stroke(); } c.fillStyle = 'rgba(255,255,255,.25)'; c.fillRect(0, 0, w * 0.4, h); });
+  const panelM = toonM({ map: solarTex, emissive: 0x1b3a7a, emissiveIntensity: 0.2 });
+  for (let r = 0; r < 2; r++) for (let i = 0; i < 4; i++) { const lx = 17 + r * 4.2, lz = -4 + i * 3.2, y = gyB(lx, lz); mesh(new T.CylinderGeometry(0.08, 0.08, 1.2, 6), an, lx, y + 0.6, lz, academy); const p = mesh(new T.BoxGeometry(3.2, 0.08, 2.2), panelM, lx, y + 1.25, lz, academy); p.rotation.z = 0.5; }
+  addSolid(19.1, 0.8, 4.2);
+  // two small habitat domes with round windows
+  [[-17, -6, 3.2], [-19.5, 3, 2.4]].forEach(([lx, lz, r]) => { const y = gyB(lx, lz); mesh(new T.SphereGeometry(r, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2), mat(0xfaf7f0), lx, y, lz, academy); mesh(new T.TorusGeometry(r * 0.99, 0.18, 8, 40), ao, lx, y + 0.25, lz, academy).rotation.x = Math.PI / 2; for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2 + 0.4; const wdw = mesh(new T.CircleGeometry(0.35, 18), toonM({ color: 0x8fd0ff, emissive: 0x6fb8ff, emissiveIntensity: 0.5 }), lx + Math.sin(a) * r * 0.8, y + r * 0.58, lz + Math.cos(a) * r * 0.8, academy, false); wdw.lookAt(academy.localToWorld(new T.Vector3(lx + Math.sin(a) * r * 3, y + r * 0.9, lz + Math.cos(a) * r * 3))); } addSolid(lx, lz, r + 0.2); });
+  // a landing pad with a big H
+  const hTex = canvasTex(256, 256, (c, w) => { c.fillStyle = '#5a6270'; c.beginPath(); c.arc(w / 2, w / 2, w / 2 - 4, 0, 7); c.fill(); c.strokeStyle = '#ffd27a'; c.lineWidth = 14; c.beginPath(); c.arc(w / 2, w / 2, w / 2 - 22, 0, 7); c.stroke(); c.fillStyle = '#fff'; c.font = '800 150px Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('H', w / 2, w / 2 + 8); });
+  const lp = mesh(new T.CircleGeometry(4.5, 40), toonM({ map: hTex }), -14, gyB(-14, 17) + 0.08, 17, academy, false); lp.rotation.x = -Math.PI / 2;
+  // a radio tower and a tall antenna dish
+  { const lx = 14, lz = 13, y = gyB(lx, lz); mesh(new T.CylinderGeometry(0.12, 0.3, 7, 6), an, lx, y + 3.5, lz, academy); const d = mesh(new T.SphereGeometry(1.6, 24, 10, 0, Math.PI * 2, 0, Math.PI / 3), mat(0xf4f1ea, { side: T.DoubleSide }), lx, y + 7.4, lz, academy); d.rotation.x = Math.PI * 0.75; mesh(new T.SphereGeometry(0.2, 10, 8), tipM, lx, y + 7.2, lz + 0.6, academy, false); addSolid(lx, lz, 0.6); }
+  // banners on poles
+  [[-6, 17, 0xec8a3c], [6, 17, 0x5fb8ff], [-9, 14.5, 0x9ccc3c], [9, 14.5, 0xffd27a]].forEach(([lx, lz, col]) => { const y = gyB(lx, lz); mesh(new T.CylinderGeometry(0.07, 0.07, 4.2, 6), an, lx, y + 2.1, lz, academy); const f = mesh(new T.PlaneGeometry(1.2, 1.8), mat(col, { side: T.DoubleSide }), lx + 0.62, y + 3.1, lz, academy, false); f.userData.flag = true; });
+  // a test rover that drives around the base (NASA tests Mars rovers in the Atacama)
+  const rover = new T.Group(); academy.add(rover);
+  { const body = mesh(new T.BoxGeometry(1.6, 0.45, 1.1), mat(0xf4f1ea), 0, 0.85, 0, rover); mesh(new T.BoxGeometry(1.2, 0.08, 0.9), panelM, 0, 1.12, 0, rover); mesh(new T.CylinderGeometry(0.05, 0.05, 0.9, 6), an, 0.55, 1.5, 0, rover); const head = mesh(new T.BoxGeometry(0.35, 0.22, 0.25), mat(0xf4f1ea), 0.55, 2.0, 0, rover); mesh(new T.CircleGeometry(0.07, 12), toonM({ color: 0x222222, emissive: 0x6fe0ff, emissiveIntensity: 1 }), 0.73, 2.0, 0, rover, false).rotation.y = Math.PI / 2; mesh(new T.CylinderGeometry(0.03, 0.03, 0.8, 4), an, -0.6, 1.5, 0.3, rover).rotation.z = 0.4; for (let i = 0; i < 3; i++) [-1, 1].forEach((s) => { const w = mesh(new T.CylinderGeometry(0.28, 0.28, 0.22, 14), mat(0x3a3f4a), -0.6 + i * 0.6, 0.3, s * 0.68, rover); w.rotation.x = Math.PI / 2; }); }
+  rover.userData.ang = 0;
+  function animateBase(dt, time) {
+    rover.userData.ang += dt * 0.12; const a = rover.userData.ang, R = 19, lx = Math.cos(a) * R, lz = Math.sin(a) * R * 0.85 + 2;
+    rover.position.set(lx, gyB(lx, lz) - 0.05, lz); rover.rotation.y = -a - Math.PI / 2 + Math.PI / 2 * 0;
+    const nx = Math.cos(a + 0.01) * R, nz = Math.sin(a + 0.01) * R * 0.85 + 2; rover.rotation.y = Math.atan2(nx - lx, nz - lz) - Math.PI / 2;
+    academy.children.forEach((o) => { if (o.userData.flag) o.rotation.y = Math.sin(time * 3 + o.position.x) * 0.25; });
+  }
   const doorLight = new T.PointLight(0x6fe0ff, 0, 22, 1.5); doorLight.position.set(0, 3, 15); academy.add(doorLight);
   const academySolid = { x: POS.academy.x, z: POS.academy.z, r: 12.8 }, porchSolid = { x: POS.academy.x, z: POS.academy.z + 11, r: 3.4 };
 
   // ---------- More life in the desert (things you can really find in the Atacama) ----------
   const rnd = (a, b) => a + Math.random() * (b - a);
   const busy = [POS.dry, POS.dunes, POS.plant, POS.hill, { x: 22, z: -9 }, { x: 0, z: -2 }, NURI_ROCK, LAGOON, ALMA, ...SALT];
-  const free = (x, z, pad = 7) => busy.every((p) => Math.hypot(x - p.x, z - p.z) > (p.r ? p.r + pad : pad)) && Math.hypot(x - POS.academy.x, z - POS.academy.z) > 20 && Math.hypot(x - POS.hill.x, z - (POS.hill.z - 16)) > 9;
+  const free = (x, z, pad = 7) => busy.every((p) => Math.hypot(x - p.x, z - p.z) > (p.r ? p.r + pad : pad)) && Math.hypot(x - POS.academy.x, z - POS.academy.z) > 27 && Math.hypot(x - POS.hill.x, z - (POS.hill.z - 16)) > 9;
   const m4 = new T.Matrix4(), qq = new T.Quaternion(), ee = new T.Euler(), sc3 = new T.Vector3(), ps3 = new T.Vector3();
   const place = (inst, i, x, y, z, s, sy = s, ry = Math.random() * 7, rx = 0) => { ee.set(rx, ry, 0); qq.setFromEuler(ee); sc3.set(s, sy, s); ps3.set(x, y, z); m4.compose(ps3, qq, sc3); inst.setMatrixAt(i, m4); };
 
@@ -1926,7 +1963,7 @@ const L1 = (() => {
   }
   function reveal() {
     S.step = 'reveal'; setObjective(null); academy.visible = true;
-    if (!solids.includes(academySolid)) solids.push(academySolid, porchSolid);
+    if (!solids.includes(academySolid)) solids.push(academySolid, porchSolid, ...baseSolids);
     const face = Math.atan2(POS.academy.x - P.pos.x, POS.academy.z - P.pos.z); P.yaw = face; girl.rotation.y = face;
     const from = new T.Vector3(P.pos.x + 1.5, P.pos.y + 2.4, P.pos.z + 5), to = new T.Vector3(POS.academy.x - 2, dh(5, -46) + 5, -44);
     camera.position.copy(from); SFX.whoosh(1);
@@ -1954,6 +1991,7 @@ const L1 = (() => {
   function update(dt, time) {
     for (const k in B) { const b = B[k]; if (!b.visible) continue; b.userData.ring.scale.setScalar(1 + 0.14 * Math.sin(time * 3)); b.userData.q.position.y = 2.7 + Math.sin(time * 2) * 0.18; }
     plant.rotation.z = Math.sin(time * 1.4) * 0.04;
+    if (academy.visible) animateBase(dt, time);
     if (academy.visible && S.step !== 'reveal') doorM.emissiveIntensity = 1.3 + Math.sin(time * 3) * 0.4;
     if (!G.control) return;
     if (S.step === 'explore') { for (const k of SPOTS) if (!S.found[k] && Math.hypot(P.pos.x - POS[k].x, P.pos.z - POS[k].z) < 3.6) { discover(k); break; } }
@@ -1966,7 +2004,7 @@ const L1 = (() => {
     $('doneCard').hidden = true; $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; closeChat(); G.chat = []; $('chatLog').innerHTML = '';
     for (const k in B) B[k].visible = false;
     academy.visible = false; doorLight.intensity = 0; doorM.emissiveIntensity = 0.2;
-    for (const s of [academySolid, porchSolid]) { const i = solids.indexOf(s); if (i >= 0) solids.splice(i, 1); }
+    for (const s of [academySolid, porchSolid, ...baseSolids]) { const i = solids.indexOf(s); if (i >= 0) solids.splice(i, 1); }
     ship.visible = true; ship.position.set(0, 6.2, -2); setBeam(ship, 0);
     girl.visible = true; girl.scale.setScalar(1); girl.userData.reach = 0; setExpr(girl, 'idle');
     nuri.visible = true; G.nuriJoined = true; G.nuriMet = true; G.done = true; setExpr(nuri, 'idle');
@@ -2057,7 +2095,7 @@ const ACAD = (() => {
   const KEYS = ['air', 'water', 'shield', 'food'];
   const POSN = { air: { x: -7.2, z: 1.5 }, water: { x: 7.2, z: 1.5 }, shield: { x: -5.6, z: -6.6 }, food: { x: 5.6, z: -6.6 } };
   const DOOR = { x: 0, z: -12.6 }, ENTRY = { x: 0, z: 9.5 };
-  let S = { done: {}, tries: 0, mode: null, end: false, hintI: {} };
+  let S = { done: {}, tries: 0, mode: null, end: false, hintI: {}, sec: {}, secT: null };
 
   // ---------- Building ----------
   const g = new T.Group(); ENV.academy = g; scene.add(g); g.visible = false;
@@ -2091,7 +2129,7 @@ const ACAD = (() => {
   const suit = new T.Group(); suit.position.set(-10.6, 0, 6.5); suit.rotation.y = 2.2; g.add(suit);
   mesh(new T.CylinderGeometry(0.06, 0.06, 1.6, 6), mat(0x9aa4ad), 0, 0.8, 0, suit);
   mesh(new T.CylinderGeometry(0.42, 0.38, 0.9, 16), mat(0xf7f7fb), 0, 1.65, 0, suit); mesh(new T.SphereGeometry(0.34, 18, 14), mat(0xf7f7fb), 0, 2.4, 0, suit);
-  mesh(new T.SphereGeometry(0.25, 16, 12), new T.MeshBasicMaterial({ color: 0xffc46b }), 0, 2.42, 0.16, suit).scale.z = 0.5;
+  const suitVisor = mesh(new T.SphereGeometry(0.25, 16, 12), new T.MeshBasicMaterial({ color: 0xffc46b }), 0, 2.42, 0.16, suit); suitVisor.scale.z = 0.5;
   mesh(new T.BoxGeometry(0.5, 0.5, 0.25), mat(0xd8dde5), 0, 1.75, -0.36, suit);
   [-1, 1].forEach((s) => { const a = mesh(new T.CylinderGeometry(0.12, 0.11, 0.8, 10), mat(0xf7f7fb), s * 0.52, 1.6, 0, suit); a.rotation.z = s * 0.25; });
   for (let i = 0; i < 4; i++) mesh(new T.BoxGeometry(0.7, 2, 0.5), mat([0x5fb8ff, 0xec8a3c, 0x9ccc3c, 0xffd27a][i]), 10.2 + (i % 2) * 0.1, 1, 6.5 - i * 0.75, g).rotation.y = -1;
@@ -2262,6 +2300,51 @@ const ACAD = (() => {
     toast(LANG === 'ar' ? `الصحن بحاجة ${name.ar}` : `Your plate needs ${name.en}`);
   }
 
+  // ---------- secret things to find and play with inside ----------
+  const SEC = [
+    { k: 'rocket', at: { x: 0, z: 3.4 }, ic: '🚀', t: { en: 'Launch!', ar: 'إطلاق!' }, f: { en: 'Real rockets must fly about 28,000 km per hour to stay in orbit around Earth!', ar: 'الصواريخ الحقيقية لازم تطير تقريباً 28,000 كم بالساعة لتضل تدور حول الأرض!' }, act: { en: 'Launch the rocket', ar: 'أطلق الصاروخ' } },
+    { k: 'suit', at: { x: -9.4, z: 5.6 }, ic: '🧑‍🚀', t: { en: 'A real spacesuit', ar: 'بدلة فضاء حقيقية' }, f: { en: 'A NASA spacesuit weighs more than 100 kg on Earth. It is like a tiny spaceship you wear!', ar: 'بدلة ناسا وزنها أكثر من 100 كيلو على الأرض. هي متل سفينة فضاء صغيرة بتلبسها!' }, act: { en: 'Try the helmet light', ar: 'جرّب ضو الخوذة' } },
+    { k: 'scope', at: { x: -11.2, z: 1.2 }, ic: '🔭', t: { en: 'Mars spotted!', ar: 'شفنا المريخ!' }, f: { en: 'Mars is so far away that sunlight takes about 13 minutes to reach it.', ar: 'المريخ بعيد كثير لدرجة إن ضو الشمس بياخد حوالي 13 دقيقة ليوصله.' }, act: { en: 'Look through the telescope', ar: 'طلّع بالتلسكوب' } },
+    { k: 'garden', at: { x: 3.4, z: 10.2 }, ic: '🥬', t: { en: 'Space garden', ar: 'حديقة فضائية' }, f: { en: 'Astronauts grow lettuce on the space station in a small garden called Veggie.', ar: 'رواد الفضاء بيزرعوا خس بمحطة الفضاء بحديقة صغيرة اسمها "فيجي".' }, act: { en: 'Water the plant', ar: 'اسقي النبتة' } },
+    { k: 'locker', at: { x: 8.9, z: 4.4 }, ic: '🧰', t: { en: 'Tool locker', ar: 'خزانة العدّة' }, f: { en: 'In space, tools float away! Astronauts tie them down with straps and Velcro.', ar: 'بالفضاء العدّة بتطوف! رواد الفضاء بيربطوها بأحزمة ولاصق.' }, act: { en: 'Open the locker', ar: 'افتح الخزانة' } },
+  ];
+  const secFX = {};
+  // telescope
+  { const tg = new T.Group(); tg.position.set(-12.3, 0, 1.6); g.add(tg); [0, 2.1, 4.2].forEach((a) => { const l = mesh(new T.CylinderGeometry(0.04, 0.04, 1.4, 6), mat(0x1f3a68), Math.sin(a) * 0.3, 0.65, Math.cos(a) * 0.3, tg); l.rotation.set(Math.cos(a) * 0.3, 0, -Math.sin(a) * 0.3); }); const tube = new T.Group(); tube.position.y = 1.35; tg.add(tube); const tb = mesh(new T.CylinderGeometry(0.14, 0.2, 1.3, 16), mat(0xf4f1ea), 0, 0, 0, tube); tb.rotation.z = 1.1; mesh(new T.TorusGeometry(0.2, 0.04, 8, 20), mat(0xec8a3c), -0.58, 0.28, 0, tube).rotation.y = Math.PI / 2; secFX.scope = tube; }
+  // a little lettuce that grows
+  { const pl = new T.Group(); pl.position.set(3.4, 0.62, 11.6); g.add(pl); for (let i = 0; i < 6; i++) { const l = mesh(new T.SphereGeometry(0.16, 10, 8), mat(i % 2 ? 0x6fbf3c : 0x9ccc3c), Math.cos(i) * 0.14, 0.12, Math.sin(i) * 0.14, pl); l.scale.set(1, 0.6, 1.3); l.rotation.y = i; } pl.scale.setScalar(0.4); secFX.garden = pl; }
+  // a locker door that swings open with a gold star inside
+  { const lk = new T.Group(); lk.position.set(10.0, 0, 3.6); lk.rotation.y = -1; g.add(lk); mesh(new T.BoxGeometry(0.8, 2.1, 0.55), mat(0x1f3a68), 0, 1.05, 0, lk); const hinge = new T.Group(); hinge.position.set(-0.4, 1.05, 0.29); lk.add(hinge); mesh(new T.BoxGeometry(0.8, 2.0, 0.05), mat(0xd8433a), 0.4, 0, 0, hinge); const star = sprite(emojiTex('⭐'), 0.5, lk, 0, 1.3, 0.1); star.visible = false; secFX.locker = { hinge, star }; }
+  const secSpark = SEC.map((s) => sprite(emojiTex('✨'), 0.55, g, s.at.x, 2.4, s.at.z));
+  const secFound = () => SEC.filter((s) => S.sec && S.sec[s.k]).length;
+  function playSecret(s) {
+    S.sec = S.sec || {}; const first = !S.sec[s.k]; S.sec[s.k] = true; S.secT = { k: s.k, t: 0 };
+    G.control = false; P.vel.set(0, 0, 0); P.speed = 0; SFX.sparkle(); setExpr(girl, 'wow');
+    if (s.k === 'rocket') SFX.whoosh(2);
+    setTimeout(() => { if (!first) { setExpr(girl, 'happy'); giveControl(); return; } card(s.ic, tr(s.t), tr(s.f), `⭐ ${LANG === 'ar' ? 'سرّ' : 'Secret'} ${secFound()} / ${SEC.length}`, () => { setExpr(girl, 'happy'); giveControl(); }); }, s.k === 'rocket' ? 2400 : 1300);
+  }
+  function secretUpdate(dt, time) {
+    SEC.forEach((s, i) => { const sp = secSpark[i]; sp.visible = !(S.sec && S.sec[s.k]); sp.position.y = 2.3 + Math.sin(time * 2.5 + i) * 0.15; sp.material.rotation = Math.sin(time + i) * 0.3; });
+    const st = S.secT; if (st) st.t += dt; const k = st ? st.k : null, tt = st ? st.t : 0;
+    // rocket hop
+    if (k === 'rocket' && tt < 2.4) { const h = Math.sin(Math.min(1, tt / 2.4) * Math.PI) * 4.5; rocket.position.y = 0.3 + h; if (Math.random() < 0.6) burst(new T.Vector3(0, rocket.position.y + 0.3, 0), Math.random() < 0.5 ? 0xffd27a : 0xec8a3c, 2, 0.6, 0.5); } else rocket.position.y = 0.3;
+    // helmet light
+    suitVisor.material.color.set(S.sec && S.sec.suit && Math.sin(time * 4) > -0.3 ? 0xfff3a0 : 0xffc46b);
+    // telescope turns up toward the dome
+    secFX.scope.rotation.y += ((k === 'scope' || (S.sec && S.sec.scope) ? 0.6 : 0) - secFX.scope.rotation.y) * Math.min(1, dt * 2);
+    secFX.scope.rotation.z += ((S.sec && S.sec.scope ? -0.25 : 0) - secFX.scope.rotation.z) * Math.min(1, dt * 2);
+    // lettuce grows
+    const gs = S.sec && S.sec.garden ? 1.3 : 0.4; secFX.garden.scale.setScalar(secFX.garden.scale.x + (gs - secFX.garden.scale.x) * Math.min(1, dt * 1.5));
+    // locker opens
+    const lo = S.sec && S.sec.locker; secFX.locker.hinge.rotation.y += ((lo ? -1.9 : 0) - secFX.locker.hinge.rotation.y) * Math.min(1, dt * 3); secFX.locker.star.visible = !!lo; if (lo) secFX.locker.star.position.y = 1.3 + Math.sin(time * 3) * 0.08;
+  }
+  function card(ic, title, text, tag, onDone) {
+    const w = $('stickerWrap'); w.hidden = false; w.dir = LANG === 'ar' ? 'rtl' : 'ltr'; G.control = false;
+    w.innerHTML = `<div class="card sticker"><div class="rays"></div><div class="sticon">${ic}</div><div class="stk">${tag}</div><h3>${title}</h3><p>${text}</p><button class="btn green" id="stOk">${t('ok')}</button></div>`;
+    $('stOk').focus({ preventScroll: true });
+    $('stOk').onclick = () => { w.querySelector('.sticker').classList.add('fly'); setTimeout(() => { w.hidden = true; onDone(); }, 420); };
+  }
+
   // ---------- Station mode ----------
   const VIEW = new T.Vector3(), LOOK = new T.Vector3();
   function standPoint(k) { const p = POSN[k], d = new T.Vector3(-p.x, 0, -p.z).normalize(); return { pos: new T.Vector3(p.x, 0, p.z).addScaledVector(d, 2.7), d }; }
@@ -2326,7 +2409,7 @@ const ACAD = (() => {
   // ---------- World hooks ----------
   function start() {
     G.scene = 'academy'; setEnv('academy'); SFX.music('march'); stage.classList.remove('lv1');
-    S = { done: {}, tries: 0, mode: null, end: false, hintI: {} };
+    S = { done: {}, tries: 0, mode: null, end: false, hintI: {}, sec: {}, secT: null };
     KEYS.forEach((k) => { stations[k].check.visible = false; stations[k].pad.material.opacity = 0.25; });
     lights4.forEach((l) => l.material.color.set(0x555b66)); lockBar.visible = true; hatchM.emissiveIntensity = 0;
     A.cubes.forEach((q) => A.sg.remove(q.c)); A.cubes = []; A.awake = false; A.testing = false;
@@ -2337,10 +2420,11 @@ const ACAD = (() => {
     ship.visible = false; girl.visible = true; nuri.visible = true; G.nuriJoined = true;
     P.pos.set(ENTRY.x, 0, ENTRY.z); P.vel.set(0, 0, 0); P.yaw = Math.PI; camYaw = 0; camPitch = 0.42; camDist = 5; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
     setObjective('ac_obj');
-    showDialog([{ who: 'nuri', expr: 'happy', en: 'Welcome to the Academy! 🎉 Finish all 4 stations.', ar: 'أهلاً بالأكاديمية! 🎉 خلّص المحطات الأربع.' }], giveControl);
+    showDialog([{ who: 'nuri', expr: 'happy', en: 'Welcome! 🎉 Finish the 4 stations and find the ✨ secrets!', ar: 'أهلاً! 🎉 خلّص المحطات الأربع ودوّر على الأسرار ✨!' }], giveControl);
   }
   function action() {
     if (S.mode) return null;
+    for (const s of SEC) { if (S.sec[s.k]) continue; if (Math.hypot(P.pos.x - s.at.x, P.pos.z - s.at.z) < 2.1) return { at: new T.Vector3(s.at.x, 0, s.at.z), r: 2.1, text: `✨ ${tr(s.act)}`, fn: () => playSecret(s) }; }
     if (S.end) return { at: new T.Vector3(DOOR.x, 0, DOOR.z + 0.5), r: 2.6, text: tr(TX.door) + ' 🚀', fn: () => { SFX.success(); try { localStorage.setItem('ja_progress', JSON.stringify({ level1: true })); } catch (e) {} finalPanel(); } };
     let best = null, bd = 1e9; KEYS.forEach((k) => { if (S.done[k]) return; const sp = standPoint(k).pos, d = Math.hypot(P.pos.x - sp.x, P.pos.z - sp.z); if (d < bd) { bd = d; best = k; } });
     if (!best) return null; const sp = standPoint(best).pos;
@@ -2348,7 +2432,7 @@ const ACAD = (() => {
   }
   function target() { if (S.mode) return null; if (S.end) return { x: DOOR.x, z: DOOR.z + 0.5 }; const a = action(); return a ? { x: a.at.x, z: a.at.z } : null; }
   function update(dt, time) {
-    rocket.rotation.y = time * 0.4;
+    rocket.rotation.y = time * 0.4; secretUpdate(dt, time);
     stations && KEYS.forEach((k, i) => { stations[k].icon.position.y = 4.1 + Math.sin(time * 2 + i) * 0.08; });
     // air
     for (const q of A.cubes) { q.t = Math.min(1, q.t + dt * 2.2); const loc = q.to.clone(); const from = new T.Vector3(q.kind === 'o' ? -1.3 : 1.3, 1.9, 0.1); q.c.position.lerpVectors(from, loc, q.t).add(new T.Vector3(0, Math.sin(q.t * Math.PI) * 0.5, 0)); q.c.rotation.y = q.t * 4; }
@@ -2375,12 +2459,12 @@ const ACAD = (() => {
   }
   function cam(dt) { camera.position.lerp(VIEW, Math.min(1, dt * 4)); const look = new T.Vector3(); look.copy(LOOK); camera.lookAt(look); }
   const camLock = () => !!S.mode && G.scene === 'academy';
-  function checklist() { return [...KEYS.map((k) => ({ ic: ST[k].ic, t: tr(ST[k].t), done: !!S.done[k] })), { ic: '🚪', t: tr(TX.door), done: false, locked: !allDone() }]; }
-  function mapDots() { return [...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, ic: ST[k].ic, done: !!S.done[k] })), { x: DOOR.x, z: DOOR.z, ic: '🚪', done: false }]; }
+  function checklist() { return [...KEYS.map((k) => ({ ic: ST[k].ic, t: tr(ST[k].t), done: !!S.done[k] })), { ic: '⭐', t: `${LANG === 'ar' ? 'أسرار مخبّاية' : 'Hidden secrets'} ${secFound()}/${SEC.length}`, done: secFound() === SEC.length }, { ic: '🚪', t: tr(TX.door), done: false, locked: !allDone() }]; }
+  function mapDots() { return [...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, ic: ST[k].ic, done: !!S.done[k] })), ...SEC.map((s) => ({ x: s.at.x, z: s.at.z, ic: '✨', done: !!S.sec[s.k] })), { x: DOOR.x, z: DOOR.z, ic: '🚪', done: false }]; }
   function qa() { return [{ q: { en: 'Give me a hint!', ar: 'أعطيني تلميح!' }, hint: true }, ...QA.slice(0, 2)]; }
   function hint() { const k = S.mode || KEYS.find((q) => !S.done[q]) || 'food'; const i = S.hintI[k] || 0; S.hintI[k] = i + 1; return tr(ST[k].hints[Math.min(i, 2)]); }
   for (const [k, v] of Object.entries({ ac_obj: TX.obj, ac_door: TX.objDoor })) TXT[k] = v;
-  ENV_SOLIDS.academy = [{ x: 0, z: 0, r: 2.5 }, ...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, r: 1.9 })), { x: -10.6, z: 6.5, r: 0.8 }, { x: 10.3, z: 5.4, r: 1.6 }];
+  ENV_SOLIDS.academy = [{ x: 0, z: 0, r: 2.5 }, ...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, r: 1.9 })), { x: -10.6, z: 6.5, r: 0.8 }, { x: -12.3, z: 1.6, r: 0.5 }, { x: 10.3, z: 5.4, r: 1.6 }];
   const context = () => `The child is inside the Junior Astronaut Training Academy, doing 4 hands-on stations: air (fill a bottle with 1 oxygen cube and 4 nitrogen cubes to wake a robot), water (only clean water is drinkable, not muddy or sea water), Earth's atmosphere shield (air to breathe, a shield from harmful sunlight, a warm blanket, and space rocks burn up), and food (a balanced plate: fruit or vegetables, bread or rice, chicken or hummus). Done: ${KEYS.filter((k) => S.done[k]).join(', ') || 'none'}. Give hints, never the full answer.`;
   return { start, action, update, cam, camLock, target, checklist, mapDots, qa, hint, context, active: () => G.scene === 'academy', relang: renderHud };
 })();
