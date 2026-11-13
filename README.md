@@ -6,6 +6,10 @@ You command a small Moon base at the lunar south pole. You have 14 days of sunli
 
 Live game: _add the Netlify link here_
 
+## Current status
+
+The prototype has a bilingual title screen and a 28-day mission counter. Resource management and solar storm effects are in development.
+
 ## Run it locally
 
 You need [Node.js](https://nodejs.org) (LTS) and Git.
