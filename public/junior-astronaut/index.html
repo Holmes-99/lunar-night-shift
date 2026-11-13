@@ -646,7 +646,7 @@ const moon = new T.Mesh(new T.SphereGeometry(9, 20, 14), new T.MeshBasicMaterial
 
 // helpers
 // cartoon look: flat toon shading with 3 soft bands (like Roblox and other kid games), plus dark outlines on the characters
-const TOON_G = (() => { const d = new Uint8Array([95, 175, 235]); const tx = new T.DataTexture(d, 3, 1, T.LuminanceFormat); tx.minFilter = tx.magFilter = T.NearestFilter; tx.generateMipmaps = false; tx.needsUpdate = true; return tx; })();
+const TOON_G = (() => { const d = new Uint8Array([165, 215, 255]); const tx = new T.DataTexture(d, 3, 1, T.LuminanceFormat); tx.minFilter = tx.magFilter = T.NearestFilter; tx.generateMipmaps = false; tx.needsUpdate = true; return tx; })();
 function toonM(o = {}) { o = Object.assign({}, o); for (const k of ['roughness', 'metalness', 'flatShading', 'envMapIntensity', 'roughnessMap', 'metalnessMap']) delete o[k]; return new T.MeshToonMaterial(Object.assign({ gradientMap: TOON_G }, o)); }
 const mat = (c, o = {}) => toonM(Object.assign({ color: c }, o));
 const OUTLINE = {};
@@ -658,7 +658,7 @@ function outlineMat(w) {
 }
 function addOutline(root, w = 0.012, minR = 0.035) {
   const list = [];
-  root.traverse((o) => { if (!o.isMesh || o.userData.outline || o.material.isMeshBasicMaterial || o.material.transparent) return; if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere(); if (o.geometry.boundingSphere.radius < minR) return; list.push(o); });
+  root.traverse((o) => { if (!o.isMesh || o.userData.outline || o.userData.noOutline || o.material.isMeshBasicMaterial || o.material.transparent) return; if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere(); if (o.geometry.boundingSphere.radius < minR) return; list.push(o); });
   for (const o of list) { const ol = new T.Mesh(o.geometry, outlineMat(w)); ol.userData.outline = true; ol.castShadow = false; ol.receiveShadow = false; o.add(ol); }
 }
 
@@ -715,7 +715,7 @@ function makeGirl(o = {}) {
   add(new T.SphereGeometry(0.2, 20, 14), skin, 0, -0.1, 0.05, head).scale.set(1, 0.7, 0.9); // soft chin and cheeks
   [-1, 1].forEach((s) => add(new T.SphereGeometry(0.05, 12, 10), skin, s * 0.262, -0.03, 0, head).scale.set(0.45, 0.8, 0.6)); // ears
   // hair: cap, back, bangs, side locks and a bouncy ponytail
-  const cap = add(new T.SphereGeometry(0.287, 32, 18, 0, Math.PI * 2, 0, Math.PI * 0.55), hair, 0, 0.015, -0.015, head); cap.rotation.x = 0.42; // tilted back so the face stays open
+  const cap = add(new T.SphereGeometry(0.287, 32, 18, 0, Math.PI * 2, 0, Math.PI * 0.42), hair, 0, 0.02, -0.03, head); cap.rotation.x = 0.55; cap.userData.noOutline = true; // tilted back so the face stays open
   add(new T.SphereGeometry(0.272, 24, 16), hair, 0, -0.03, -0.065, head).scale.set(1.02, 0.98, 0.9);
   for (let i = 0; i < 6; i++) {
     const a = -0.95 + i * 0.38; const b = add(new T.SphereGeometry(0.1, 12, 8), hair, Math.sin(a) * 0.21, 0.19 - Math.abs(a) * 0.05, Math.cos(a) * 0.2, head);
