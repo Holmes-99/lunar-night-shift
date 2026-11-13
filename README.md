@@ -1,5 +1,7 @@
 # Junior Astronaut Mission Trainer
 
+> **Team game:** the current 3D version (prologue + Level 1 in the Atacama) is in [`public/junior-astronaut/`](public/junior-astronaut/). Open `public/junior-astronaut/index.html` in a browser, or `/junior-astronaut/` on the live site.
+
 Team SHEclipse, NASA Space Apps Challenge 2026: **Build a Junior Astronaut Mission Trainer**
 
 A browser game for kids aged 7 to 12. A young engineer gets an invitation to train for space, starts at a test base in Earth's Atacama Desert, then loses Earth's protections level by level on the way to a Moon or Mars base.
