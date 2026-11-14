@@ -489,6 +489,7 @@ body {
   <div class="topbar">
     <div class="objective card" id="objective" hidden><div class="dot">!</div><div><div class="k" id="objK"></div><div class="t" id="objT"></div></div></div>
     <div class="tools">
+      <button class="icon-btn" id="devSkip" title="Skip (for testing)">⏭</button>
       <button class="icon-btn" id="passBtn" hidden></button>
       <button class="icon-btn" id="sndBtn" aria-label="Sound on or off">🔊</button>
       <button class="icon-btn" id="voiceBtn" aria-pressed="false" title="Read aloud / القراءة بصوت">🗣️</button>
@@ -537,7 +538,7 @@ body {
       <div class="field"><label for="nameInput" id="tNameLbl"></label><input id="nameInput" maxlength="16" autocomplete="off"><small id="tNameNote"></small></div>
       <div class="controls-mini" id="tControls"></div>
       <button class="btn" id="startBtn"></button>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipL2Btn"></button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipACBtn"></button><button class="btn ghost small" id="skipL2Btn"></button></div>
     </div>
   </div>
 
@@ -630,6 +631,7 @@ const TXT = {
   dnKeep: { en: 'Start Level 1', ar: 'ابدأ الليفل الأول' },
   skipL1: { en: 'Jump to Level 1', ar: 'انتقل إلى المرحلة الأولى' },
   skipL2: { en: 'Jump to Level 2', ar: 'انتقل إلى المرحلة الثانية' },
+  skipAC: { en: 'Jump to Training Center', ar: 'انتقل إلى مركز التدريب' },
   dnReplay: { en: 'Replay prologue', ar: 'أعد المقدمة' },
   ok: { en: 'Got it! ✓', ar: 'تمام! ✓' },
   skipAll: { en: 'Skip ⏭', ar: 'تخطّي ⏭' },
@@ -1727,7 +1729,7 @@ function applyLang() {
   $('tTitle').innerHTML = t('title'); $('tSub').textContent = t('sub'); $('tIntro').textContent = t('intro');
   $('tNameLbl').textContent = t('nameLbl'); $('tNameNote').textContent = t('nameNote'); $('nameInput').placeholder = t('defaultName');
   $('tControls').innerHTML = coarse ? t('controlsTouch') : t('controlsDesk'); $('startBtn').textContent = t('start');
-  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1'); $('skipL2Btn').textContent = t('skipL2');
+  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1'); $('skipL2Btn').textContent = t('skipL2'); $('skipACBtn').textContent = t('skipAC');
   L1.relang(); L2.relang(); if (G.scene === 'academy') ACAD.relang();
   for (const id of ['dialog', 'caption', 'objective', 'prompt', 'skipBtn']) $(id).dir = LANG === 'ar' ? 'rtl' : 'ltr';
   document.querySelector('.topbar').dir = LANG === 'ar' ? 'rtl' : 'ltr';
@@ -1743,6 +1745,8 @@ $('langBtn').addEventListener('click', () => { LANG = LANG === 'ar' ? 'en' : 'ar
 $('startBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; startBedroom(); });
 $('skipL2Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L2.start(); });
 $('skipL1Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L1.start(); });
+$('skipACBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; ACAD.start(); });
+$('devSkip').addEventListener('click', () => { if (G.dialog) return; if (G.scene === 'academy') ACAD.devSkip(); else if (G.scene === 'level2') L2.devSkip(); });
 $('nameInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('startBtn').click(); });
 
 // ============================== LEVEL 1: The Secrets of the Atacama Desert ==============================
@@ -2887,7 +2891,7 @@ const L2 = (() => {
     $('helpBtn').hidden = false; $('helpLbl').textContent = t('help'); setObjective(null); renderPassBtn(); G.control = false;
     SFX.success();
     showDialog([
-      { who: 'nuri', expr: 'happy', en: 'Welcome to the Academy! Finish 5 rooms to earn 5 stamps.', ar: 'مرحباً بك في الأكاديمية! أنهِ 5 غرف لتحصل على 5 أختام.' },
+      { who: 'nuri', expr: 'happy', en: 'Welcome to the Academy! Here you learn to take Earth’s gifts with you. Finish 5 rooms to earn 5 stamps.', ar: 'مرحباً بك في الأكاديمية! هنا تتعلم كيف تأخذ هدايا الأرض معك. أنهِ 5 غرف لتحصل على 5 أختام.' },
     ], () => { setExpr(girl, 'happy'); setObjective('l2_go'); giveControl(); });
   }
   function relang() {
@@ -2921,12 +2925,10 @@ const ACAD = (() => {
     leave: { en: 'Leave', ar: 'اطلع' },
     serve: { en: 'Serve! 🍽️', ar: 'قدّم! 🍽️' },
     clear: { en: 'Empty', ar: 'فرّغ' },
-    door: { en: 'Level 2', ar: 'المرحلة 2' },
+    door: { en: 'Level 2: The Academy', ar: 'المرحلة 2: الأكاديمية' },
     badgeT: { en: 'Safe Home badge!', ar: 'شارة البيت الآمن!' },
     badgeP: { en: 'Air, water, a shield and food. Earth gives us all of this for free!', ar: 'هوا، ماي، درع وأكل. الأرض بتعطينا كل هاد مجاناً!' },
     cont: { en: 'Continue', ar: 'متابعة' },
-    l2T: { en: 'Level 2: Losing Earth’s protection', ar: 'المرحلة 2: فقدان حماية الأرض' },
-    l2P: { en: 'Coming soon! What happens when we leave Earth’s shield behind?', ar: 'قريباً! شو بصير لما نترك درع الأرض ورانا؟' },
     replay: { en: 'Play the training again', ar: 'العب التدريب مرة ثانية' },
     restart: { en: 'Play from the beginning', ar: 'العب من البداية' },
     tries: { en: (n) => `Brave tries: ${n} 💪`, ar: (n) => `محاولات شجاعة: ${n} 💪` },
@@ -3323,13 +3325,10 @@ const ACAD = (() => {
     S.end = true; SFX.music('party'); SFX.fanfare(); lockBar.visible = false; hatchM.emissiveIntensity = 1.2;
     const w = $('stickerWrap'); w.hidden = false; w.dir = LANG === 'ar' ? 'rtl' : 'ltr';
     w.innerHTML = `<div class="card sticker badge-card"><div class="rays"></div><div class="sticon">🏡</div><h3>${tr(TX.badgeT)}</h3><div class="four">${KEYS.map((k) => `<span>${ST[k].ic}<i>✔</i></span>`).join('')}</div><p>${tr(TX.badgeP)}</p><div class="stk">${tr(TX.tries, S.tries)}</div><button class="btn green" id="stOk">${tr(TX.cont)}</button></div>`;
-    $('stOk').onclick = () => { w.hidden = true; showDialog([{ who: 'nuri', expr: 'wow', en: 'But what happens if we leave Earth? 🚀', ar: 'بس شو بصير لو تركنا الأرض؟ 🚀' }], () => { setObjective('ac_door'); giveControl(); }); };
-  }
-  function finalPanel() {
-    G.control = false; const ov = $('lvOverlay'); ov.hidden = false; ov.dir = LANG === 'ar' ? 'rtl' : 'ltr';
-    $('lvPanel').innerHTML = `<div class="eyebrow">🚀 ${tr(TX.door)}</div><h2>${tr(TX.l2T)}</h2><p>${tr(TX.l2P)}</p><div class="actions"><button class="btn ghost" id="again">${tr(TX.replay)}</button><button class="btn" id="restart">${tr(TX.restart)}</button></div>`;
-    $('again').onclick = () => { ov.hidden = true; start(); };
-    $('restart').onclick = () => { ov.hidden = true; $('dnReplay').click(); };
+    $('stOk').onclick = () => { w.hidden = true; showDialog([
+      { who: 'nuri', expr: 'wow', en: 'In space, nobody gives us air, water or food for free. We have to bring them! 🚀', ar: 'بالفضاء ما في حدا بيعطينا هوا ولا ماي ولا أكل مجاناً. لازم نجيبهم معنا! 🚀' },
+      { who: 'nuri', expr: 'happy', en: 'Go through the Level 2 door. The Academy will get you ready to launch!', ar: 'امشِ من باب المرحلة 2. الأكاديمية رح تجهّزك للإطلاق!' },
+    ], () => { setObjective('ac_door'); giveControl(); }); };
   }
 
   // ---------- Click on equipment ----------
@@ -3417,7 +3416,9 @@ const ACAD = (() => {
   const context = () => `The child is inside the Junior Astronaut Training Academy, doing 4 hands-on stations: air (fill a bottle with 1 oxygen cube and 4 nitrogen cubes to wake a robot), water (fill a tank with 2.5 liters, the daily need, using half-liter buckets, then recycle used water because Mars has no pools), Earth's atmosphere layers (tap troposphere, stratosphere, mesosphere, thermosphere, exosphere from the ground up), and food (a balanced tray: fruit or veggies, bread or rice, chicken/egg/hummus, milk or yogurt). Done: ${KEYS.filter((k) => S.done[k]).join(', ') || 'none'}. Give hints, never the full answer.`;
   /*ACADHOOK*/
   const FITX = FIT;
-  return { start, action, update, cam, camLock, target, checklist, mapDots, qa, hint, context, active: () => G.scene === 'academy', relang: renderHud };
+  // test skip: mark every station done and show the badge
+  function devSkip() { if (S.end || S.mode) return; KEYS.forEach((k) => { S.done[k] = true; stations[k].check.visible = true; }); renderHud(); finish(); }
+  return { start, action, update, cam, camLock, target, checklist, mapDots, qa, hint, context, devSkip, active: () => G.scene === 'academy', relang: renderHud };
 })();
 
 // ============================== Guide: glowing arrows on the ground, mini map and mission checklist ==============================
