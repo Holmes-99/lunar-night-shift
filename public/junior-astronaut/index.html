@@ -5941,11 +5941,12 @@ const MARS = (() => {
   (async () => {
     // 1) today's flares saved from NASA DONKI when the game was published (if the site has them)
     try { const r = await fetch('../data/space-weather.json', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && j.day && typeof j.n === 'number') { swApply({ live: true, n: j.n, top: j.top, date: j.date, day: j.day }); return; } } } catch (e) {}
-    // 2) ask NASA directly (shared demo key, can be busy), 3) otherwise the archived storms
+    // 2) ask NASA's DONKI directly, 3) otherwise the archived storms
     try { const c = JSON.parse(localStorage.getItem('ja_sw') || 'null'); if (c && c.live && Date.now() - c.at < 6 * 3600e3) { swApply(c); return; } } catch (e) {}
     try {
       const d = (x) => new Date(Date.now() - x * 864e5).toISOString().slice(0, 10);
-      const r = await fetch(`https://api.nasa.gov/DONKI/FLR?startDate=${d(7)}&endDate=${d(0)}&api_key=DEMO_KEY`); if (!r.ok) throw new Error('donki');
+      let r = await fetch(`https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=${d(7)}&endDate=${d(0)}`).catch(() => null);
+      if (!r || !r.ok) r = await fetch(`https://api.nasa.gov/DONKI/FLR?startDate=${d(7)}&endDate=${d(0)}&api_key=DEMO_KEY`); if (!r.ok) throw new Error('donki');
       const a = await r.json(), list = Array.isArray(a) ? a : []; let top = null, date = null;
       for (const f of list) if (flareRank(f.classType) > flareRank(top)) { top = f.classType; date = (f.peakTime || f.beginTime || '').slice(0, 10); }
       const j = { live: true, n: list.length, top, date, at: Date.now(), day: d(0) }; swApply(j); try { localStorage.setItem('ja_sw', JSON.stringify(j)); } catch (e) {}

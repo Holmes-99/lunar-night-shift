@@ -13,6 +13,7 @@ out = sys.argv[1]
 today = datetime.now(timezone.utc).date()
 start = today - timedelta(days=7)
 urls = [
+    f"https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate={start}&endDate={today}",
     f"https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/FLR?startDate={start}&endDate={today}",
     f"https://api.nasa.gov/DONKI/FLR?startDate={start}&endDate={today}&api_key=DEMO_KEY",
 ]
