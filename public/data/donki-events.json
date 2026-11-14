@@ -1,11 +1,23 @@
 {
-  "_note": "Real space weather events from NASA DONKI (ccmc.gsfc.nasa.gov/tools/DONKI). Owner: science lead",
-  "_example": {
-    "id": "DONKI activity ID",
-    "type": "FLR | SEP | CME | GST",
-    "date": "YYYY-MM-DD",
-    "class": "e.g. X1.0 for flares",
-    "severity": 1
-  },
-  "events": []
+  "_note": "Real solar storms that reached Mars, as listed in NASA's DONKI space weather database (kauai.ccmc.gsfc.nasa.gov/DONKI) and described in NASA mission reports. Archived records, not a live feed. Used by Level 3 (Mars base). Fields: date, cls (flare class), t (kid text, en/ar), src (source).",
+  "events": [
+    {
+      "date": "2024-05-20",
+      "cls": "X12 (estimated)",
+      "t": { "en": "Huge solar flare. Curiosity rover measured radiation like 30 chest X-rays.", "ar": "توهّج شمسي ضخم. قاست مركبة كيوريوسيتي إشعاعاً يعادل 30 صورة أشعة للصدر." },
+      "src": "NASA DONKI; NASA JPL (Curiosity RAD: 8,100 micrograys vs about 700 on a normal day), June 2024"
+    },
+    {
+      "date": "2017-09-10",
+      "cls": "X8.2",
+      "t": { "en": "A solar storm made aurora glow over all of Mars and doubled surface radiation.", "ar": "عاصفة شمسية أضاءت الشفق فوق المريخ كله وضاعفت الإشعاع على السطح." },
+      "src": "NASA DONKI; NASA JPL (MAVEN and Curiosity), Sept 2017"
+    },
+    {
+      "date": "2003-10-28",
+      "cls": "X17",
+      "t": { "en": "A giant solar storm broke a radiation sensor on a NASA spacecraft at Mars.", "ar": "عاصفة شمسية عملاقة عطّلت حسّاس إشعاع على مركبة لناسا عند المريخ." },
+      "src": "NASA Mars Odyssey (MARIE instrument lost), Oct 2003"
+    }
+  ]
 }

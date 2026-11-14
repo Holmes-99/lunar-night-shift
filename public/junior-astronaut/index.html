@@ -1,4 +1,32 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+/* ===== Level 3: launch + Mars ===== */
+.bigchip { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 22px; background: rgba(16,26,51,.78); color: #fffaf0; pointer-events: none; z-index: 6; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.bigchip .ic { font-size: 46px; line-height: 1; }
+.bigchip b { font-family: var(--f-display); font-size: 24px; font-weight: 800; max-width: 52vw; }
+.bigchip.in { animation: pop2 .3s ease-out; }
+.ruler { position: absolute; top: 80px; inset-inline-start: 12px; width: 220px; padding: 10px; display: flex; flex-direction: column; gap: 5px; pointer-events: none; z-index: 5; }
+.ruler .rk { font-family: var(--f-display); font-weight: 800; font-size: 22px; color: var(--navy); text-align: center; }
+.ruler .rl { display: grid; grid-template-columns: 28px 1fr; gap: 0 6px; align-items: center; padding: 5px 8px; border-radius: 10px; background: #f1ece2; opacity: .55; transition: all .3s; border-inline-start: 6px solid var(--c); }
+.ruler .rl span { grid-row: span 2; font-size: 22px; } .ruler .rl b { font-size: 14px; color: var(--navy); } .ruler .rl i { font-style: normal; font-size: 12px; color: var(--muted); }
+.ruler .rl.on { opacity: 1; background: #fff; transform: scale(1.06); box-shadow: 0 3px 10px rgba(0,0,0,.15); }
+.ruler .rl.past { opacity: .8; }
+.countdown { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 160px; color: #fffaf0; text-shadow: 0 8px 0 rgba(0,0,0,.25); pointer-events: none; z-index: 6; }
+.countdown.pop { animation: pop2 .5s ease-out; }
+.solbtn { position: absolute; inset-inline-end: 14px; bottom: 96px; font-size: 19px; z-index: 5; animation: pop2 .3s ease-out; }
+.hotkeys { position: absolute; left: 50%; bottom: 80px; transform: translateX(-50%); font-size: 13px; font-weight: 800; color: #fffaf0; background: rgba(16,26,51,.55); padding: 4px 12px; border-radius: 10px; pointer-events: none; white-space: nowrap; max-width: 92vw; overflow: hidden; text-overflow: ellipsis; }
+.slot.sel { outline: 4px solid var(--lime); transform: translateY(-6px); }
+.m3h { font-family: var(--f-display); font-weight: 800; font-size: 15px; color: var(--navy); }
+.evbig { font-size: 74px; line-height: 1; text-align: center; }
+.lvp .evt { font-size: 20px; font-weight: 700; text-align: center; color: var(--navy); }
+.evopt { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px !important; text-align: center; }
+.evopt .eic { font-size: 44px; line-height: 1; } .evopt .et { font-weight: 800; font-size: 16px; }
+.evopt .tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; } .evopt .tags i { font-style: normal; font-size: 13px; font-weight: 800; background: #f1ece2; border-radius: 8px; padding: 2px 7px; }
+.results.r3 .rrow { grid-template-columns: 150px 70px 1fr; }
+.timeline { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.timeline .tl { display: flex; flex-direction: column; align-items: center; gap: 2px; background: #fff; border: 2px solid #efe1c4; border-radius: 12px; padding: 6px 10px; font-size: 22px; }
+.timeline .tl b { font-size: 12px; color: var(--muted); }
+@media (max-width: 640px) { .ruler { width: 160px; } .bigchip b { font-size: 18px; } .bigchip .ic { font-size: 34px; } .hotkeys { display: none; } .solbtn { bottom: 150px; } }
+</style></head><body>
 <meta charset="utf-8">
 <title>Junior Astronaut</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -540,7 +568,7 @@ body {
       <div class="field"><label for="nameInput" id="tNameLbl"></label><input id="nameInput" maxlength="16" autocomplete="off"><small id="tNameNote"></small></div>
       <div class="controls-mini" id="tControls"></div>
       <button class="btn" id="startBtn"></button>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipACBtn"></button><button class="btn ghost small" id="skipL2Btn"></button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipACBtn"></button><button class="btn ghost small" id="skipL2Btn"></button><button class="btn ghost small" id="skipL3Btn"></button></div>
     </div>
   </div>
 
@@ -633,6 +661,7 @@ const TXT = {
   dnKeep: { en: 'Start Level 1', ar: 'ابدأ الليفل الأول' },
   skipL1: { en: 'Jump to Level 1', ar: 'انتقل إلى المرحلة الأولى' },
   skipL2: { en: 'Jump to Level 2', ar: 'انتقل إلى المرحلة الثانية' },
+  skipL3: { en: 'Jump to Mars (Level 3)', ar: 'انتقل إلى المريخ (المرحلة 3)' },
   skipAC: { en: 'Jump to Training Center', ar: 'انتقل إلى مركز التدريب' },
   dnReplay: { en: 'Replay prologue', ar: 'أعد المقدمة' },
   ok: { en: 'Got it! ✓', ar: 'تمام! ✓' },
@@ -997,6 +1026,7 @@ function animateShip(ship, time) {
 
 // ============================== Environments ==============================
 const ENV = {};
+const EXTRA_ENV = {};
 // ---- Bedroom ----
 {
   const g = new T.Group(); ENV.bedroom = g; scene.add(g);
@@ -1165,7 +1195,7 @@ const LAGOON = { x: -32, z: 28, r: 9 }, ALMA = { x: 38, z: -26, r: 8 }, VIC = { 
   for (const s of SALT) for (let i = 0; i < 18; i++) { const a = Math.random() * 7, r = Math.random() * s.r * 0.8, x = s.x + Math.cos(a) * r, z = s.z + Math.sin(a) * r; const k = mesh(new T.DodecahedronGeometry(0.15 + Math.random() * 0.2, 0), mat(0xf3eee6, { roughness: 0.9, flatShading: true }), x, dh(x, z) + 0.05, z, g); k.scale.y = 0.4; }
 }
 const ENV_SOLIDS = { bedroom: ENV.bedroom.userData.solids, desert: ENV.desert.userData.solids, yard: [{ x: 0, z: 12, r: 6.5 }] };
-function groundY(x, z) { return G.scene === 'desert' || G.scene === 'landing' || G.scene === 'level1' ? dh(x, z) : 0; }
+function groundY(x, z) { return G.scene === 'desert' || G.scene === 'landing' || G.scene === 'level1' ? dh(x, z) : G.scene === 'mars' ? MARS.h(x, z) : 0; }
 ENV_SOLIDS.level1 = ENV.desert.userData.solids;
 
 function setEnv(name) {
@@ -1206,6 +1236,7 @@ function setEnv(name) {
     sun.color.set(0xffffff); sun.intensity = 0.7; sun.position.set(4, 16, 6); sun.target.position.set(0, 0, 0);
     Object.assign(sun.shadow.camera, { left: -28, right: 28, top: 28, bottom: -28 }); sun.shadow.camera.updateProjectionMatrix();
   }
+  if (EXTRA_ENV[name]) EXTRA_ENV[name]();
   SFX.music(name === 'desert' ? 'morning' : name === 'academy' || name === 'level2' ? 'march' : null);
 }
 
@@ -1325,6 +1356,7 @@ const ACTIONS = {
   level1: () => (G.scene === 'level1' ? L1.action() : null),
   academy: () => (G.scene === 'academy' ? ACAD.action() : null),
   level2: () => (G.scene === 'level2' ? L2.action() : null),
+  mars: () => (G.scene === 'mars' ? MARS.action() : null),
   yard: () => G.scene === 'yard' && G.beamReady ? { at: new T.Vector3(ship.position.x, 0, ship.position.z), r: 1.3, label: 'act_beam', fn: beamUp } : null,
 };
 const v3 = new T.Vector3();
@@ -1391,6 +1423,7 @@ function giveControl() { G.control = true; $('keysHint').hidden = coarse; $('sti
 
 // ============================== Story ==============================
 function startBedroom() {
+  MARS.hide(); suitUp(false);
   $('passBtn').hidden = true;
   $('stHud').hidden = true; $('mapHud').hidden = true;
   $('tray').hidden = true; $('stickerWrap').hidden = true;
@@ -1606,8 +1639,8 @@ function applyLang() {
   $('tTitle').innerHTML = t('title'); $('tSub').textContent = t('sub'); $('tIntro').textContent = t('intro');
   $('tNameLbl').textContent = t('nameLbl'); $('tNameNote').textContent = t('nameNote'); $('nameInput').placeholder = t('defaultName');
   $('tControls').innerHTML = coarse ? t('controlsTouch') : t('controlsDesk'); $('startBtn').textContent = t('start');
-  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1'); $('skipL2Btn').textContent = t('skipL2'); $('skipACBtn').textContent = t('skipAC');
-  L1.relang(); L2.relang(); if (G.scene === 'academy') ACAD.relang();
+  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1'); $('skipL2Btn').textContent = t('skipL2'); $('skipL3Btn').textContent = t('skipL3'); $('skipACBtn').textContent = t('skipAC');
+  L1.relang(); L2.relang(); if (G.scene === 'academy') ACAD.relang(); MARS.relang();
   for (const id of ['dialog', 'caption', 'objective', 'prompt', 'skipBtn']) $(id).dir = LANG === 'ar' ? 'rtl' : 'ltr';
   document.querySelector('.topbar').dir = LANG === 'ar' ? 'rtl' : 'ltr';
   if (G.objective) setObjective(G.objective);
@@ -1621,9 +1654,10 @@ document.querySelectorAll('.seg').forEach((b) => b.addEventListener('click', () 
 $('langBtn').addEventListener('click', () => { LANG = LANG === 'ar' ? 'en' : 'ar'; applyLang(); });
 $('startBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; startBedroom(); });
 $('skipL2Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L2.start(); });
+$('skipL3Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start(false); });
 $('skipL1Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L1.start(); });
 $('skipACBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; ACAD.start(); });
-$('devSkip').addEventListener('click', () => { if (G.dialog) return; if (G.scene === 'academy') ACAD.devSkip(); else if (G.scene === 'level2') L2.devSkip(); });
+$('devSkip').addEventListener('click', () => { if (G.dialog) return; if (G.scene === 'academy') ACAD.devSkip(); else if (G.scene === 'level2') L2.devSkip(); else if (G.scene === 'mars') MARS.devSkip(); });
 $('nameInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('startBtn').click(); });
 
 // ============================== LEVEL 1: The Secrets of the Atacama Desert ==============================
@@ -2202,7 +2236,8 @@ const L2 = (() => {
     launchAct: { en: 'Enter the launch bay', ar: 'ادخل منصة الإطلاق' },
     doneT: { en: 'LEVEL 2 COMPLETE — JUNIOR ASTRONAUT', ar: 'انتهت المرحلة الثانية — رائد فضاء صغير' },
     doneP: { en: (n) => `Amazing, ${n}! You earned all five stamps and you are ready for launch.`, ar: (n) => `رائع يا ${n}! جمعت الأختام الخمسة وأصبحت جاهزاً للإطلاق.` },
-    next: { en: 'Next Level: Launch to Mars (coming soon)', ar: 'المرحلة التالية: الإطلاق نحو المريخ (قريباً)' },
+    next: { en: 'Next: put on your spacesuit and fly to Mars! 🚀', ar: 'التالي: البس بدلة الفضاء وطِر إلى المريخ! 🚀' },
+    go3: { en: 'Launch to Mars 🚀', ar: 'انطلق إلى المريخ 🚀' },
     learned: { en: 'What you learned', ar: 'ماذا تعلّمت' },
     replay: { en: 'Play Level 2 again', ar: 'العب المرحلة الثانية مرة أخرى' }, restart: { en: 'Play from the beginning', ar: 'العب من البداية' },
     chipHint: { en: 'Give me a hint', ar: 'أعطني تلميحاً' }, chipWhy: { en: 'Why does this matter?', ar: 'لماذا هذا مهم؟' }, chipWhat: { en: 'What do I do here?', ar: 'ماذا أفعل هنا؟' },
@@ -2747,9 +2782,9 @@ const L2 = (() => {
   function finish() {
     setObjective(null); SFX.fanfare();
     panel((el) => {
-      el.innerHTML = `<div class="eyebrow">${tr(UI.eyebrow)}</div><h2>${tr(UI.doneT)}</h2><p>${tr(UI.doneP, playerName())}</p><div class="feedback good">${tr(UI.next)}</div><h3>${tr(UI.learned)}</h3><ul class="notebook">${TASKS.map((tk) => `<li>${tr(LEARN[tk.id])}</li>`).join('')}</ul><div class="actions"><button class="btn ghost" id="again">${tr(UI.replay)}</button><button class="btn" id="restart">${tr(UI.restart)}</button></div>`;
+      el.innerHTML = `<div class="eyebrow">${tr(UI.eyebrow)}</div><h2>${tr(UI.doneT)}</h2><p>${tr(UI.doneP, playerName())}</p><div class="feedback good">${tr(UI.next)}</div><h3>${tr(UI.learned)}</h3><ul class="notebook">${TASKS.map((tk) => `<li>${tr(LEARN[tk.id])}</li>`).join('')}</ul><div class="actions"><button class="btn ghost" id="again">${tr(UI.replay)}</button><button class="btn green" id="go3">${tr(UI.go3)}</button></div>`;
       el.querySelector('#again').onclick = () => { closePanel(); start(); };
-      el.querySelector('#restart').onclick = () => { closePanel(); $('passBtn').hidden = true; $('dnReplay').click(); };
+      el.querySelector('#go3').onclick = () => { closePanel(); $('passBtn').hidden = true; LAUNCH.start(); };
     });
   }
   function renderPassBtn() { const b = $('passBtn'); b.hidden = G.scene !== 'level2'; b.textContent = `★ ${Object.keys(S.stamps).length}/5`; b.title = tr(UI.passT); }
@@ -3323,6 +3358,647 @@ const ACAD = (() => {
   return { start, action, update, cam, camLock, target, checklist, mapDots, qa, hint, context, devSkip, active: () => G.scene === 'academy', relang: renderHud };
 })();
 
+// ============================== LEVEL 3: Launch to Mars, then build and survive on Mars ==============================
+const tr3 = (o, ...a) => { const v = o[LANG]; return typeof v === 'function' ? v(...a) : v; };
+// one big picture chip in the middle of the screen: an icon and a few words
+const chipEl = document.createElement('div'); chipEl.className = 'bigchip'; chipEl.hidden = true; stage.appendChild(chipEl);
+let chipT = null;
+function chip(ic, o, ms = 2300) {
+  chipEl.innerHTML = `<span class="ic">${ic}</span><b>${tr3(o)}</b>`; chipEl.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  chipEl.hidden = false; chipEl.classList.remove('in'); void chipEl.offsetWidth; chipEl.classList.add('in');
+  clearTimeout(chipT); chipT = setTimeout(() => (chipEl.hidden = true), ms); say(tr3(o), 'narr');
+}
+function hideChip() { clearTimeout(chipT); chipEl.hidden = true; }
+const cine = (dur, upd, skippable = true) => new Promise((res) => runCine(dur, upd, res, skippable));
+const emojiTexCache = {};
+function emojiTex(e) { if (!emojiTexCache[e]) emojiTexCache[e] = canvasTex(128, 128, (c) => { c.font = '92px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(e, 64, 70); }); return emojiTexCache[e]; }
+function iconSprite(e, s = 0.9) { const sp = new T.Sprite(new T.SpriteMaterial({ map: emojiTex(e), transparent: true, depthWrite: false })); sp.scale.setScalar(s); return sp; }
+
+// gloves for the full spacesuit (the fitting room only uses helmet + air pack)
+const gloves = [girl.userData.armL, girl.userData.armR].map((a) => { const g = mesh(new T.SphereGeometry(0.082, 12, 10), mat(0xeef1f6, { roughness: 0.5 }), 0, -0.39, 0, a); g.visible = false; return g; });
+function suitUp(on) { setSuit(girl, on); gloves.forEach((g) => (g.visible = on)); }
+
+// a crew capsule (used in space and for the Mars landing)
+function makeCapsule() {
+  const g = new T.Group();
+  const body = mesh(new T.CylinderGeometry(0.55, 1.25, 1.5, 28), mat(0xe9edf2, { roughness: 0.4 }), 0, 0.95, 0, g);
+  mesh(new T.CylinderGeometry(1.3, 1.3, 0.22, 28), mat(0x6a4a3a, { roughness: 0.8 }), 0, 0.12, 0, g); // heat shield
+  mesh(new T.CylinderGeometry(0.42, 0.55, 0.3, 20), mat(0xd9dee6), 0, 1.85, 0, g);
+  const win = mesh(new T.CircleGeometry(0.2, 18), toonM({ color: 0x7fc8ff, emissive: 0x4fa8ff, emissiveIntensity: 0.6 }), 0, 1.15, 0.92, g, false); win.rotation.x = -0.45;
+  mesh(new T.BoxGeometry(0.6, 0.85, 0.05), mat(0x1f3a68), 0.62, 0.8, 0.72, g).rotation.y = 0.7;
+  mesh(new T.TorusGeometry(0.9, 0.05, 8, 28), mat(0xec8a3c), 0, 0.6, 0, g).rotation.x = Math.PI / 2;
+  const glow = mesh(new T.SphereGeometry(1.7, 20, 14, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), new T.MeshBasicMaterial({ color: 0xff6a1a, transparent: true, opacity: 0, depthWrite: false }), 0, 0.2, 0, g, false);
+  const fm = new T.MeshBasicMaterial({ color: 0xff9a2a, transparent: true, opacity: 0.9, depthWrite: false });
+  const jets = new T.Group(); g.add(jets); jets.visible = false;
+  for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2 + 0.8, f = mesh(new T.ConeGeometry(0.16, 1.4, 10), fm, Math.cos(a) * 0.9, -0.6, Math.sin(a) * 0.9, jets, false); f.rotation.x = Math.PI; }
+  // parachute
+  const chuteTex = canvasTex(256, 64, (c, w, h) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#ffffff' : '#ec8a3c'; c.fillRect(i * w / 8, 0, w / 8, h); } });
+  const chute = new T.Group(); g.add(chute); chute.visible = false;
+  mesh(new T.SphereGeometry(2.6, 24, 10, 0, Math.PI * 2, 0, Math.PI / 2.4), new T.MeshStandardMaterial({ map: chuteTex, side: T.DoubleSide, roughness: 0.8 }), 0, 6.2, 0, chute);
+  for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4, l = mesh(new T.CylinderGeometry(0.012, 0.012, 5, 4), mat(0xffffff), Math.cos(a) * 1.0, 4.2, Math.sin(a) * 1.0, chute, false); l.rotation.z = Math.cos(a) * 0.32; l.rotation.x = -Math.sin(a) * 0.32; }
+  g.userData = { glow, jets, chute, body };
+  return g;
+}
+
+// ============================== Launch: suit up, rocket, sky layers, space, Mars landing ==============================
+const LAUNCH = (() => {
+  const TX = {
+    helmet: { en: 'Helmet: air to breathe', ar: 'الخوذة: هواء للتنفّس' },
+    pack: { en: 'Air pack: oxygen', ar: 'حقيبة الهواء: أكسجين' },
+    gloves: { en: 'Gloves: warm hands', ar: 'القفازات: يدان دافئتان' },
+    boots: { en: 'Boots: strong, warm feet', ar: 'الحذاء: قدمان قويتان ودافئتان' },
+    ready: { en: 'Suit ready! To the rocket!', ar: 'البدلة جاهزة! إلى الصاروخ!' },
+    board: { en: 'Climb into the capsule', ar: 'اصعد إلى الكبسولة' },
+    lift: { en: 'Liftoff!', ar: 'انطلاق!' },
+    boost: { en: 'Side boosters drop away', ar: 'الصواريخ الجانبية تنفصل' },
+    core: { en: 'Main stage done', ar: 'انتهت المرحلة الرئيسية' },
+    space: { en: 'Space starts at 100 km!', ar: 'يبدأ الفضاء عند 100 كم!' },
+    seven: { en: 'About 7 months to Mars', ar: 'نحو 7 أشهر إلى المريخ' },
+    rad: { en: 'Space radiation! The ship’s walls protect you', ar: 'إشعاع الفضاء! جدران المركبة تحميك' },
+    day: { en: (n) => `Day ${n}`, ar: (n) => `اليوم ${n}` },
+    heat: { en: 'Heat shield: about 1,300°C!', ar: 'الدرع الحراري: نحو 1300 درجة!' },
+    chute: { en: 'Parachute opens', ar: 'المظلّة تنفتح' },
+    rockets: { en: 'Rockets slow us down', ar: 'الصواريخ تُبطئنا' },
+    touch: { en: 'We landed on Mars!', ar: 'هبطنا على المريخ!' },
+  };
+  const LAYERS = [
+    { k: 0, top: 12, ic: '☁️', n: { en: 'Troposphere', ar: 'التروبوسفير' }, j: { en: 'weather and air', ar: 'الطقس والهواء' }, c: '#8fd0ef' },
+    { k: 12, top: 50, ic: '🕶️', n: { en: 'Stratosphere', ar: 'الستراتوسفير' }, j: { en: 'ozone shield', ar: 'درع الأوزون' }, c: '#6fa8e8' },
+    { k: 50, top: 85, ic: '🌠', n: { en: 'Mesosphere', ar: 'الميزوسفير' }, j: { en: 'space rocks burn', ar: 'تحترق الصخور الفضائية' }, c: '#5a78d0' },
+    { k: 85, top: 600, ic: '🛰️', n: { en: 'Thermosphere', ar: 'الثيرموسفير' }, j: { en: 'space station', ar: 'محطة الفضاء' }, c: '#4a4fb0' },
+    { k: 600, top: 10000, ic: '✨', n: { en: 'Exosphere', ar: 'الإكزوسفير' }, j: { en: 'satellites', ar: 'الأقمار الصناعية' }, c: '#2c2a70' },
+  ];
+
+  // ---------- the launch pad ----------
+  const PAD = new T.Group(); PAD.visible = false; scene.add(PAD); ENV.pad = PAD;
+  const groundG = new T.Group(); PAD.add(groundG);
+  const grass = mesh(new T.CircleGeometry(320, 48), mat(0x7f9c5c, { roughness: 1 }), 0, 0, 0, groundG, false); grass.rotation.x = -Math.PI / 2; grass.receiveShadow = true;
+  const sea = mesh(new T.PlaneGeometry(700, 300), mat(0x3d7fb8, { roughness: 0.3 }), 0, 0.03, -240, groundG, false); sea.rotation.x = -Math.PI / 2;
+  mesh(new T.CylinderGeometry(9, 11, 1, 36), mat(0xd6cfc2), 0, 0.5, 0, groundG).receiveShadow = true;
+  { // launch tower with a crew walkway
+    const steel = mat(0x8a909a, { roughness: 0.6 }), red = mat(0xd8433a);
+    const tw = new T.Group(); tw.position.set(-4.6, 1, 0); groundG.add(tw);
+    [[-0.9, -0.9], [0.9, -0.9], [-0.9, 0.9], [0.9, 0.9]].forEach(([x, z]) => mesh(new T.BoxGeometry(0.22, 21, 0.22), steel, x, 10.5, z, tw));
+    for (let y = 1; y < 21; y += 2) { mesh(new T.BoxGeometry(2, 0.12, 0.12), steel, 0, y, -0.9, tw); mesh(new T.BoxGeometry(2, 0.12, 0.12), steel, 0, y, 0.9, tw); mesh(new T.BoxGeometry(0.12, 0.12, 2), steel, -0.9, y, 0, tw); mesh(new T.BoxGeometry(0.12, 0.12, 2), steel, 0.9, y, 0, tw); }
+    mesh(new T.BoxGeometry(2.4, 0.6, 2.4), red, 0, 21.3, 0, tw);
+    mesh(new T.BoxGeometry(3.2, 0.2, 0.9), steel, 2.4, 16.5, 0, tw); // walkway to the capsule
+  }
+  // a few buildings far away
+  [[40, -40, 8, 10], [-50, -30, 14, 6], [60, 30, 10, 7]].forEach(([x, z, w, h]) => mesh(new T.BoxGeometry(w, h, w * 0.8), mat(0xe8e4dc), x, h / 2, z, groundG));
+  const cloudsG = new T.Group(); PAD.add(cloudsG);
+  for (let i = 0; i < 14; i++) { const c = new T.Group(); for (let j = 0; j < 4; j++) mesh(new T.SphereGeometry(2 + Math.random() * 2, 12, 8), mat(0xffffff, { roughness: 1 }), j * 2.6 - 4, Math.random(), Math.random() * 2, c, false).scale.y = 0.55; c.position.set((Math.random() - 0.5) * 60, 30 + i * 9, (Math.random() - 0.5) * 40 - 10); cloudsG.add(c); }
+  const meteor = mesh(new T.CylinderGeometry(0.08, 0.02, 9, 6), new T.MeshBasicMaterial({ color: 0xffe9a0, transparent: true, opacity: 0.9, blending: T.AdditiveBlending, depthWrite: false }), 0, 0, 0, PAD, false); meteor.visible = false;
+  const sat = new T.Group(); PAD.add(sat); sat.visible = false;
+  mesh(new T.BoxGeometry(1.2, 0.8, 0.8), mat(0xd9c27a, { metalness: 0.4, roughness: 0.4 }), 0, 0, 0, sat); [-1, 1].forEach((s) => mesh(new T.BoxGeometry(2.4, 0.05, 0.9), mat(0x2a4f9f), s * 1.9, 0, 0, sat));
+  const auroraTex = canvasTex(64, 128, (c, w, h) => { const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, 'rgba(120,255,160,0)'); g.addColorStop(0.6, 'rgba(120,255,160,.7)'); g.addColorStop(1, 'rgba(80,200,255,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); });
+  const aurora = mesh(new T.PlaneGeometry(120, 30), new T.MeshBasicMaterial({ map: auroraTex, transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide }), 0, 0, -70, PAD, false);
+
+  // ---------- the rocket (a big moon-and-Mars rocket: orange core, two white side boosters) ----------
+  const rocket = new T.Group(); rocket.position.set(0, 1, 0); PAD.add(rocket);
+  const white = mat(0xf4f1ea, { roughness: 0.45 }), orange = mat(0xd9732e, { roughness: 0.55 }), dark = mat(0x2a2f3a, { roughness: 0.5 });
+  const fm = new T.MeshBasicMaterial({ color: 0xff8a1a, transparent: true, opacity: 0.9, depthWrite: false });
+  const fm2 = new T.MeshBasicMaterial({ color: 0xfff2b0, transparent: true, opacity: 0.95, depthWrite: false });
+  const flames = [];
+  const flame = (x, r, len, parent) => { const f = new T.Group(); f.position.set(x, 0.3, 0); parent.add(f); const o = mesh(new T.ConeGeometry(r, len, 16), fm, 0, -len / 2, 0, f, false); o.rotation.x = Math.PI; const i2 = mesh(new T.ConeGeometry(r * 0.5, len * 0.55, 12), fm2, 0, -len * 0.28, 0, f, false); i2.rotation.x = Math.PI; f.visible = false; f.userData.len = len; flames.push(f); return f; };
+  const core = new T.Group(); rocket.add(core);
+  mesh(new T.CylinderGeometry(0.9, 0.9, 13, 28), orange, 0, 7.4, 0, core);
+  mesh(new T.CylinderGeometry(0.93, 0.93, 0.3, 28), dark, 0, 1.1, 0, core);
+  [[-0.4, -0.4], [0.4, -0.4], [-0.4, 0.4], [0.4, 0.4]].forEach(([x, z]) => mesh(new T.ConeGeometry(0.26, 0.7, 14, 1, true), dark, x, 0.65, z, core));
+  flame(0, 0.8, 5, core);
+  const upper = new T.Group(); rocket.add(upper);
+  mesh(new T.CylinderGeometry(0.72, 0.9, 1.6, 28), white, 0, 14.7, 0, upper);
+  mesh(new T.CylinderGeometry(0.75, 0.75, 1.3, 28), white, 0, 16.1, 0, upper);
+  mesh(new T.ConeGeometry(0.85, 1.3, 28), mat(0xdfe3ea), 0, 17.4, 0, upper);
+  mesh(new T.CylinderGeometry(0.07, 0.07, 1.5, 8), white, 0, 18.8, 0, upper); mesh(new T.ConeGeometry(0.2, 0.6, 12), orange, 0, 19.8, 0, upper);
+  const boosters = [-1, 1].map((s) => { const b = new T.Group(); b.position.x = s * 1.38; rocket.add(b); mesh(new T.CylinderGeometry(0.45, 0.45, 12, 20), white, 0, 6.9, 0, b); mesh(new T.ConeGeometry(0.45, 1.3, 20), white, 0, 13.55, 0, b); [3, 6, 9].forEach((y) => mesh(new T.CylinderGeometry(0.47, 0.47, 0.18, 20), dark, 0, y, 0, b)); mesh(new T.ConeGeometry(0.36, 0.8, 16, 1, true), dark, 0, 0.55, 0, b); flame(0, 0.5, 4, b); return b; });
+
+  // ---------- space ----------
+  const SPC = new T.Group(); SPC.visible = false; scene.add(SPC); ENV.space = SPC;
+  const earthTex = canvasTex(512, 256, (c, w, h) => { c.fillStyle = '#2a6fc0'; c.fillRect(0, 0, w, h); for (let y = 0; y < h; y += 4) for (let x = 0; x < w; x += 4) { const n = fbm(x * 0.012, y * 0.02); if (n > 0.56) { c.fillStyle = n > 0.66 ? '#c9a46a' : '#4f9a48'; c.fillRect(x, y, 4, 4); } } c.fillStyle = 'rgba(255,255,255,.75)'; for (let i = 0; i < 70; i++) { c.beginPath(); c.ellipse(Math.random() * w, Math.random() * h, 8 + Math.random() * 26, 3 + Math.random() * 6, 0, 0, 7); c.fill(); } c.fillStyle = '#f4f8ff'; c.fillRect(0, 0, w, 10); c.fillRect(0, h - 12, w, 12); });
+  const marsTex = canvasTex(512, 256, (c, w, h) => { c.fillStyle = '#c1562e'; c.fillRect(0, 0, w, h); for (let y = 0; y < h; y += 4) for (let x = 0; x < w; x += 4) { const n = fbm(x * 0.015 + 9, y * 0.025); if (n > 0.55) { c.fillStyle = n > 0.65 ? '#7e3016' : '#a3421f'; c.fillRect(x, y, 4, 4); } } c.fillStyle = '#fbf3ea'; c.fillRect(0, 0, w, 8); c.fillRect(0, h - 8, w, 8); });
+  const earth = mesh(new T.SphereGeometry(14, 40, 28), new T.MeshStandardMaterial({ map: earthTex, roughness: 0.8 }), 0, 0, 0, SPC, false);
+  const atm = mesh(new T.SphereGeometry(14.8, 32, 20), new T.MeshBasicMaterial({ color: 0x8fd0ff, transparent: true, opacity: 0.18, depthWrite: false }), 0, 0, 0, earth, false);
+  const marsP = mesh(new T.SphereGeometry(9, 40, 28), new T.MeshStandardMaterial({ map: marsTex, roughness: 0.9 }), 0, 0, 0, SPC, false);
+  const ship2 = new T.Group(); SPC.add(ship2);
+  { const cap = makeCapsule(); cap.rotation.z = -Math.PI / 2; cap.position.x = 1.6; ship2.add(cap); mesh(new T.CylinderGeometry(0.95, 0.95, 2.2, 24), mat(0xd9dee6), 0, 0, 0, ship2).rotation.z = Math.PI / 2; [-1, 1].forEach((s) => { const w = mesh(new T.BoxGeometry(1.2, 0.05, 4.5), mat(0x2a4f9f, { emissive: 0x112244, emissiveIntensity: 0.4 }), -0.2, 0, s * 3.4, ship2); w.castShadow = false; }); mesh(new T.ConeGeometry(0.5, 0.8, 16, 1, true), dark, -1.5, 0, 0, ship2).rotation.z = Math.PI / 2; }
+  const sunSp = new T.Sprite(new T.SpriteMaterial({ map: sparkTex, color: 0xfff1c0, transparent: true, depthWrite: false, blending: T.AdditiveBlending })); sunSp.scale.setScalar(40); sunSp.position.set(-60, 40, -160); SPC.add(sunSp);
+
+  EXTRA_ENV.pad = () => {
+    scene.background = null; scene.fog = new T.Fog('#cfe6f7', 120, 420);
+    skyMat.uniforms.top.value.set('#4f8fd0'); skyMat.uniforms.bottom.value.set('#d6ecfa'); skyMat.uniforms.sunAmt.value = 1; skyMat.uniforms.sunDir.value.set(-0.4, 0.5, -0.6).normalize();
+    hemi.color.set(0xffffff); hemi.groundColor.set(0x6a7a5a); hemi.intensity = 0.8;
+    sun.color.set(0xfff4e0); sun.intensity = 1.3; sun.position.set(-20, 40, 20); sun.target.position.set(0, 8, 0);
+    Object.assign(sun.shadow.camera, { left: -20, right: 20, top: 30, bottom: -10 }); sun.shadow.camera.updateProjectionMatrix();
+  };
+  EXTRA_ENV.space = () => {
+    sky.visible = false; scene.background = new T.Color('#03040b'); scene.fog = null; stars.visible = true; starMat.opacity = 1;
+    hemi.color.set(0xffffff); hemi.groundColor.set(0x101020); hemi.intensity = 0.35;
+    sun.color.set(0xffffff); sun.intensity = 1.6; sun.position.set(-60, 40, -100); sun.target.position.set(0, 0, 0);
+  };
+
+  // ---------- altitude ruler (HTML) ----------
+  const ruler = document.createElement('div'); ruler.className = 'ruler card'; ruler.hidden = true; stage.appendChild(ruler);
+  function drawRuler(km) {
+    ruler.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+    ruler.innerHTML = `<div class="rk">📏 ${Math.round(km)} ${LANG === 'ar' ? 'كم' : 'km'}</div>` + LAYERS.slice().reverse().map((L) => { const on = km >= L.k && km < L.top, past = km >= L.top; return `<div class="rl ${on ? 'on' : ''} ${past ? 'past' : ''}" style="--c:${L.c}"><span>${L.ic}</span><b>${tr3(L.n)}</b><i>${tr3(L.j)}</i></div>`; }).join('');
+  }
+  const countEl = document.createElement('div'); countEl.className = 'countdown'; countEl.hidden = true; stage.appendChild(countEl);
+
+  let running = false;
+  async function start() {
+    if (running) return; running = true;
+    G.scene = 'launch'; G.control = false; $('passBtn').hidden = true; $('lvOverlay').hidden = true; setObjective(null); closeChat();
+    // 1) suit up, piece by piece
+    suitUp(false); girl.visible = true; P.vel.set(0, 0, 0);
+    const fwd = new T.Vector3(Math.sin(P.yaw), 0, Math.cos(P.yaw));
+    const camAt = new T.Vector3().copy(P.pos).addScaledVector(fwd, 2.8).add(new T.Vector3(0.6, 1.35, 0));
+    const u = girl.userData;
+    const steps = [
+      [0.4, () => { u.helmet.visible = true; u.tail.visible = false; burst(new T.Vector3(P.pos.x, P.pos.y + 1.4, P.pos.z), 0x8fd0ef, 16, 0.8, 0.6); SFX.snap(); chip('🪖', TX.helmet, 1500); }],
+      [1.9, () => { u.lsPack.visible = true; u.pack.visible = false; burst(new T.Vector3(P.pos.x, P.pos.y + 0.9, P.pos.z), 0xffffff, 14, 0.8, 0.6); SFX.snap(); chip('🎒', TX.pack, 1500); }],
+      [3.4, () => { gloves.forEach((g) => (g.visible = true)); burst(new T.Vector3(P.pos.x, P.pos.y + 0.6, P.pos.z), 0xffffff, 14, 0.8, 0.6); SFX.snap(); chip('🧤', TX.gloves, 1500); }],
+      [4.9, () => { suitUp(true); burst(new T.Vector3(P.pos.x, P.pos.y + 0.1, P.pos.z), 0xec8a3c, 14, 0.8, 0.6); SFX.snap(); chip('🥾', TX.boots, 1500); }],
+      [6.4, () => { SFX.success(); setExpr(girl, 'happy'); chip('🧑‍🚀', TX.ready, 1600); }],
+    ];
+    let si = 0;
+    await cine(8, (tt, dt) => {
+      while (si < steps.length && tt >= steps[si][0]) { steps[si][1](); si++; }
+      camera.position.lerp(camAt, Math.min(1, (dt || 1) * 3)); camera.lookAt(P.pos.x, P.pos.y + 1.0, P.pos.z);
+      girl.rotation.y = P.yaw + Math.sin(tt * 2) * 0.15;
+    });
+    while (si < steps.length) { steps[si][1](); si++; }
+    fade(true); await wait(650); hideChip();
+    // 2) at the pad: she walks onto the tower walkway, then countdown
+    G.scene = 'launch'; setEnv('pad'); nuri.visible = false;
+    groundG.position.y = 0; rocket.position.set(0, 1, 0); rocket.rotation.set(0, 0, 0); core.position.set(0, 0, 0); core.visible = true; boosters.forEach((b, i) => { b.position.set(i ? 1.38 : -1.38, 0, 0); b.rotation.set(0, 0, 0); b.visible = true; }); flames.forEach((f) => (f.visible = false));
+    cloudsG.children.forEach((c, i) => c.position.set(c.position.x, 30 + i * 9, c.position.z)); meteor.visible = false; sat.visible = false; aurora.material.opacity = 0;
+    girl.visible = true; girl.scale.setScalar(1); girl.position.set(-4.6, 17.7, 0); girl.rotation.y = Math.PI / 2;
+    fade(false); chip('🚀', TX.board, 2000);
+    await cine(3.2, (tt) => {
+      const k = Math.min(1, tt / 2.6); girl.position.set(-4.6 + k * 3.5, 17.7, 0); girl.userData.phase += 0.12;
+      if (tt > 2.6) girl.visible = false;
+      camera.position.set(14, 15, 16); camera.lookAt(-1, 16.5, 0);
+    });
+    girl.visible = false;
+    countEl.hidden = false;
+    for (const n of ['3', '2', '1']) { countEl.textContent = n; countEl.classList.remove('pop'); void countEl.offsetWidth; countEl.classList.add('pop'); SFX.pick(); camera.position.set(16, 6, 22); camera.lookAt(0, 9, 0); await wait(800); }
+    countEl.hidden = true;
+    // 3) liftoff
+    chip('🔥', TX.lift, 1800); SFX.whoosh(1); SFX.rise();
+    flames.forEach((f) => (f.visible = true));
+    await cine(5, (tt, dt) => {
+      const y = 1 + 0.9 * tt * tt * 1.6; rocket.position.y = y;
+      flames.forEach((f) => (f.scale.y = 0.85 + Math.random() * 0.35));
+      if (Math.random() < 0.7) burst(new T.Vector3((Math.random() - 0.5) * 4, 1.2, (Math.random() - 0.5) * 4), 0xe8e4dc, 3, 6, 1.2);
+      const shake = tt < 2 ? 0.08 : 0.03;
+      camera.position.set(18 + (Math.random() - 0.5) * shake, 5 + y * 0.35, 24 + (Math.random() - 0.5) * shake); camera.lookAt(0, y + 8, 0);
+    });
+    // 4) through the sky layers (we keep the rocket still and let the world fall away)
+    ruler.hidden = false; drawRuler(0);
+    const ryBase = rocket.position.y;
+    const skyCol = [[0, '#4f8fd0', '#d6ecfa'], [0.25, '#2f5fb0', '#9fc8f0'], [0.5, '#16246a', '#3a5aa0'], [0.75, '#05061a', '#141a40'], [1, '#02030a', '#06081a']];
+    const colAt = (k, idx) => { let a = skyCol[0], b = skyCol[skyCol.length - 1]; for (let i = 0; i < skyCol.length - 1; i++) if (k >= skyCol[i][0] && k <= skyCol[i + 1][0]) { a = skyCol[i]; b = skyCol[i + 1]; break; } const f = (k - a[0]) / Math.max(1e-4, b[0] - a[0]); return new T.Color(a[idx]).lerp(new T.Color(b[idx]), f); };
+    let said = {}; const DUR = 15;
+    const kmAt = (tt) => { const k = tt / DUR; return k < 0.5 ? k / 0.5 * 100 : 100 + Math.pow((k - 0.5) / 0.5, 2) * 900; };
+    await cine(DUR, (tt, dt) => {
+      dt = dt || 0; const km = kmAt(Math.min(tt, DUR)), k = Math.min(1, tt / DUR);
+      drawRuler(km);
+      groundG.position.y = -km * 3; scene.fog && (scene.fog.far = Math.max(60, 420 - km * 8));
+      skyMat.uniforms.top.value.copy(colAt(k, 1)); skyMat.uniforms.bottom.value.copy(colAt(k, 2)); if (scene.fog) scene.fog.color.copy(skyMat.uniforms.bottom.value);
+      stars.visible = true; starMat.opacity = smooth(0.35, 0.65, k);
+      flames.forEach((f) => (f.scale.y = 0.85 + Math.random() * 0.35));
+      cloudsG.children.forEach((c) => { c.position.y -= dt * (km < 14 ? 60 : 120); });
+      // boosters fall away in the stratosphere, the main stage near space
+      if (km > 45 && !said.boost) { said.boost = true; chip('🔁', TX.boost, 1800); SFX.whoosh(0); }
+      if (said.boost) boosters.forEach((b, i) => { b.position.x += (i ? 1 : -1) * dt * 2.2; b.position.y -= dt * 9; b.rotation.z += (i ? -1 : 1) * dt * 0.6; if (b.position.y < -60) b.visible = false; });
+      if (km > 62 && km < 80) { meteor.visible = true; meteor.position.set(-30 + (km - 62) * 4, ryBase + 30 - (km - 62) * 2, -40); meteor.rotation.z = 1.1; } else meteor.visible = false;
+      if (km > 100 && !said.space) { said.space = true; chip('✨', TX.space, 2000); SFX.sparkle(); }
+      if (km > 150 && !said.core) { said.core = true; chip('🧡', TX.core, 1600); flames[0].visible = false; }
+      if (said.core) { core.position.y -= dt * 10; if (core.position.y < -80) core.visible = false; }
+      aurora.material.opacity = km > 110 && km < 400 ? 0.55 : Math.max(0, aurora.material.opacity - dt);
+      aurora.position.set(0, ryBase + 6, -70);
+      if (km > 300 && km < 700) { sat.visible = true; sat.position.set(25 - (km - 300) * 0.12, ryBase + 14, -18); sat.rotation.y += dt; } else sat.visible = false;
+      const a = tt * 0.15; camera.position.set(Math.sin(a) * 20, ryBase + 9, Math.cos(a) * 20); camera.lookAt(0, ryBase + 9, 0);
+    });
+    ruler.hidden = true;
+    fade(true); await wait(650);
+    // 5) seven months in space
+    setEnv('space'); G.scene = 'launch';
+    earth.position.set(-26, -4, -40); marsP.position.set(70, 6, -120); ship2.position.set(-10, 0, -20); ship2.rotation.set(0, 0, 0);
+    fade(false); chip('🗓️', TX.seven, 2400);
+    let radSaid = false;
+    await cine(10, (tt, dt) => {
+      const k = Math.min(1, tt / 10), e = k * k * (3 - 2 * k);
+      earth.position.set(-26 - e * 60, -4 - e * 10, -40 - e * 160); earth.rotation.y += (dt || 0) * 0.2;
+      marsP.position.set(70 - e * 52, 6 - e * 4, -120 + e * 78); marsP.rotation.y += (dt || 0) * 0.1;
+      ship2.position.set(-10 + e * 14, Math.sin(tt) * 0.4, -20 - e * 4); ship2.rotation.x = Math.sin(tt * 0.7) * 0.05;
+      if (tt > 3.2 && !radSaid) { radSaid = true; chip('☢️', TX.rad, 2600); }
+      if (tt > 6.4 && tt < 9.5) { chipEl.hidden = false; chipEl.innerHTML = `<span class="ic">📅</span><b>${tr3(TX.day, Math.round(1 + (tt - 6.4) / 3.1 * 202))}</b>`; }
+      camera.position.set(-2 + e * 10, 3, 6 - e * 2); camera.lookAt(ship2.position.x + 6, 0, ship2.position.z - 10);
+    });
+    hideChip(); fade(true); await wait(650);
+    // 6) landing on Mars: heat shield, parachute, rockets
+    MARS.prepare(); setEnv('mars'); G.scene = 'launch';
+    const cap = MARS.capsule, land = MARS.landAt;
+    cap.visible = true; cap.userData.glow.material.opacity = 0; cap.userData.chute.visible = false; cap.userData.jets.visible = false;
+    fade(false); chip('🔥', TX.heat, 2400); SFX.whoosh(2);
+    let st = {};
+    await cine(9.5, (tt, dt) => {
+      let x, y, z;
+      if (tt < 3) { const k = tt / 3; x = land.x - 70 * (1 - k); y = 90 - 60 * k; z = land.z - 90 * (1 - k); cap.userData.glow.material.opacity = 0.85 * Math.sin(Math.min(1, k * 1.2) * Math.PI); cap.rotation.z = 0.5 * (1 - k); }
+      else if (tt < 6) { if (!st.chute) { st.chute = true; chip('🪂', TX.chute, 2000); SFX.open(); } const k = (tt - 3) / 3; cap.userData.glow.material.opacity = 0; cap.userData.chute.visible = true; cap.rotation.z = Math.sin(tt * 2) * 0.06; x = land.x; y = 30 - 22 * k; z = land.z; }
+      else if (tt < 8) { if (!st.jets) { st.jets = true; cap.userData.chute.visible = false; cap.userData.jets.visible = true; chip('🚀', TX.rockets, 1800); SFX.whoosh(1); } const k = (tt - 6) / 2; x = land.x; y = 8 * (1 - k * k * (3 - 2 * k)); z = land.z; cap.userData.jets.children.forEach((j) => (j.scale.y = 0.7 + Math.random() * 0.5)); if (Math.random() < 0.5) burst(new T.Vector3(land.x, 0.3, land.z), 0xd9875a, 3, 5, 0.8); cap.rotation.z = 0; }
+      else { if (!st.touch) { st.touch = true; cap.userData.jets.visible = false; SFX.land(); burst(new T.Vector3(land.x, 0.4, land.z), 0xd9875a, 40, 7, 1.2); chip('✅', TX.touch, 2200); SFX.fanfare(); } x = land.x; y = 0; z = land.z; }
+      cap.position.set(x, y, z);
+      camera.position.set(cap.position.x - 9, Math.max(3.2, cap.position.y + 2.5), cap.position.z + 13); camera.lookAt(cap.position.x, Math.max(1.5, cap.position.y - 1), cap.position.z);
+    });
+    cap.position.set(land.x, 0, land.z); cap.rotation.set(0, 0, 0); cap.userData.chute.visible = false; cap.userData.jets.visible = false; cap.userData.glow.material.opacity = 0;
+    running = false;
+    MARS.start(true);
+  }
+  return { start, active: () => running };
+})();
+
+// ============================== LEVEL 3: Build and survive on Mars ==============================
+const MARS = (() => {
+  const TX = {
+    eyebrow: { en: 'Level 3 · Mars Base', ar: 'المرحلة 3 · قاعدة المريخ' },
+    obj_build: { en: 'Build your base: power, air, water, food', ar: 'ابنِ قاعدتك: كهرباء، هواء، ماء، طعام' },
+    obj_start: { en: 'Base ready? Press ▶ to start the sol', ar: 'القاعدة جاهزة؟ اضغط ▶ لبدء اليوم' },
+    place: { en: 'Place', ar: 'ضَع' }, pick: { en: 'Pick up', ar: 'ارفع' },
+    full: { en: 'No more space (8 buildings)', ar: 'لا مكان بعد الآن (8 مبانٍ)' }, taken: { en: 'Spot taken', ar: 'المكان مشغول' }, out: { en: 'Build inside the grid', ar: 'ابنِ داخل الشبكة' },
+    keys: { en: '1–7 choose · R turn · E place · Q put away', ar: '1–7 اختر · R تدوير · E ضع · Q أعِد' },
+    startSol: { en: (n) => `▶ Start sol ${n}`, ar: (n) => `▶ ابدأ اليوم ${n}` },
+    sol: { en: 'Sol', ar: 'اليوم' }, solIs: { en: 'A sol is a Mars day: 24 h 39 min', ar: 'السول يوم مريخي: 24 ساعة و39 دقيقة' },
+    power: { en: 'Power', ar: 'الكهرباء' }, life: { en: 'Life support', ar: 'دعم الحياة' }, rad: { en: 'Radiation safety', ar: 'الأمان من الإشعاع' }, night: { en: 'Night battery', ar: 'بطارية الليل' }, sci: { en: 'Science', ar: 'العلم' }, built: { en: 'Buildings', ar: 'المباني' },
+    need: { en: 'Your crew needs these first:', ar: 'يحتاج طاقمك هذه أولاً:' },
+    hi1: { en: 'We made it! This is Mars. 🔴', ar: 'وصلنا! هذا هو المريخ. 🔴' },
+    hi2: { en: 'Pick a piece in the bar below, carry it, and place it on the grid.', ar: 'اختر قطعة من الشريط في الأسفل، احملها، وضعها على الشبكة.' },
+    hi3: { en: 'We only have room for 8 buildings. Choose wisely!', ar: 'لدينا مكان لـ 8 مبانٍ فقط. اختر بحكمة!' },
+    ready: { en: 'Power, air, water and food are ready! Add more, or start the sol.', ar: 'الكهرباء والهواء والماء والطعام جاهزة! أضف المزيد أو ابدأ اليوم.' },
+    choose: { en: 'What do you do?', ar: 'ماذا ستفعل؟' },
+    done: { en: (n) => `Sol ${n} done`, ar: (n) => `انتهى اليوم ${n}` },
+    nextSol: { en: '▶ Next sol', ar: '▶ اليوم التالي' }, change: { en: '🔧 Change my base', ar: '🔧 عدّل قاعدتي' },
+    winT: { en: 'Mission complete!', ar: 'نجحت المهمة!' }, winP: { en: (n) => `${n}, your crew lived 5 sols on Mars!`, ar: (n) => `يا ${n}، عاش طاقمك 5 أيام على المريخ!` },
+    failT: { en: 'The crew flies home safely', ar: 'الطاقم يعود إلى الأرض بأمان' }, failP: { en: 'Mission Control called them back. Try a new plan!', ar: 'استدعاهم مركز التحكم. جرّب خطة جديدة!' },
+    again: { en: 'Play Level 3 again (new events)', ar: 'العب المرحلة 3 مجدداً (أحداث جديدة)' }, restart: { en: 'Play from the beginning', ar: 'العب من البداية' }, sources: { en: '📚 Real NASA data used', ar: '📚 بيانات ناسا الحقيقية' },
+    yourSols: { en: 'Your mission', ar: 'مهمتك' }, back: { en: 'Back', ar: 'رجوع' },
+    real: { en: 'Real event', ar: 'حدث حقيقي' }, src: { en: 'Source', ar: 'المصدر' },
+    noAir: { en: 'No oxygen maker running', ar: 'صانع الأكسجين متوقف' }, noWater: { en: 'No water today', ar: 'لا ماء اليوم' }, noFood: { en: 'No fresh food', ar: 'لا طعام طازج' },
+    moreFood: { en: 'Two greenhouses: extra food', ar: 'دفيئتان: طعام إضافي' }, cold: { en: 'Cold night: the battery ran out', ar: 'ليلة باردة: نفدت البطارية' },
+    daily: { en: 'No shield: daily space radiation', ar: 'لا درع: إشعاع يومي' }, stormHit: { en: 'Solar storm radiation', ar: 'إشعاع العاصفة الشمسية' },
+    labOn: { en: 'Lab did science', ar: 'المختبر قام بالعلم' }, off: { en: 'Not enough power: turned off', ar: 'كهرباء غير كافية: توقّف' },
+    tipPower: { en: 'Tip: more solar panels, or fewer machines.', ar: 'نصيحة: ألواح شمسية أكثر أو آلات أقل.' }, tipNight: { en: 'Tip: a battery keeps the heater on at night.', ar: 'نصيحة: البطارية تُبقي المدفأة تعمل ليلاً.' }, tipShield: { en: 'Tip: shield walls block radiation.', ar: 'نصيحة: الجدران الواقية تصدّ الإشعاع.' },
+  };
+  Object.assign(TXT, { l3_build: TX.obj_build, l3_start: TX.obj_start });
+  const PCS = {
+    solar: { ic: '☀️', n: { en: 'Solar panel', ar: 'لوح شمسي' }, d: { en: 'Makes power by day', ar: 'يصنع الكهرباء نهاراً' }, use: 0, count: 4 },
+    battery: { ic: '🔋', n: { en: 'Battery', ar: 'بطارية' }, d: { en: 'Keeps power for the night', ar: 'تحفظ الكهرباء لليل' }, use: 0, count: 2 },
+    oxygen: { ic: '🫧', n: { en: 'Oxygen maker', ar: 'صانع الأكسجين' }, d: { en: 'Makes oxygen from Mars air', ar: 'يصنع الأكسجين من هواء المريخ' }, use: 2, count: 1 },
+    ice: { ic: '💧', n: { en: 'Ice drill', ar: 'حفّارة الجليد' }, d: { en: 'Melts ice into water', ar: 'تذيب الجليد إلى ماء' }, use: 2, count: 1 },
+    greenhouse: { ic: '🌱', n: { en: 'Greenhouse', ar: 'دفيئة' }, d: { en: 'Grows food', ar: 'تزرع الطعام' }, use: 1, count: 2 },
+    shield: { ic: '🛡️', n: { en: 'Shield wall', ar: 'جدار واقٍ' }, d: { en: 'Blocks radiation', ar: 'يصدّ الإشعاع' }, use: 0, count: 3 },
+    lab: { ic: '🔬', n: { en: 'Science lab', ar: 'مختبر علمي' }, d: { en: 'Earns science stars', ar: 'يكسب نجوم العلم' }, use: 2, count: 1 },
+  };
+  const ORDER = ['solar', 'battery', 'oxygen', 'ice', 'greenhouse', 'shield', 'lab'];
+  const MAX_BUILD = 8, TILE = 3, NT = 3, SOLS = 5, SUN_PER_PANEL = 3, HEATER = 2, BATT_CAP = 3;
+  // Real solar storms (NASA DONKI space weather database + NASA mission reports). Loaded from data/donki-events.json when possible.
+  let STORMS = [
+    { date: '2024-05-20', cls: 'X12 (estimated)', t: { en: 'Huge solar flare. Curiosity rover measured radiation like 30 chest X-rays.', ar: 'توهّج شمسي ضخم. قاست مركبة كيوريوسيتي إشعاعاً يعادل 30 صورة أشعة للصدر.' }, src: 'NASA DONKI; NASA JPL (Curiosity RAD), June 2024' },
+    { date: '2017-09-10', cls: 'X8.2', t: { en: 'A solar storm made aurora glow over all of Mars and doubled surface radiation.', ar: 'عاصفة شمسية أضاءت الشفق فوق المريخ كله وضاعفت الإشعاع على السطح.' }, src: 'NASA DONKI; NASA MAVEN and Curiosity, Sept 2017' },
+    { date: '2003-10-28', cls: 'X17', t: { en: 'A giant solar storm broke a radiation sensor on a NASA spacecraft at Mars.', ar: 'عاصفة شمسية عملاقة عطّلت حسّاس إشعاع على مركبة لناسا عند المريخ.' }, src: 'NASA Mars Odyssey (MARIE instrument lost), Oct 2003' },
+  ];
+  fetch('../data/donki-events.json').then((r) => (r.ok ? r.json() : null)).then((j) => { const ok = j && Array.isArray(j.events) ? j.events.filter((e) => e.t && e.t.en && e.t.ar && e.date) : []; if (ok.length) STORMS = ok; }).catch(() => {});
+  const EV = {
+    calm: { ic: '☀️', t: { en: 'A sunny, calm sol.', ar: 'يوم مشمس وهادئ.' },
+      a: { ic: '🚙', t: { en: 'Drive the rover to explore', ar: 'قُد المركبة الجوّالة للاستكشاف' }, power: 3, sci: 2, tags: ['⚡ −3', '⭐ +2'] },
+      b: { ic: '🔋', t: { en: 'Save power', ar: 'وفّر الكهرباء' }, tags: ['⭐ +0'] } },
+    dust: { ic: '🌪️', t: { en: 'Dust storm! Dusty panels make less power.', ar: 'عاصفة غبار! الألواح المغبرّة تصنع كهرباء أقل.' }, fact: { en: 'Real: a dust storm stopped NASA’s Opportunity rover in 2018.', ar: 'حقيقة: عاصفة غبار أوقفت مركبة أوبورتيونيتي التابعة لناسا عام 2018.' },
+      a: { ic: '🧹', t: { en: 'Clean the panels', ar: 'نظّف الألواح' }, solar: 0.67, labOff: true, tags: ['☀️ ⅔', '🔬 ✕'] },
+      b: { ic: '⏳', t: { en: 'Wait it out', ar: 'انتظر حتى تنتهي' }, solar: 0.34, tags: ['☀️ ⅓'] } },
+    storm: { ic: '☢️', storm: true,
+      a: { ic: '🛡️', t: { en: 'Hide in the shelter', ar: 'اختبئ في الملجأ' }, hide: true, labOff: true, tags: ['☢️ ↓', '🔬 ✕'] },
+      b: { ic: '🔬', t: { en: 'Keep working', ar: 'تابع العمل' }, sci: 2, tags: ['☢️ ↑↑', '⭐ +2'] } },
+    cold: { ic: '🥶', t: { en: 'Freezing night ahead: −80°C!', ar: 'ليلة متجمّدة قادمة: −80 درجة!' }, fact: { en: 'Real: Mars is about −60°C on average.', ar: 'حقيقة: متوسط حرارة المريخ نحو −60 درجة.' },
+      a: { ic: '🔥', t: { en: 'Turn the heater up', ar: 'ارفع المدفأة' }, heat: 2, tags: ['🔋 −2'] },
+      b: { ic: '🧥', t: { en: 'Wear warm layers', ar: 'البس طبقات دافئة' }, life: -1, tags: ['🫧 −1'] } },
+    leak: { ic: '💨', t: { en: 'A small air leak in the habitat!', ar: 'تسرّب هواء صغير في المسكن!' },
+      a: { ic: '🔧', t: { en: 'Fix it now', ar: 'أصلحه الآن' }, labOff: true, power: 1, tags: ['⚡ −1', '🔬 ✕'] },
+      b: { ic: '⏰', t: { en: 'Fix it tomorrow', ar: 'أصلحه غداً' }, life: -2, tags: ['🫧 −2'] } },
+    msg: { ic: '📡', t: { en: 'Message from Earth! It took 12 minutes to get here.', ar: 'رسالة من الأرض! استغرقت 12 دقيقة لتصل.' }, fact: { en: 'Real: messages take 3 to 22 minutes between Earth and Mars.', ar: 'حقيقة: الرسائل تستغرق من 3 إلى 22 دقيقة بين الأرض والمريخ.' },
+      a: { ic: '📸', t: { en: 'Send photos back', ar: 'أرسل صوراً' }, power: 2, sci: 1, tags: ['⚡ −2', '⭐ +1'] },
+      b: { ic: '😴', t: { en: 'Let the crew rest', ar: 'دع الطاقم يرتاح' }, life: 1, tags: ['🫧 +1'] } },
+  };
+
+  // ---------- Mars ground ----------
+  const W = new T.Group(); W.visible = false; scene.add(W); ENV.mars = W;
+  const CRATERS = [{ x: 38, z: -24, r: 9 }, { x: -34, z: 30, r: 7 }, { x: -46, z: -40, r: 12 }];
+  function h(x, z) {
+    const d = Math.hypot(x, z), flat = smooth(16, 28, d);
+    let y = flat * (fbm(x * 0.03 + 40, z * 0.03 + 7) - 0.45) * 6 + smooth(80, 140, d) * 18 * fbm(x * 0.012, z * 0.012);
+    for (const c of CRATERS) { const cd = Math.hypot(x - c.x, z - c.z) / c.r; if (cd < 1.4) y += cd < 1 ? -2.2 * (1 - cd * cd) : 1.1 * (1 - Math.abs(cd - 1.15) / 0.25) * (cd < 1.4 ? 1 : 0); }
+    return y;
+  }
+  { const geo = new T.PlaneGeometry(340, 340, 170, 170); geo.rotateX(-Math.PI / 2); const pos = geo.attributes.position, col = []; const c1 = new T.Color('#b8532e'), c2 = new T.Color('#8f3d20'), c3 = new T.Color('#d07a48'), tmp = new T.Color();
+    for (let i = 0; i < pos.count; i++) { const x = pos.getX(i), z = pos.getZ(i); pos.setY(i, h(x, z)); const n = fbm(x * 0.08, z * 0.08); tmp.copy(c1).lerp(n > 0.5 ? c2 : c3, Math.abs(n - 0.5) * 1.6); col.push(tmp.r, tmp.g, tmp.b); }
+    geo.setAttribute('color', new T.Float32BufferAttribute(col, 3)); geo.computeVertexNormals();
+    const gm = mesh(geo, new T.MeshStandardMaterial({ vertexColors: true, roughness: 1 }), 0, 0, 0, W, false); gm.receiveShadow = true; }
+  const solids = []; ENV_SOLIDS.mars = solids;
+  const rockM = [mat(0x7a3420, { roughness: 0.95 }), mat(0x9a4a2a, { roughness: 0.95 }), mat(0x5e2a1a, { roughness: 0.95 })];
+  for (let i = 0; i < 160; i++) { const a = Math.random() * Math.PI * 2, d = 19 + Math.random() * 110, x = Math.cos(a) * d, z = Math.sin(a) * d, s = 0.3 + Math.random() * (d > 40 ? 2.4 : 1.1); const r = mesh(new T.DodecahedronGeometry(s, 0), rockM[i % 3], x, h(x, z) + s * 0.35, z, W); r.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3); r.scale.y = 0.6; if (s > 0.9) solids.push({ x, z, r: s * 0.9 }); }
+  [[120, -60, 30, 12], [-130, -20, 24, 16], [40, 140, 36, 10], [-80, 120, 20, 14]].forEach(([x, z, r, hh]) => { mesh(new T.CylinderGeometry(r * 0.8, r, hh, 9), mat(0xa04a28, { roughness: 1 }), x, h(x, z) + hh / 2 - 1, z, W, false); mesh(new T.CylinderGeometry(r * 0.82, r * 0.82, 1.2, 9), mat(0xc9774a, { roughness: 1 }), x, h(x, z) + hh * 0.7, z, W, false); });
+  // the build grid
+  const gridG = new T.Group(); W.add(gridG); gridG.visible = false;
+  { const pts = [], L = (NT + 0.5) * TILE; for (let i = -NT; i <= NT + 1; i++) { const v = (i - 0.5) * TILE; pts.push(-L, 0.04, v, L, 0.04, v, v, 0.04, -L, v, 0.04, L); }
+    const gg = new T.BufferGeometry(); gg.setAttribute('position', new T.Float32BufferAttribute(pts, 3)); gridG.add(new T.LineSegments(gg, new T.LineBasicMaterial({ color: 0xffe2b8, transparent: true, opacity: 0.45 }))); }
+  const pad = mesh(new T.PlaneGeometry((2 * NT + 1) * TILE, (2 * NT + 1) * TILE), new T.MeshStandardMaterial({ color: 0xc8764a, roughness: 1, transparent: true, opacity: 0.35 }), 0, 0.02, 0, W, false); pad.rotation.x = -Math.PI / 2;
+  const hiTile = mesh(new T.PlaneGeometry(TILE - 0.2, TILE - 0.2), new T.MeshBasicMaterial({ color: 0x9ccc3c, transparent: true, opacity: 0.45, depthWrite: false }), 0, 0.06, 0, W, false); hiTile.rotation.x = -Math.PI / 2; hiTile.visible = false;
+
+  // ---------- buildings ----------
+  const solarTex = canvasTex(128, 64, (c, w, hh) => { c.fillStyle = '#1b3a7a'; c.fillRect(0, 0, w, hh); c.strokeStyle = '#8fb8ff'; c.lineWidth = 2; for (let i = 1; i < 6; i++) { c.beginPath(); c.moveTo(i * w / 6, 0); c.lineTo(i * w / 6, hh); c.stroke(); } c.beginPath(); c.moveTo(0, hh / 2); c.lineTo(w, hh / 2); c.stroke(); });
+  const glass = new T.MeshStandardMaterial({ color: 0xbfe6ff, transparent: true, opacity: 0.35, roughness: 0.05, depthWrite: false });
+  function makeBuilding(type) {
+    const g = new T.Group(), wM = mat(0xf2efe8, { roughness: 0.5 }), nM = mat(0x2f4170), oM = mat(0xec8a3c);
+    const u = { anim: null };
+    if (type === 'hab') {
+      const b = mesh(new T.CylinderGeometry(1.35, 1.35, 3.6, 28), wM, 0, 1.45, 0, g); b.rotation.z = Math.PI / 2;
+      [-1, 1].forEach((s) => mesh(new T.SphereGeometry(1.35, 24, 16), wM, s * 1.8, 1.45, 0, g).scale.set(0.45, 1, 1));
+      mesh(new T.TorusGeometry(1.37, 0.07, 8, 28), oM, 0.6, 1.45, 0, g).rotation.y = Math.PI / 2; mesh(new T.TorusGeometry(1.37, 0.07, 8, 28), oM, -0.6, 1.45, 0, g).rotation.y = Math.PI / 2;
+      u.winM = toonM({ color: 0x7fc8ff, emissive: 0xffd27a, emissiveIntensity: 0.2 });
+      [-1.2, 0, 1.2].forEach((x) => { const w = mesh(new T.CircleGeometry(0.28, 18), u.winM, x, 1.7, 1.33, g, false); });
+      mesh(new T.BoxGeometry(0.9, 1.3, 0.1), nM, 0, 0.95, 1.36, g);
+      [[-1.3, -0.8], [1.3, -0.8], [-1.3, 0.8], [1.3, 0.8]].forEach(([x, z]) => mesh(new T.CylinderGeometry(0.08, 0.1, 0.4, 6), nM, x, 0.2, z, g));
+    } else if (type === 'solar') {
+      mesh(new T.CylinderGeometry(0.07, 0.09, 1, 8), nM, 0, 0.5, 0, g);
+      const p = mesh(new T.BoxGeometry(2.4, 0.06, 1.3), new T.MeshStandardMaterial({ map: solarTex, roughness: 0.3, metalness: 0.3, emissive: 0x1b3a7a, emissiveIntensity: 0.15 }), 0, 1.05, 0, g); p.rotation.x = -0.5; u.panel = p;
+    } else if (type === 'battery') {
+      mesh(new T.BoxGeometry(1.4, 1, 0.9), wM, 0, 0.5, 0, g); mesh(new T.BoxGeometry(0.3, 0.12, 0.3), nM, 0, 1.06, 0, g);
+      u.cells = [0, 1, 2].map((i) => mesh(new T.BoxGeometry(0.3, 0.55, 0.05), toonM({ color: 0x2a3a2a, emissive: 0x9ccc3c, emissiveIntensity: 0 }), -0.4 + i * 0.4, 0.5, 0.46, g, false));
+    } else if (type === 'oxygen') {
+      mesh(new T.BoxGeometry(1.1, 0.9, 1.1), mat(0xd9b24a, { metalness: 0.5, roughness: 0.35 }), 0, 0.45, 0, g);
+      mesh(new T.SphereGeometry(0.42, 18, 14), mat(0x5fa8e8, { roughness: 0.3 }), 0.75, 0.5, 0, g); mesh(new T.CylinderGeometry(0.07, 0.07, 0.6, 8), nM, 0.4, 0.75, 0, g).rotation.z = Math.PI / 2;
+      u.bubbles = [0, 1, 2].map((i) => mesh(new T.SphereGeometry(0.1, 10, 8), new T.MeshBasicMaterial({ color: 0xbfe8ff, transparent: true, opacity: 0.8 }), 0.75, 1 + i * 0.4, 0, g, false));
+    } else if (type === 'ice') {
+      [0, 1, 2].forEach((i) => { const a = i * Math.PI * 2 / 3, l = mesh(new T.CylinderGeometry(0.06, 0.06, 2.2, 6), nM, Math.cos(a) * 0.45, 1, Math.sin(a) * 0.45, g); l.rotation.z = Math.cos(a) * -0.22; l.rotation.x = Math.sin(a) * 0.22; });
+      u.drill = mesh(new T.CylinderGeometry(0.1, 0.02, 1.6, 8), mat(0xb8c0cc, { metalness: 0.6 }), 0, 0.7, 0, g);
+      mesh(new T.CylinderGeometry(0.4, 0.4, 0.9, 16), mat(0x6fb8f0, { roughness: 0.3 }), 0.95, 0.45, 0.3, g);
+    } else if (type === 'greenhouse') {
+      mesh(new T.CylinderGeometry(1.25, 1.3, 0.25, 28), wM, 0, 0.12, 0, g);
+      mesh(new T.SphereGeometry(1.2, 24, 14, 0, Math.PI * 2, 0, Math.PI / 2), glass, 0, 0.24, 0, g, false);
+      for (let i = 0; i < 7; i++) { const a = i * 0.9, r = i ? 0.6 : 0; mesh(new T.SphereGeometry(0.22, 10, 8), mat(i % 2 ? 0x6abf3a : 0x4f9a2a), Math.cos(a) * r, 0.45, Math.sin(a) * r, g); }
+      u.grow = new T.PointLight(0xff8fd0, 0, 4, 2); u.grow.position.set(0, 1, 0); g.add(u.grow);
+    } else if (type === 'shield') {
+      const bm = [mat(0xa04a28, { roughness: 1 }), mat(0x8a3a1e, { roughness: 1 })];
+      for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) mesh(new T.BoxGeometry(0.62, 0.42, 0.7), bm[(r + i) % 2], -0.96 + i * 0.64 + (r % 2) * 0.16, 0.22 + r * 0.44, 0, g);
+    } else if (type === 'lab') {
+      mesh(new T.BoxGeometry(1.6, 1.1, 1.2), wM, 0, 0.55, 0, g); mesh(new T.BoxGeometry(1.62, 0.15, 1.22), nM, 0, 1.12, 0, g);
+      const d = mesh(new T.SphereGeometry(0.5, 18, 8, 0, Math.PI * 2, 0, Math.PI / 3), mat(0xf2efe8, { side: T.DoubleSide }), 0.3, 1.6, 0, g); d.rotation.x = 0.6; u.dish = d;
+      mesh(new T.CylinderGeometry(0.12, 0.16, 0.8, 10), oM, -0.5, 1.5, 0, g).rotation.z = 0.6;
+    }
+    if (type !== 'hab') { u.lamp = mesh(new T.SphereGeometry(0.12, 10, 8), new T.MeshBasicMaterial({ color: 0x9ccc3c }), 0, type === 'shield' ? 1.5 : type === 'solar' ? 1.6 : 1.45, -0.5, g, false); const ic = iconSprite(PCS[type].ic, 0.8); ic.position.set(0, 2.5, 0); g.add(ic); u.ic = ic; }
+    g.userData = u; return g;
+  }
+  const hab = makeBuilding('hab'); W.add(hab); solids.push({ x: 0, z: 0, w: 4.4, d: 3.0 });
+  const capsule = makeCapsule(); W.add(capsule); const landAt = { x: 8, z: 13 }; capsule.position.set(landAt.x, 0, landAt.z); solids.push({ x: landAt.x, z: landAt.z, r: 1.4 });
+  // ghost preview + held mini model
+  let ghost = null, held = null;
+  const ghostMat = new T.MeshBasicMaterial({ color: 0x9ccc3c, transparent: true, opacity: 0.35, depthWrite: false });
+  function setGhost(type) {
+    if (ghost) { W.remove(ghost); ghost = null; } if (held) { girl.remove(held); held = null; }
+    if (!type) { gridG.visible = false; hiTile.visible = false; girl.userData.reach = 0; return; }
+    ghost = makeBuilding(type); ghost.traverse((o) => { if (o.isMesh) { o.material = ghostMat; o.castShadow = false; } if (o.isSprite) o.visible = false; if (o.isLight) o.intensity = 0; }); W.add(ghost);
+    held = makeBuilding(type); held.scale.setScalar(0.22); held.position.set(0, 1.05, 0.42); held.traverse((o) => { if (o.isSprite) o.visible = false; if (o.isLight) o.intensity = 0; }); girl.add(held);
+    gridG.visible = true; girl.userData.reach = 0.55;
+  }
+
+  // ---------- HUD: hotbar, meters, sol button ----------
+  const solBtn = document.createElement('button'); solBtn.className = 'btn green solbtn'; solBtn.hidden = true; stage.appendChild(solBtn);
+  const keysEl = document.createElement('div'); keysEl.className = 'hotkeys'; keysEl.hidden = true; stage.appendChild(keysEl);
+
+  let S = null;
+  const fresh = () => ({ phase: 'build', inv: Object.fromEntries(ORDER.map((k) => [k, PCS[k].count])), placed: [], hold: null, rot: 0, sol: 0, life: 7, rad: 10, sci: 0, log: [], deck: makeDeck(), stormI: Math.floor(Math.random() * STORMS.length), over: false, readySaid: false });
+  function makeDeck() { const pool = ['calm', 'cold', 'leak', 'msg'].sort(() => Math.random() - 0.5).slice(0, 3); const d = [pool[0], pool[1], pool[2]]; d.splice(1 + Math.floor(Math.random() * 3), 0, 'dust'); d.splice(2 + Math.floor(Math.random() * 3), 0, 'storm'); return d.slice(0, SOLS); }
+  const cnt = (t) => S.placed.filter((p) => p.type === t).length;
+  const hasBasics = () => cnt('solar') > 0 && cnt('oxygen') > 0 && cnt('ice') > 0 && cnt('greenhouse') > 0;
+  const powerMade = () => cnt('solar') * SUN_PER_PANEL;
+  const powerUse = () => S.placed.reduce((a, p) => a + PCS[p.type].use, 0);
+  function renderInv() {
+    const inv = $('inv'); inv.hidden = !barVisible();
+    inv.innerHTML = ORDER.map((k, i) => `<button class="slot ${S.hold === k ? 'sel' : ''} ${S.inv[k] ? '' : 'used-up'}" data-k="${k}" title="${tr3(PCS[k].n)}: ${tr3(PCS[k].d)}"><span class="k">${i + 1}</span>${PCS[k].ic}<span class="u">${S.inv[k]}</span></button>`).join('');
+    inv.querySelectorAll('.slot').forEach((b) => b.addEventListener('click', () => select(b.dataset.k)));
+    keysEl.hidden = inv.hidden; keysEl.textContent = (S.hold ? `${PCS[S.hold].ic} ${tr3(PCS[S.hold].n)}: ${tr3(PCS[S.hold].d)} · ` : '') + tr3(TX.keys); keysEl.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  }
+  function barVisible() { return !!S && S.phase === 'build' && G.scene === 'mars' && !G.dialog && !G.cine && $('lvOverlay').hidden; }
+  function bar(ic, label, v, max, c, txt) { const p = Math.max(0, Math.min(1, v / max)); return `<div class="meter ${p < 0.3 ? 'low' : ''}" style="--c:${c}" title="${label}"><span class="ic">${ic}</span><div class="bar"><div class="fill" style="width:${p * 100}%"></div></div><span class="n">${txt ?? v}</span></div>`; }
+  function renderMeters() {
+    const m = $('meters'); m.hidden = G.scene !== 'mars'; if (m.hidden) return; m.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+    const made = powerMade(), use = powerUse(), bcap = cnt('battery') * BATT_CAP;
+    m.innerHTML = `<div class="m3h">${S.phase === 'build' && S.sol === 0 ? '🏗️ ' + tr3(TX.eyebrow) : `☀️ ${tr3(TX.sol)} ${Math.min(S.sol + (S.phase === 'build' ? 1 : 0), SOLS)}/${SOLS}`}</div>`
+      + bar('⚡', tr3(TX.power), made, Math.max(use, 1), made >= use ? '#ffc22e' : '#ec5a50', `${made}/${use}`)
+      + bar('🌙', tr3(TX.night), bcap, HEATER, bcap >= HEATER ? '#9ccc3c' : '#ec5a50', `${bcap}/${HEATER}`)
+      + bar('🫧', tr3(TX.life), S.life, 10, '#5fb8ff')
+      + bar('☢️', tr3(TX.rad), S.rad, 10, '#b07aff')
+      + `<div class="sci"><span>⭐ ${tr3(TX.sci)}</span><span>${S.sci}</span></div><div class="sci"><span>🏗️ ${tr3(TX.built)}</span><span>${S.placed.length}/${MAX_BUILD}</span></div>`;
+    solBtn.hidden = !(S.phase === 'build' && hasBasics() && !S.over); solBtn.textContent = tr3(TX.startSol, S.sol + 1);
+  }
+
+  // ---------- building: choose, carry, place, rotate, pick up ----------
+  function select(k) { if (!S || S.phase !== 'build' || !G.control) return; if (S.hold === k || !S.inv[k]) { S.hold = null; setGhost(null); } else { S.hold = k; setGhost(k); SFX.pick(); } renderInv(); }
+  function tileAhead() { const fx = Math.sin(P.yaw), fz = Math.cos(P.yaw); const x = P.pos.x + fx * 2.6, z = P.pos.z + fz * 2.6; return { i: Math.round(x / TILE), j: Math.round(z / TILE) }; }
+  function tileState(i, j) { if (Math.abs(i) > NT || Math.abs(j) > NT) return 'out'; if (Math.abs(i) <= 1 && j === 0) return 'taken'; if (S.placed.some((p) => p.i === i && p.j === j)) return 'taken'; if (S.placed.length >= MAX_BUILD) return 'full'; const cx = i * TILE, cz = j * TILE; if (Math.hypot(P.pos.x - cx, P.pos.z - cz) < 1.1) return 'taken'; return 'ok'; }
+  function place() {
+    const { i, j } = tileAhead(); if (tileState(i, j) !== 'ok') { SFX.nope(); return; }
+    const type = S.hold, obj = makeBuilding(type); obj.position.set(i * TILE, 0, j * TILE); obj.rotation.y = S.rot; W.add(obj);
+    const p = { type, i, j, rot: S.rot, obj, on: true, solid: { x: i * TILE, z: j * TILE, r: 1.0 } }; S.placed.push(p); solids.push(p.solid);
+    S.inv[type]--; SFX.snap(); burst(new T.Vector3(i * TILE, 0.5, j * TILE), 0xffe2b8, 18, 2, 0.8);
+    if (!S.inv[type]) { S.hold = null; setGhost(null); }
+    renderInv(); renderMeters(); checkReady();
+  }
+  function pickUp(p) { W.remove(p.obj); S.placed.splice(S.placed.indexOf(p), 1); solids.splice(solids.indexOf(p.solid), 1); S.inv[p.type]++; SFX.pick(); S.hold = p.type; setGhost(p.type); renderInv(); renderMeters(); setObjective(hasBasics() ? 'l3_start' : 'l3_build'); }
+  function checkReady() { if (hasBasics()) { setObjective('l3_start'); if (!S.readySaid) { S.readySaid = true; showDialog([{ who: 'nuri', expr: 'happy', en: TX.ready.en, ar: TX.ready.ar }], giveControl); } } else setObjective('l3_build'); }
+  addEventListener('keydown', (e) => {
+    if (G.scene !== 'mars' || !S || !G.control || S.phase !== 'build') return;
+    if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+    const n = Number(e.key); if (n >= 1 && n <= ORDER.length) select(ORDER[n - 1]);
+    if (e.code === 'KeyR' && S.hold) { S.rot += Math.PI / 2; SFX.pick(); }
+    if (e.code === 'KeyQ' && S.hold) { S.hold = null; setGhost(null); renderInv(); }
+  });
+
+  function action() {
+    if (!S || !G.control || S.phase !== 'build') return null;
+    if (S.hold) {
+      const { i, j } = tileAhead(), st = tileState(i, j), at = new T.Vector3(i * TILE, 0, j * TILE);
+      if (st === 'ok') return { at, r: 99, text: `${PCS[S.hold].ic} ${tr3(TX.place)}`, fn: place };
+      return { at, r: 99, text: '🚫 ' + tr3(TX[st]), fn: () => SFX.nope() };
+    }
+    let best = null, bd = 2.6; for (const p of S.placed) { const d = Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z); if (d < bd) { bd = d; best = p; } }
+    if (best) return { at: best.obj.position, r: 2.6, text: `✋ ${tr3(TX.pick)} ${PCS[best.type].ic}`, fn: () => pickUp(best) };
+    return null;
+  }
+
+  // ---------- one sol: event card, then day and night, then results ----------
+  function panel(html, wire) { G.control = false; const ov = $('lvOverlay'); ov.hidden = false; ov.dir = LANG === 'ar' ? 'rtl' : 'ltr'; $('lvPanel').innerHTML = html; $('lvPanel').scrollTop = 0; wire && wire($('lvPanel')); }
+  function closePanel() { $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; }
+  function evText(ev) { if (ev.storm) { const s = STORMS[S.stormI % STORMS.length]; return { t: s.t, fact: { en: `${TX.real.en}: ${s.date} · ${s.cls} · ${TX.src.en}: ${s.src}`, ar: `${TX.real.ar}: ${s.date} · ${s.cls} · ${TX.src.ar}: ${s.src}` }, head: { en: 'Solar storm!', ar: 'عاصفة شمسية!' } }; } return { t: ev.t, fact: ev.fact, head: null }; }
+  function startSol() {
+    if (!hasBasics() || S.phase !== 'build') return;
+    S.hold = null; setGhost(null); S.phase = 'event'; renderInv(); solBtn.hidden = true; setObjective(null);
+    const key = S.deck[S.sol], ev = EV[key], tx = evText(ev);
+    const opt = (o, id) => `<button class="opt evopt" id="${id}"><span class="eic">${o.ic}</span><span class="et">${tr3(o.t)}</span><span class="tags">${o.tags.map((x) => `<i>${x}</i>`).join('')}</span></button>`;
+    if (key === 'storm') SFX.alarm(); else SFX.discover();
+    panel(`<div class="eyebrow">${tr3(TX.sol)} ${S.sol + 1}/${SOLS} · ${tr3(TX.solIs)}</div><div class="evbig">${ev.ic}</div>${tx.head ? `<h2>${tr3(tx.head)}</h2>` : ''}<p class="evt">${tr3(tx.t)}</p><div class="opts">${opt(ev.a, 'oa')}${opt(ev.b, 'ob')}</div>${tx.fact ? `<div class="src">📚 ${tr3(tx.fact)}</div>` : ''}`, (el) => {
+      el.querySelector('#oa').onclick = () => runSol(key, 'a'); el.querySelector('#ob').onclick = () => runSol(key, 'b');
+    });
+    say(tr3(tx.t), 'narr');
+  }
+  function simulate(key, which) {
+    const ch = EV[key][which], R = { life: 0, rad: 0, sci: 0, why: [], off: [] };
+    let made = Math.round(cnt('solar') * SUN_PER_PANEL * (ch.solar || 1));
+    // the day: machines run in order of importance while there is power
+    const loads = [];
+    S.placed.forEach((p) => { if (PCS[p.type].use) loads.push(p); });
+    const prio = { oxygen: 0, ice: 1, greenhouse: 2, lab: 3 }; loads.sort((a, b) => prio[a.type] - prio[b.type]);
+    let avail = made - (ch.power || 0);
+    S.placed.forEach((p) => (p.on = true));
+    for (const p of loads) { if (p.type === 'lab' && ch.labOff) { p.on = false; continue; } if (avail >= PCS[p.type].use) avail -= PCS[p.type].use; else { p.on = false; R.off.push(p.type); } }
+    const run = (t) => S.placed.some((p) => p.type === t && p.on);
+    const ghOn = S.placed.filter((p) => p.type === 'greenhouse' && p.on).length;
+    if (!run('oxygen')) { R.life -= 3; R.why.push(['🫧', TX.noAir, -3]); }
+    if (!run('ice')) { R.life -= 2; R.why.push(['💧', TX.noWater, -2]); }
+    if (!ghOn) { R.life -= 1; R.why.push(['🌱', TX.noFood, -1]); } else if (ghOn >= 2) { R.life += 1; R.why.push(['🌱', TX.moreFood, +1]); }
+    // the night: the heater runs from the batteries
+    const charge = Math.min(cnt('battery') * BATT_CAP, Math.max(0, avail)), heatNeed = HEATER + (ch.heat || 0);
+    if (charge < heatNeed) { R.life -= 1; R.why.push(['🥶', TX.cold, -1]); }
+    if (ch.life) { R.life += ch.life; R.why.push([ch.ic, ch.t, ch.life]); }
+    // radiation
+    const sh = cnt('shield');
+    if (EV[key].storm) { const dmg = ch.hide ? Math.max(0, 3 - 2 * sh) : Math.max(1, 6 - 2 * sh); if (dmg) { R.rad -= dmg; R.why.push(['☢️', TX.stormHit, -dmg]); } }
+    else if (!sh) { R.rad -= 1; R.why.push(['☢️', TX.daily, -1]); }
+    if (run('lab')) { R.sci += 1; R.why.push(['🔬', TX.labOn, +1]); }
+    if (ch.sci) { R.sci += ch.sci; R.why.push([ch.ic, ch.t, ch.sci]); }
+    if (R.off.length) R.why.unshift(['⚡', TX.off, R.off.map((t) => PCS[t].ic).join(' ')]);
+    R.made = made; R.charge = charge; R.dust = (ch.solar || 1) < 1; R.storm = !!EV[key].storm; return R;
+  }
+  async function runSol(key, which) {
+    closePanel(); S.phase = 'sol';
+    const R = simulate(key, which);
+    // show the sol: day, blue Mars sunset, night, dawn
+    const camFrom = camera.position.clone();
+    await cine(6, (tt) => {
+      const k = Math.min(1, tt / 6), sunA = k * Math.PI * 1.15 - 0.1, day = Math.max(0, Math.sin(sunA));
+      dayLight(day, k, R);
+      S.placed.forEach((p) => { const u = p.obj.userData; if (u.lamp) u.lamp.material.color.set(p.on ? 0x9ccc3c : 0xec5a50); if (u.cells) u.cells.forEach((c, i) => (c.material.emissiveIntensity = (day < 0.2 ? (R.charge >= HEATER ? 1 - i * 0.3 : 0.1) : Math.min(1, k * 3 - i * 0.6)) * 1.4)); if (u.grow) u.grow.intensity = p.on ? 1.2 : 0; });
+      hab.userData.winM.emissiveIntensity = day < 0.3 ? 1.4 : 0.2;
+      const a = 0.6 + tt * 0.05; camera.position.set(Math.sin(a) * 22, 11, Math.cos(a) * 22); camera.lookAt(0, 1, 0);
+      if (R.storm && day > 0.3 && Math.random() < 0.3) burst(new T.Vector3((Math.random() - 0.5) * 20, 8, (Math.random() - 0.5) * 20), 0xd8b0ff, 2, 1, -2);
+    });
+    dayLight(1, 0, {}); camera.position.copy(camFrom);
+    const before = { life: S.life, rad: S.rad, sci: S.sci };
+    S.life = Math.max(0, Math.min(10, S.life + R.life)); S.rad = Math.max(0, Math.min(10, S.rad + R.rad)); S.sci += R.sci;
+    S.log.push({ sol: S.sol + 1, ev: EV[key].ic, ch: EV[key][which].ic });
+    S.sol++; renderMeters();
+    const dead = S.life <= 0 || S.rad <= 0;
+    const row = (ic, label, a, b) => `<div class="rrow ${b < a ? 'bad' : 'ok'}"><b>${ic} ${label}</b><span>${a} → ${b}</span><div class="rbar"><i style="width:${b * 10}%"></i></div></div>`;
+    const why = R.why.slice(0, 4).map(([ic, o, v]) => `<li>${ic} ${tr3(o)} <b>${typeof v === 'number' ? (v > 0 ? '+' + v : v) : v}</b></li>`).join('');
+    if (dead || S.sol >= SOLS) { S.over = true; return endCard(dead); }
+    panel(`<div class="eyebrow">${tr3(TX.eyebrow)}</div><h2>${tr3(TX.done, S.sol)}</h2><div class="results r3">${row('🫧', tr3(TX.life), before.life, S.life)}${row('☢️', tr3(TX.rad), before.rad, S.rad)}<div class="rrow ok"><b>⭐ ${tr3(TX.sci)}</b><span>${before.sci} → ${S.sci}</span></div></div>${why ? `<ul class="notebook">${why}</ul>` : ''}${tipFor(R)}<div class="actions"><button class="btn ghost" id="chg">${tr3(TX.change)}</button><button class="btn green" id="nxt">${tr3(TX.nextSol)}</button></div>`, (el) => {
+      el.querySelector('#nxt').onclick = () => { closePanel(); S.phase = 'build'; giveControl(); startSol(); };
+      el.querySelector('#chg').onclick = () => { closePanel(); S.phase = 'build'; renderInv(); renderMeters(); setObjective('l3_start'); giveControl(); };
+    });
+  }
+  function tipFor(R) { const t = R.off.length ? TX.tipPower : R.why.some((w) => w[1] === TX.cold) ? TX.tipNight : R.rad < 0 && !cnt('shield') ? TX.tipShield : null; return t ? `<div class="feedback try">💡 ${tr3(t)}</div>` : ''; }
+  function endCard(dead) {
+    const stars = dead ? 0 : 1 + (S.life >= 5 && S.rad >= 5 ? 1 : 0) + (S.sci >= 4 ? 1 : 0);
+    if (!dead) { SFX.fanfare(); } else SFX.nope();
+    const tl = S.log.map((l) => `<div class="tl"><b>${l.sol}</b><span>${l.ev}</span><span>${l.ch}</span></div>`).join('');
+    panel(`<div class="eyebrow">${tr3(TX.eyebrow)}</div><h2>${dead ? '🚀 ' + tr3(TX.failT) : '🏆 ' + tr3(TX.winT)}</h2>${dead ? '' : `<div class="stars">${[1, 2, 3].map((i) => `<span class="${i <= stars ? 'on' : ''}" style="animation-delay:${i * 0.15}s">★</span>`).join('')}</div>`}<p>${dead ? tr3(TX.failP) : tr3(TX.winP, playerName())}</p><div class="results r3"><div class="rrow ok"><b>🫧 ${tr3(TX.life)}</b><span>${S.life}/10</span></div><div class="rrow ok"><b>☢️ ${tr3(TX.rad)}</b><span>${S.rad}/10</span></div><div class="rrow ok"><b>⭐ ${tr3(TX.sci)}</b><span>${S.sci}</span></div></div><h3>${tr3(TX.yourSols)}</h3><div class="timeline">${tl}</div><div class="actions"><button class="btn ghost" id="srcs">${tr3(TX.sources)}</button><button class="btn ghost" id="rst">${tr3(TX.restart)}</button><button class="btn green" id="agn">${tr3(TX.again)}</button></div>`, (el) => {
+      el.querySelector('#agn').onclick = () => { closePanel(); start(false); };
+      el.querySelector('#rst').onclick = () => { closePanel(); hide(); $('dnReplay').click(); };
+      el.querySelector('#srcs').onclick = () => sources(() => endCard(dead));
+    });
+    if (!dead) confetti();
+  }
+  function sources(back) {
+    const rows = [
+      ['☢️', 'NASA DONKI space weather database (kauai.ccmc.gsfc.nasa.gov/DONKI) and NASA mission reports: real solar storms of ' + STORMS.map((s) => s.date).join(', ')],
+      ['📡', 'NASA Curiosity rover, Radiation Assessment Detector: about 700 micrograys a day on Mars; about 8,100 in the May 2024 storm'],
+      ['🫧', 'NASA Perseverance MOXIE: made oxygen from Mars air (2021 to 2023)'],
+      ['🌪️', 'NASA Opportunity rover: mission ended after the 2018 global dust storm'],
+      ['🌡️', 'NASA Mars facts: about −60°C on average; a sol is 24 h 39 min'],
+      ['📨', 'NASA: radio messages take about 3 to 22 minutes between Earth and Mars'],
+      ['🚀', 'NASA Perseverance: about 7 months to Mars; heat shield near 1,300°C on entry'],
+      ['☀️', 'Solar power: Mars gets a bit less than half of Earth’s sunlight'],
+    ];
+    panel(`<div class="eyebrow">${tr3(TX.eyebrow)}</div><h2>${tr3(TX.sources)}</h2><div class="facts">${rows.map(([ic, tx]) => `<div class="fact"><span class="ic">${ic}</span><span>${tx}</span></div>`).join('')}</div><div class="src">${LANG === 'ar' ? 'هذه بيانات مؤرشفة حقيقية، وليست بثاً مباشراً.' : 'These are real archived records, not a live feed.'}</div><div class="actions"><span></span><button class="btn" id="bk">${tr3(TX.back)}</button></div>`, (el) => { el.querySelector('#bk').onclick = back; });
+  }
+  // sky over one sol
+  const skyDay = { top: new T.Color('#b07a52'), bot: new T.Color('#e8c39a') }, skyDusk = { top: new T.Color('#3a3050'), bot: new T.Color('#7da0c8') }, skyNight = { top: new T.Color('#04050c'), bot: new T.Color('#1a1222') };
+  function dayLight(day, k, R) {
+    const dusk = Math.max(0, 1 - Math.abs(day - 0.15) / 0.15) * (k > 0.4 ? 1 : 0);
+    const top = skyNight.top.clone().lerp(skyDay.top, day), bot = skyNight.bot.clone().lerp(skyDay.bot, day);
+    top.lerp(skyDusk.top, dusk * 0.7); bot.lerp(skyDusk.bot, dusk * 0.9);
+    if (R && R.dust) { top.lerp(new T.Color('#a0704a'), 0.5 * day); bot.lerp(new T.Color('#b08060'), 0.5 * day); }
+    skyMat.uniforms.top.value.copy(top); skyMat.uniforms.bottom.value.copy(bot); if (scene.fog) { scene.fog.color.copy(bot); scene.fog.far = R && R.dust ? 120 : 260; }
+    stars.visible = true; starMat.opacity = Math.max(0, 1 - day * 3);
+    sun.intensity = 0.15 + day * 1.15; hemi.intensity = 0.2 + day * 0.6; skyMat.uniforms.sunAmt.value = day;
+  }
+  EXTRA_ENV.mars = () => {
+    scene.background = null; scene.fog = new T.Fog('#e3b48a', 70, 260);
+    skyMat.uniforms.top.value.set('#b07a52'); skyMat.uniforms.bottom.value.set('#e8c39a'); skyMat.uniforms.sunAmt.value = 1; skyMat.uniforms.sunDir.value.set(0.5, 0.45, 0.3).normalize();
+    hemi.color.set(0xffe2c8); hemi.groundColor.set(0x8a3a1a); hemi.intensity = 0.75;
+    sun.color.set(0xffe4c4); sun.intensity = 1.25; sun.position.set(20, 30, 12); sun.target.position.set(0, 0, 0);
+    Object.assign(sun.shadow.camera, { left: -24, right: 24, top: 24, bottom: -24 }); sun.shadow.camera.updateProjectionMatrix();
+  };
+
+  function prepare() { capsule.visible = true; }
+  function start(fromLanding) {
+    if (S) S.placed.forEach((p) => W.remove(p.obj));
+    S = fresh(); G.scene = 'mars'; setEnv('mars'); stage.classList.add('lv1'); closeChat(); hideChip();
+    solids.length = 0; rockSolids.forEach((r) => solids.push(r));
+    capsule.position.set(landAt.x, 0, landAt.z); capsule.visible = true;
+    suitUp(true); girl.visible = true; girl.scale.setScalar(1); setExpr(girl, 'wow');
+    nuri.visible = true; G.nuriJoined = true; G.nuriMet = true; setExpr(nuri, 'happy');
+    P.pos.set(3, 0, 8); P.vel.set(0, 0, 0); P.yaw = Math.PI + 0.3; camYaw = 0.3; camPitch = 0.42; camDist = 7; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
+    $('helpBtn').hidden = false; $('passBtn').hidden = true; setGhost(null); dayLight(1, 0, {});
+    renderInv(); renderMeters(); setObjective(null); $('inv').hidden = true; keysEl.hidden = true;
+    showDialog([
+      { who: 'nuri', expr: 'wow', en: TX.hi1.en, ar: TX.hi1.ar },
+      { who: 'nuri', expr: 'happy', en: TX.hi2.en, ar: TX.hi2.ar },
+      { who: 'nuri', expr: 'happy', en: TX.hi3.en, ar: TX.hi3.ar },
+    ], () => { setExpr(girl, 'happy'); setObjective('l3_build'); renderInv(); giveControl(); });
+  }
+  const rockSolids = solids.slice();
+  solBtn.addEventListener('click', () => { if (G.control) startSol(); });
+  function hide() { S && (S.phase = 'off'); $('inv').hidden = true; $('meters').hidden = true; solBtn.hidden = true; keysEl.hidden = true; stage.classList.remove('lv1'); setGhost(null); if (S) S.placed.forEach((p) => W.remove(p.obj)); }
+  function update(dt, time) {
+    if (!S) return;
+    sun.position.copy(P.pos).add(new T.Vector3(20, 30, 12)); sun.target.position.copy(P.pos);
+    if (ghost && S.hold) { const { i, j } = tileAhead(), st = tileState(i, j); ghost.position.set(i * TILE, 0, j * TILE); ghost.rotation.y = S.rot; ghost.visible = st !== 'out'; hiTile.visible = st !== 'out'; hiTile.position.set(i * TILE, 0.06, j * TILE); hiTile.material.color.set(st === 'ok' ? 0x9ccc3c : 0xec5a50); ghostMat.color.set(st === 'ok' ? 0x9ccc3c : 0xec5a50); }
+    for (const p of S.placed) { const u = p.obj.userData; if (u.bubbles && p.on) u.bubbles.forEach((b, i) => { b.position.y = 1 + ((time * 0.6 + i * 0.33) % 1) * 1.4; b.material.opacity = 0.8 * (1 - ((time * 0.6 + i * 0.33) % 1)); }); if (u.drill && p.on) u.drill.rotation.y = time * 6; if (u.dish) u.dish.rotation.y = Math.sin(time * 0.5) * 0.6; if (u.ic) u.ic.position.y = 2.5 + Math.sin(time * 2 + p.i) * 0.08; }
+    if (held) held.rotation.y = S.rot + time * 0.6;
+    const bv = barVisible(); if ($('inv').hidden === bv) { $('inv').hidden = !bv; keysEl.hidden = !bv; }
+    if (S.phase === 'build' && G.control) renderMetersThrottled(time);
+  }
+  let lastM = 0; function renderMetersThrottled(time) { if (time - lastM > 0.5) { lastM = time; renderMeters(); } }
+  // guide: arrows to the build area, mini map, checklist
+  function target() { if (!S || S.phase !== 'build' || S.hold) return null; if (Math.hypot(P.pos.x, P.pos.z) > 11) return { x: 0, z: 4 }; return null; }
+  function checklist() {
+    if (!S) return [];
+    const c = (t) => cnt(t) > 0;
+    return [{ ic: '☀️', t: tr3(PCS.solar.n), done: c('solar') }, { ic: '🫧', t: tr3(PCS.oxygen.n), done: c('oxygen') }, { ic: '💧', t: tr3(PCS.ice.n), done: c('ice') }, { ic: '🌱', t: tr3(PCS.greenhouse.n), done: c('greenhouse') },
+      { ic: '▶', t: tr3(TX.startSol, Math.min(S.sol + 1, SOLS)).replace('▶ ', ''), done: S.sol >= SOLS, locked: !hasBasics() }];
+  }
+  function mapDots() { if (!S) return []; return [{ x: 0, z: 0, ic: '🏠', done: false }, { x: landAt.x, z: landAt.z, ic: '🚀', done: false }, ...S.placed.map((p) => ({ x: p.obj.position.x, z: p.obj.position.z, ic: PCS[p.type].ic, done: !p.on }))]; }
+  function devSkip() {
+    if (!S || S.phase !== 'build') return;
+    const plan = [['solar', -1, -2], ['solar', 0, -2], ['solar', 1, -2], ['oxygen', -2, 0], ['ice', 2, 0], ['greenhouse', -1, 2], ['battery', 1, 2], ['shield', 0, -1]];
+    for (const [type, i, j] of plan) { if (!S.inv[type] || S.placed.length >= MAX_BUILD || S.placed.some((p) => p.i === i && p.j === j)) continue; S.hold = type; const obj = makeBuilding(type); obj.position.set(i * TILE, 0, j * TILE); W.add(obj); const p = { type, i, j, rot: 0, obj, on: true, solid: { x: i * TILE, z: j * TILE, r: 1.0 } }; S.placed.push(p); solids.push(p.solid); S.inv[type]--; }
+    S.hold = null; setGhost(null); renderInv(); renderMeters(); checkReady();
+  }
+  function relang() { if (G.scene !== 'mars' || !S) return; renderInv(); renderMeters(); }
+  return { start, prepare, update, action, target, checklist, mapDots, devSkip, hide, relang, h, capsule, landAt, startSol };
+})();
+
 // ============================== Guide: glowing arrows on the ground, mini map and mission checklist ==============================
 const GUIDE = (() => {
   const N = 14, GAP = 1.5;
@@ -3332,14 +4008,14 @@ const GUIDE = (() => {
   arrows.frustumCulled = false; arrows.renderOrder = 3; scene.add(arrows); arrows.visible = false;
   const edge = new T.InstancedMesh(geo, new T.MeshBasicMaterial({ color: 0x1b1530, transparent: true, opacity: 0.85, depthWrite: false, side: T.DoubleSide }), N); edge.frustumCulled = false; edge.renderOrder = 2; scene.add(edge); edge.visible = false; const sc2 = new T.Vector3(), pos2 = new T.Vector3();
   const m4 = new T.Matrix4(), q = new T.Quaternion(), up = new T.Vector3(0, 1, 0), pos = new T.Vector3(), sc = new T.Vector3();
-  const prov = () => (G.scene === 'level1' ? L1 : G.scene === 'academy' ? ACAD : G.scene === 'level2' ? L2 : null);
+  const prov = () => (G.scene === 'level1' ? L1 : G.scene === 'academy' ? ACAD : G.scene === 'level2' ? L2 : G.scene === 'mars' ? MARS : null);
   const cv = $('mmap'), cx = cv.getContext('2d');
   let lastList = '';
   const TX = { title: { en: 'Mission list', ar: 'قائمة المهام' } };
   function draw(p, time) {
-    const W = cv.width, R = W / 2, indoor = G.scene === 'academy' || G.scene === 'level2', range = G.scene === 'academy' ? 15 : G.scene === 'level2' ? 24 : 45, k = (R - 10) / range;
+    const W = cv.width, R = W / 2, indoor = G.scene === 'academy' || G.scene === 'level2', range = G.scene === 'academy' ? 15 : G.scene === 'level2' ? 24 : G.scene === 'mars' ? 26 : 45, k = (R - 10) / range;
     cx.clearRect(0, 0, W, W); cx.save(); cx.beginPath(); cx.arc(R, R, R - 2, 0, 7); cx.clip();
-    cx.fillStyle = indoor ? '#e9f1fb' : '#f3cf98'; cx.fillRect(0, 0, W, W);
+    cx.fillStyle = indoor ? '#e9f1fb' : G.scene === 'mars' ? '#d9875a' : '#f3cf98'; cx.fillRect(0, 0, W, W);
     const cs = Math.cos(camYaw), sn = Math.sin(camYaw);
     const toS = (x, z) => { const dx = x - P.pos.x, dz = z - P.pos.z; let sx = dx * cs - dz * sn, sy = dx * sn + dz * cs; sx *= k; sy *= k; const l = Math.hypot(sx, sy), lim = R - 16; let edge = false; if (l > lim) { sx *= lim / l; sy *= lim / l; edge = true; } return [R + sx, R + sy, edge]; };
     if (indoor) { const [ax, ay] = toS(0, 0); cx.strokeStyle = '#1f3a68'; cx.lineWidth = 3; cx.beginPath(); cx.arc(ax, ay, (G.scene === 'level2' ? 13.5 : 14) * k, 0, 7); cx.stroke(); cx.fillStyle = '#ec8a3c'; cx.beginPath(); cx.arc(ax, ay, 2.4 * k, 0, 7); cx.fill(); }
@@ -3397,9 +4073,10 @@ function loop() {
   const dt = Math.min(0.05, clock.getDelta()), time = clock.elapsedTime;
   if (G.cine) { G.cine.t += dt; G.cine.update(G.cine.t, dt); if (G.cine && G.cine.t >= G.cine.dur) endCine(); }
   else if (G.scene === 'title') { titleT += dt; camera.position.set(2.7 + Math.sin(titleT * 0.25) * 0.4, 2.2, 3.3); camera.lookAt(-0.6, 0.8, -1.4); }
-  else if (!G.dialog) { if (L1.roverMode()) L1.updateRover(dt); else { updatePlayer(dt); if (ACAD.camLock()) ACAD.cam(dt); else followCamera(dt); } }
+  else if (!G.dialog && !LAUNCH.active()) { if (L1.roverMode()) L1.updateRover(dt); else { updatePlayer(dt); if (ACAD.camLock()) ACAD.cam(dt); else followCamera(dt); } }
   if (G.scene === 'academy') ACAD.update(dt, time);
   if (G.scene === 'level2') L2.update(dt, time);
+  if (G.scene === 'mars') MARS.update(dt, time);
   GUIDE.update(dt, time); stage.classList.toggle('has-st', !$('stHud').hidden);
   if (G.scene === 'level1') L1.update(dt, time);
   if (G.scene === 'level1' || G.scene === 'desert' || G.scene === 'landing') L1.ambient(dt, time);
