@@ -1,6 +1,6 @@
 # Junior Astronaut Mission Trainer
 
-> **⭐ Level 1 (main team game):** [`public/junior-astronaut/index.html`](public/junior-astronaut/index.html) is **Level 1**: the prologue, the Atacama Desert, and the Training Center with 4 hands-on rooms (air, water, atmosphere layers, food), a fitting room and hidden secrets. Its exit door leads into Razan's Level 2 (5 walk-in training rooms). Open the file in a browser, or `/junior-astronaut/` on the live site.
+> **⭐ Level 1 (main team game):** [`public/junior-astronaut/index.html`](public/junior-astronaut/index.html) is **Level 1**: the prologue, the Atacama Desert, and the Training Center with 4 hands-on rooms (air, water, atmosphere layers, food), a fitting room and hidden secrets. Its exit door leads into Razan's Level 2 (5 walk-in training rooms). Open the file in a browser, or play it live at https://junior-astronaut-sheclipse.netlify.app/
 
 Team SHEclipse, NASA Space Apps Challenge 2026: **Build a Junior Astronaut Mission Trainer**
 
@@ -14,7 +14,7 @@ A browser game for kids aged 7 to 12. A young engineer gets an invitation to tra
 | 4 | Building a Space Base | Planned |
 | 5 | Survival Challenge | Planned |
 
-Live game: _add the Netlify link here_
+**▶ Play the game:** https://junior-astronaut-sheclipse.netlify.app/
 
 ## Level 1 in short
 
