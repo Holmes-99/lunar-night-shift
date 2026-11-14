@@ -76,7 +76,9 @@ When the capsule lands on Mars, Level 4 starts. The first crew already built the
 - **6 meters:** water, oxygen, power, food, shielding and crew safety, plus your own energy and the rover battery.
 - **Every sol:** morning report (with Nuri's scan for problems), inspect the base (problems show a wrench sign), decide (switch machines on or off, fix, clean, harvest, recycle), one surprise event (dust storm, water system failure, greenhouse problem, solar storm radiation alert, marsquake), and an end-of-day card showing what got better or worse.
 - **Fixing:** clean dusty panels, fix leaks and clogged air filters with spare parts (3D-print them from Mars soil or order them from Earth), repair cracked walls with soil, and work out what sick plants need (dry soil needs water, soggy soil needs the fan).
-- **Rover missions (no fighting):** explore 3 new places, study rock samples in the lab, repair a far solar station, and rescue a stuck astronaut.
+- **Rover missions (no fighting):** claim 6 new places, study rock samples in the lab, repair a far solar station, and rescue a stuck astronaut.
+- **Your flag:** drive to an orange flag and press E to plant your own flag there. Pick one of 31 country flags or design your own (colors, pattern, picture, your name). It also flies over the base. Each place gives a real Mars fact.
+- **Long days with a pause:** one sol lasts about 3.5 minutes (2.5 minutes of day). The pause button next to the clock stops time so you can think.
 - **Mars Credits:** the coins from Levels 1 to 3 carry over. Earn more from daily jobs, fixes, harvests, science, exploring and rescues. Spend them on base upgrades, rover upgrades and new suit colors. Credits can't buy air or water.
 - **Orders from Earth** go through the radio station and take 1 to 2 sols to land, so you plan ahead.
 - **Build mode:** the base is done, but you can still move, add or remove pieces.

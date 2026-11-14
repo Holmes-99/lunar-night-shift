@@ -84,6 +84,16 @@
 .mis { display: flex; flex-direction: column; gap: 8px; text-align: start; }
 .mis .mi { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; background: #f6f1e6; border-radius: 12px; padding: 8px 10px; }
 .mis .mi.ok { background: #eef8dc; } .mis .mi.lock { opacity: .5; } .mis b { display: block; color: var(--navy); } .mis small { color: var(--muted); font-size: 12.5px; }
+.pz5 { border: 0; background: #fffaf0; color: #1f3a68; border-radius: 8px; width: 26px; height: 22px; font-size: 13px; cursor: pointer; box-shadow: 0 2px 0 #1f3a6833; }
+.pz5.on { background: #ffc22e; }
+.fprev { text-align: center; margin: 4px 0 6px; } .fprev img { width: 200px; height: 125px; border-radius: 8px; box-shadow: 0 3px 0 #1f3a6844; }
+.flaggrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; max-height: 260px; overflow: auto; padding: 2px; }
+.fl5 { border: 2px solid transparent; background: #fffaf0; border-radius: 10px; padding: 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 700 11px inherit; color: #1f3a68; }
+.fl5 img { width: 64px; height: 40px; border-radius: 3px; box-shadow: 0 1px 2px #0003; } .fl5.sel, .sw5.sel, .pt5.sel { border-color: #ffc22e; box-shadow: 0 0 0 2px #ffc22e; }
+.fopt { text-align: start; } .fopt b { display: block; margin: 8px 0 4px; font-size: 13px; color: #1f3a68; }
+.swatch { display: flex; flex-wrap: wrap; gap: 6px; } .sw5 { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #1f3a6833; cursor: pointer; }
+.pt5 { border: 2px solid #1f3a6822; background: #fffaf0; border-radius: 8px; padding: 3px; cursor: pointer; min-width: 40px; min-height: 36px; display: grid; place-items: center; font-weight: 900; color: #1f3a68; } .pt5 img { display: block; }
+.nm5 { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-weight: 700; color: #1f3a68; }
 .stabs { display: flex; gap: 6px; justify-content: center; margin: 6px 0 10px; flex-wrap: wrap; }
 @media (max-width: 640px) { .rep { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .m4lab { display: none; } }
@@ -5120,6 +5130,8 @@ const MARS = (() => {
   Object.assign(TXT, { l4_obj: T4.obj });
   // Level 4 text: life on Mars (the base is already built)
   const T5 = {
+    pause: L4('Pause the clock', 'أوقف الوقت'), resume: L4('Start the clock', 'شغّل الوقت'),
+    paused: L4('Time stopped. Take your time to think!', 'توقّف الوقت. خذ وقتك في التفكير!'), resumed: L4('Time is moving again.', 'عاد الوقت يمشي.'),
     eyebrow: L4('Level 4 · Life on Mars', 'المرحلة 4 · الحياة على المريخ'),
     obj: L4('Keep the base and the crew safe', 'حافظ على أمان القاعدة والطاقم'),
     objBuild: L4('Build mode: E picks up, 1–8 choose a piece, R turns, E places', 'وضع البناء: E للرفع، 1–8 لاختيار قطعة، R للتدوير، E للوضع'),
@@ -5205,7 +5217,7 @@ const MARS = (() => {
     run: [L4('You saved energy by walking.', 'وفّرت طاقتك بالمشي.'), L4('You ran a lot: more energy, more food.', 'ركضت كثيراً: طاقة أكثر وطعام أكثر.'), L4('Real: moving in a spacesuit is hard work.', 'حقيقة: الحركة ببدلة الفضاء عمل شاق.')],
     dose: [L4((d) => `Total dose ${d}: safe.`, (d) => `الجرعة الكلية ${d}: آمنة.`), L4((d) => `Total dose ${d}: too much.`, (d) => `الجرعة الكلية ${d}: كثيرة جداً.`), L4('Real: NASA’s Curiosity rover measures Mars radiation every day.', 'حقيقة: تقيس مركبة كيوريوسيتي إشعاع المريخ كل يوم.')],
   };
-  const DAY = 55, NIGHT = 35, SOL = DAY + NIGHT, NSOL = 3, BASE_USE = 0.03; let CREW = 2;
+  const DAY = 150, NIGHT = 60, SOL = DAY + NIGHT, K5 = 90 / SOL, NSOL = 3, BASE_USE = 0.03; let CREW = 2;
   const MACH = {
     oxygen: { ic: 'oxygen', pw: 0.10, n: L4('Oxygen maker', 'صانع الأكسجين') },
     ice: { ic: 'ice', pw: 0.10, n: L4('Ice melter', 'مُذيب الجليد') },
@@ -5328,21 +5340,21 @@ const MARS = (() => {
     const sunAmt = night ? 0 : Math.min(1, st / 5, (DAY - st) / 5);
     m.gen = (S.placed.filter((p) => p.type === 'solar').reduce((a, p) => a + 0.16 * p.q * (p.dirty ? (S.up && S.up.coat ? 0.75 : 0.45) : 1), 0) + (S.mis && S.mis.repair ? 0.14 : 0)) * sunAmt * (m.dustT > 0 ? 0.3 : 1);
     m.use = BASE_USE; for (const k in MACH) if (m.sw[k] && machines(k) && (k !== 'heater' || night) && (k !== 'garage' || S.rvCharging)) m.use += MACH[k].pw * machines(k);
-    m.bat = Math.min(batCap(), m.bat + (m.gen - m.use) * dt);
+    const rdt = dt * K5; m.bat = Math.min(batCap(), m.bat + (m.gen - m.use) * rdt);
     const run = m.bat > 0 || m.gen >= m.use;
     if (m.bat <= 0) { m.bat = 0; if (!m.blackout) { m.blackout = true; m.blackouts++; chip('battery', T4.dark, 3500); SFX.alarm(); } } else if (m.bat > 0.6) m.blackout = false;
     m.run = run; const on = (k) => run && m.sw[k] && machines(k) > 0;
     // life support for the crew
     let dW = -0.03 * CREW, dA = -0.04 * CREW, dF = -0.02 * CREW;
     if (night && !on('heater')) { dF *= 2; m.coldT += dt; }
-    m.used = Math.min(10, m.used + 0.02 * CREW * dt);
+    m.used = Math.min(10, m.used + 0.02 * CREW * rdt);
     if (m.used >= 10 && !m.tankSaid) { m.tankSaid = true; chip('tank', T4.tankFull, 3500); }
     if (on('oxygen')) dA += 0.14 * machines('oxygen') * (faultN('filter') ? 0.3 : 1);
     if (on('ice')) dW += 0.06 * machines('ice');
     dW -= 0.05 * faultN('leak');
-    if (on('recycler') && m.used > 0) { const r = Math.min(m.used, 0.05 * (S.up && S.up.rec98 ? 1.6 : 1) * (faultN('leak', 'recycler') ? 0 : 1) * machines('recycler') * dt); m.used -= r; dW += r / dt; }
+    if (on('recycler') && m.used > 0) { const r = Math.min(m.used, 0.05 * (S.up && S.up.rec98 ? 1.6 : 1) * (faultN('leak', 'recycler') ? 0 : 1) * machines('recycler') * rdt); m.used -= r; dW += r / rdt; }
     if (on('greenhouse')) { const g = Math.max(0, machines('greenhouse') - faultN('wilt')); dF += (night ? 0.01 : 0.03) * g; dA += (night ? 0 : 0.02) * g; dW -= 0.02 * g; }
-    m.water = clamp10(m.water + dW * dt); m.air = clamp10(m.air + dA * dt); m.food = clamp10(m.food + dF * dt);
+    m.water = clamp10(m.water + dW * rdt); m.air = clamp10(m.air + dA * rdt); m.food = clamp10(m.food + dF * rdt);
     for (const k of ['water', 'air', 'food']) {
       if (m[k] < 2.5 && !m.warned[k]) { m.warned[k] = true; chip(k === 'water' ? 'ice' : k === 'air' ? 'oxygen' : 'greenhouse', T4.low[k], 3000); SFX.alarm(); } else if (m[k] > 4) m.warned[k] = false;
       if (m[k] <= 0) { m.zero[k] = (m.zero[k] || 0) + dt; } else m.zero[k] = 0;
@@ -5351,7 +5363,7 @@ const MARS = (() => {
     const R = Math.hypot(P.pos.x, P.pos.z), inHab = Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2, inBase = R < 14, wf = Math.max(0.15, 1 - 0.3 * goodWalls());
     let rate = inBase ? 0.03 * wf : 0.22;
     if (m.stormOn > 0) rate = inHab ? 0.25 * wf : inBase ? 1.2 * wf + 0.2 : 2.6;
-    m.dose += rate * dt; if (m.stormOn > 0) m.stormDose += rate * dt;
+    m.dose += rate * (m.stormOn > 0 ? dt : rdt); if (m.stormOn > 0) m.stormDose += rate * dt;
     m.dose = Math.min(m.dose, 100);
     if (m.stormIn > 0) { m.stormIn -= dt; if (m.stormIn <= 0) { m.stormOn = 15; vig.hidden = false; SFX.alarm(); } }
     else if (m.stormOn > 0) { m.stormOn -= dt; if (m.stormOn <= 0) { vig.hidden = true; const d = Math.round(m.stormDose); if (d < 6) { chip('hide', T4.stormOk, 3000); SFX.success(); } else { chip('rad', L4(T4.stormBad.en(d), T4.stormBad.ar(d)), 3500); } m.stormDoseR = d; } }
@@ -5363,7 +5375,7 @@ const MARS = (() => {
       let dS = 0; for (const k of ['water', 'air', 'food']) if (m[k] <= 0) dS -= 0.1;
       if (night && !on('heater')) dS -= 0.025; if (m.stormOn > 0 && m.stormChoice === 'work') dS -= 0.12; if (m.dose > 60) dS -= 0.02;
       if (!dS && m.water > 3 && m.air > 3 && m.food > 3) dS = 0.015;
-      m.safety = clamp10((m.safety == null ? 8 : m.safety) + dS * dt); if (S.today) S.today.minRes = Math.min(S.today.minRes, m.water, m.air, m.food);
+      m.safety = clamp10((m.safety == null ? 8 : m.safety) + dS * rdt); if (S.today) S.today.minRes = Math.min(S.today.minRes, m.water, m.air, m.food);
       if (m.safety < 3 && !m.warned.safety) { m.warned.safety = true; chip('safety', T5.lowSafe, 3500); SFX.alarm(); } else if (m.safety > 5) m.warned.safety = false;
       growCrops(dt, night, on);
       if (m.safety <= 0) return emergency();
@@ -5398,7 +5410,7 @@ const MARS = (() => {
     if (m.lang !== LANG || !box.querySelector('.m4top')) {
       m.lang = LANG;
       const row = (id, ic, lab, c, cls = '') => `<div class="meter ${cls}" data-id="${id}" style="--c:${c}" title="${lab}"><span class="ic">${ico(ic, 18)}</span><div class="bar"><div class="fill"></div></div><span class="n"></span></div>`;
-      box.innerHTML = `<div class="m4top"><span class="m4ic"></span><b class="m4sol"></b><div class="clk" style="background:linear-gradient(90deg,#ffd27a 0 ${DAY / SOL * 100}%,#3a3060 ${DAY / SOL * 100}%)"><i></i></div></div><div class="m4warn" hidden></div>`
+      box.innerHTML = `<div class="m4top"><span class="m4ic"></span><b class="m4sol"></b><button class="pz5" id="b4pause"></button><div class="clk" style="background:linear-gradient(90deg,#ffd27a 0 ${DAY / SOL * 100}%,#3a3060 ${DAY / SOL * 100}%)"><i></i></div></div><div class="m4warn" hidden></div>`
         + row('water', 'ice', tr3(T5.water), '#3a9cf0') + row('air', 'oxygen', tr3(T5.oxy), '#8fd0ff') + row('bat', 'power', tr3(T5.power), '#ffc22e')
         + row('food', 'greenhouse', tr3(T5.food), '#5fbf2a') + row('shield', 'shield', tr3(T5.shield), '#ec8a3c') + row('safety', 'safety', tr3(T5.safety), '#ec5a50')
         + row('energy', 'energy', tr3(T5.you), '#b07aff', 'sub') + row('rv', 'rover', tr3(T5.rvBat), '#9ccc3c', 'sub')
@@ -5410,9 +5422,10 @@ const MARS = (() => {
       box.querySelector('#b4build').onclick = () => { if (!G.control || S.drive) return; S.build = !S.build; if (!S.build) { S.hold = null; setGhost(null); } SFX.pick(); renderInv(); renderMeters4(); };
       box.querySelector('#b4shop').onclick = () => { if (G.control) shopPanel(); };
       box.querySelector('#b4mis').onclick = () => { if (G.control) misPanel(); };
+      box.querySelector('#b4pause').onclick = () => { if (S.over) return; S.paused = !S.paused; SFX.pick(); chip(S.paused ? 'night' : 'sun', S.paused ? T5.paused : T5.resumed, 2400); renderMeters4(); };
     }
     const st = m.t % SOL, set = (id, v, max, txt) => { const r = box.querySelector(`[data-id="${id}"]`), p = Math.max(0, Math.min(1, v / max)); r.querySelector('.fill').style.width = p * 100 + '%'; r.querySelector('.n').textContent = txt; r.classList.toggle('low', p < 0.3); };
-    box.querySelector('.m4ic').innerHTML = ico(m.night ? 'night' : 'sun', 20); box.querySelector('.m4sol').textContent = `${tr3(T4.sol)} ${m.sol}`; box.querySelector('.clk i').style.left = `calc(${st / SOL * 100}% - 2px)`;
+    box.querySelector('.m4ic').innerHTML = ico(m.night ? 'night' : 'sun', 20); box.querySelector('.m4sol').textContent = `${tr3(T4.sol)} ${m.sol}`; box.querySelector('.clk i').style.left = `calc(${st / SOL * 100}% - 2px)`; { const pb = box.querySelector('#b4pause'); pb.textContent = S.paused ? '▶' : '⏸'; pb.title = tr3(S.paused ? T5.resume : T5.pause); pb.classList.toggle('on', !!S.paused); }
     const cap = batCap();
     set('water', m.water, 10, Math.round(m.water)); set('air', m.air, 10, Math.round(m.air));
     set('bat', m.bat, cap, `${m.gen > m.use + 0.005 ? '▲' : m.use > m.gen + 0.005 ? '▼' : ''}${Math.round(m.bat)}`);
@@ -5452,7 +5465,7 @@ const MARS = (() => {
     if (near({ x: PR.i * TILE, z: PR.j * TILE }, 3)) return { at: printer.position, r: 3, text: `${ico('printer', 20)} ${tr3(T4.useP)}`, fn: openPrinter };
     if (near(COMM, 3.4)) return { at: commG.position, r: 3.4, text: `${ico('antenna', 20)} ${tr3(T5.comm)}`, fn: commPanel };
     if (near(S.rv, 3)) return { at: RV4.position, r: 3, text: `${ico('rover', 20)} ${tr3(T5.garage)} <span class="why ${S.rv.bat > 2 ? 'g' : 'y'}">${ico('battery', 16)} ${Math.round(S.rv.bat / rvCap() * 100)}%</span>`, fn: enterRover4 };
-    const ra = relayAction(); if (ra) return ra;
+    const ra = relayAction(); if (ra) return ra; const ca = claimAction(); if (ca) return ca;
     let fb = null, fd = 2.6; for (const p of problems()) { const d = Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z); if (d < fd) { fd = d; fb = p; } }
     if (fb) return fixAction(fb);
     for (const p of S.placed) {
@@ -5495,7 +5508,7 @@ const MARS = (() => {
     const m = S.m; if (!m) return;
     const s = Math.max(0.03, m.used / 10) * 1.25; tankFill.scale.y = s; tankFill.position.y = 0.06 + s / 2;
     const running = m.started && !S.over && G.control && freeView();
-    if (running) sim(dt);
+    if (running && !S.paused) sim(dt);
     if (!S || S.lvl !== 4) return;
     tick5(dt, time, running);
     if (S.over) return;
@@ -5527,9 +5540,12 @@ const MARS = (() => {
   }
   // ============================== LEVEL 4: Life on Mars. The base is already built: keep it running, fix it, grow it ==============================
   const COMM = { x: -18, z: 3 }, GAR = { x: 18, z: 4 }, DROP = { x: -13, z: 15 };
-  const FAR = { rescue: { x: 64, z: 46 }, relay: { x: -66, z: -40 }, cave: { x: -26, z: 70 }, dunes: { x: 80, z: -12 }, rim: { x: 26, z: -72 } };
-  const FLAGS = ['cave', 'dunes', 'rim'];
+  const FAR = { rescue: { x: 64, z: 46 }, relay: { x: -66, z: -40 }, cave: { x: -26, z: 70 }, dunes: { x: 80, z: -12 }, rim: { x: 26, z: -72 }, crater: { x: 40, z: -26 }, cliffs: { x: 6, z: -44 }, mesa: { x: -98, z: -12 } };
+  const FLAGS = ['cave', 'dunes', 'rim', 'crater', 'cliffs', 'mesa'];
   const F5 = {
+    crater: L4('Real: orbiters spotted bright water ice inside fresh Mars craters. Ice like this could give a base water.', 'حقيقة: رصدت المركبات المدارية جليد ماء لامعاً داخل فوهات مريخية حديثة. جليد كهذا قد يعطي القاعدة ماءً.'),
+    cliffs: L4('Real: Mars rock is stacked in layers. Many layers were laid down by ancient water, billions of years ago.', 'حقيقة: صخور المريخ مرصوصة في طبقات، وكثير منها تكوّن بفعل ماء قديم قبل مليارات السنين.'),
+    mesa: L4('Real: Mars has the tallest volcano we know of: Olympus Mons, about 2.5 times as high as Mount Everest.', 'حقيقة: في المريخ أعلى بركان نعرفه: أوليمبوس مونس، أعلى من جبل إيفرست بنحو 2.5 مرة.'),
     chapea: L4('Real: in NASA’s CHAPEA test, 4 volunteers lived 378 days in a 3D-printed pretend Mars home, growing vegetables and fixing broken gear.', 'حقيقة: في تجربة CHAPEA التابعة لناسا عاش 4 متطوعين 378 يوماً في بيت مريخي تجريبي مطبوع، يزرعون الخضار ويصلحون المعدات المعطّلة.'),
     water: L4('Real: each astronaut needs about 4 liters of water a day. The space station recycles 98% of its water.', 'حقيقة: يحتاج كل رائد فضاء نحو 4 لترات ماء يومياً. محطة الفضاء تعيد تدوير 98% من مائها.'),
     air: L4('Real: one person breathes about 0.84 kg of oxygen a day.', 'حقيقة: يتنفّس الشخص الواحد نحو 0.84 كغ من الأكسجين يومياً.'),
@@ -5548,7 +5564,7 @@ const MARS = (() => {
   };
   const MIS = [
     { k: 'science', ic: 'sample', mc: 24, n: L4('Science: study 3 rock samples', 'علم: ادرس 3 عينات صخرية'), d: L4('Collect samples from the cliffs and study them in the lab.', 'اجمع العينات من المنحدرات وادرسها في المختبر.') },
-    { k: 'explore', ic: 'flag', mc: 30, n: L4('Explore 3 new places', 'استكشف 3 أماكن جديدة'), d: L4('Drive the rover to the 3 orange flags.', 'قُد المركبة إلى الأعلام البرتقالية الثلاثة.') },
+    { k: 'explore', ic: 'flag', mc: 30, n: L4('Claim 6 new places', 'احجز 6 أماكن جديدة'), d: L4('Drive to the orange flags and press E to plant YOUR flag.', 'قُد إلى الأعلام البرتقالية واضغط E لترفع عَلَمك.') },
     { k: 'repair', ic: 'fix', mc: 25, from: 2, n: L4('Repair the far power station', 'أصلح محطة الطاقة البعيدة'), d: L4('Take a spare part to the broken solar station. Then it sends power to the base.', 'خذ قطعة غيار إلى المحطة الشمسية المعطّلة، فترسل الكهرباء إلى القاعدة.') },
     { k: 'rescue', ic: 'sos', mc: 40, from: 2, n: L4('Rescue a stuck astronaut', 'أنقذ رائد فضاء عالقاً'), d: L4('A geologist’s buggy broke down. Drive out and bring them home.', 'تعطّلت مركبة عالِمة جيولوجيا. اذهب بالمركبة وأعِدها إلى القاعدة.') },
   ];
@@ -5637,6 +5653,117 @@ const MARS = (() => {
     const ic = sprite('flag', 1.2); ic.position.y = 4.3; g.add(ic); g.userData = { cl, ring, ic }; flagG[k] = g; });
   { const f = FAR.cave, y = h(f.x, f.z - 9); const hill = mesh(new T.SphereGeometry(7, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat(0x8f3d20, { roughness: 1 }), f.x, y - 1.2, f.z - 10, W4); hill.scale.y = 0.8;
     const hole = mesh(new T.CircleGeometry(2.4, 20, 0, Math.PI), new T.MeshBasicMaterial({ color: 0x120806 }), f.x, y - 1.1, f.z - 3.35, W4, false); hole.rotation.x = -0.15; }
+  // ---------- flags: claim new places with your own flag (a country flag or your own design) ----------
+  const PLACE = {
+    cave: L4('Cave Mouth', 'فوهة الكهف'), dunes: L4('Moving Dunes', 'الكثبان المتحرّكة'), rim: L4('Crater Rim', 'حافة الفوهة'),
+    crater: L4('Ice Crater', 'فوهة الجليد'), cliffs: L4('Layer Cliffs', 'منحدرات الطبقات'), mesa: L4('Red Mesa', 'الهضبة الحمراء'),
+  };
+  const FT = {
+    claim: L4((p) => `Claim ${p} with your flag`, (p) => `اِحجز ${p} بعَلَمك`), claimed: L4((p) => `${p} is yours!`, (p) => `${p} صار لك!`),
+    title: L4('Your flag', 'عَلَمك'), countries: L4('Country flags', 'أعلام الدول'), own: L4('Make my own', 'صمّم عَلَمي'),
+    bg: L4('Color', 'اللون'), pat: L4('Pattern', 'النقش'), c2: L4('Second color', 'اللون الثاني'), sym: L4('Picture', 'الصورة'), name: L4('Write my name', 'اكتب اسمي'),
+    use: L4('Use this flag', 'استخدم هذا العَلَم'), change: L4('My flag', 'عَلَمي'),
+    note: L4('Your flag flies over the base and every place you claim. You can change it any time.', 'يرفرف عَلَمك فوق القاعدة وكل مكان تحجزه. يمكنك تغييره متى شئت.'),
+  };
+  const hs = (c, w, h, cols) => cols.forEach((col, i) => { c.fillStyle = col; c.fillRect(0, Math.floor(i * h / cols.length), w, Math.ceil(h / cols.length) + 1); });
+  const vs = (c, w, h, cols) => cols.forEach((col, i) => { c.fillStyle = col; c.fillRect(Math.floor(i * w / cols.length), 0, Math.ceil(w / cols.length) + 1, h); });
+  const starP = (c, x, y, r, col, n = 5, inner = 0.4) => { c.beginPath(); for (let i = 0; i < n * 2; i++) { const a = -Math.PI / 2 + i * Math.PI / n, rr = i % 2 ? r * inner : r; c.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } c.closePath(); c.fillStyle = col; c.fill(); };
+  const hoist = (c, h, col, len) => { c.fillStyle = col; c.beginPath(); c.moveTo(0, 0); c.lineTo(len, h / 2); c.lineTo(0, h); c.closePath(); c.fill(); };
+  const disc = (c, x, y, r, col) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
+  const moon = (c, x, y, r, col, bg, off) => { disc(c, x, y, r, col); disc(c, x + off, y, r * 0.8, bg); };
+  const word = (c, t, x, y, px, col) => { c.fillStyle = col; c.font = `bold ${px}px "Segoe UI", Tahoma, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(t, x, y); };
+  const COUNTRY = [
+    ['ps', 'Palestine', 'فلسطين', (c, w, h) => { hs(c, w, h, ['#000', '#fff', '#149954']); hoist(c, h, '#e4312b', w * 0.36); }],
+    ['jo', 'Jordan', 'الأردن', (c, w, h) => { hs(c, w, h, ['#000', '#fff', '#007a3d']); hoist(c, h, '#ce1126', w * 0.5); starP(c, w * 0.17, h / 2, h * 0.09, '#fff', 7, 0.5); }],
+    ['eg', 'Egypt', 'مصر', (c, w, h) => { hs(c, w, h, ['#ce1126', '#fff', '#000']); c.fillStyle = '#c09300'; c.beginPath(); c.moveTo(w / 2, h * 0.36); c.lineTo(w * 0.56, h * 0.62); c.lineTo(w * 0.44, h * 0.62); c.closePath(); c.fill(); disc(c, w / 2, h * 0.4, h * 0.05, '#c09300'); }],
+    ['sy', 'Syria', 'سوريا', (c, w, h) => { hs(c, w, h, ['#ce1126', '#fff', '#000']); starP(c, w * 0.36, h / 2, h * 0.11, '#007a3d'); starP(c, w * 0.64, h / 2, h * 0.11, '#007a3d'); }],
+    ['iq', 'Iraq', 'العراق', (c, w, h) => { hs(c, w, h, ['#ce1126', '#fff', '#000']); word(c, 'الله أكبر', w / 2, h / 2, h * 0.17, '#007a3d'); }],
+    ['lb', 'Lebanon', 'لبنان', (c, w, h) => { hs(c, w, h, ['#ed1c24', '#fff', '#fff', '#ed1c24']); c.fillStyle = '#00a651'; for (let i = 0; i < 3; i++) { const y = h * (0.32 + i * 0.1), s = w * (0.07 + i * 0.035); c.beginPath(); c.moveTo(w / 2, y - h * 0.08); c.lineTo(w / 2 + s, y + h * 0.06); c.lineTo(w / 2 - s, y + h * 0.06); c.closePath(); c.fill(); } c.fillRect(w / 2 - w * 0.012, h * 0.6, w * 0.024, h * 0.1); }],
+    ['ae', 'UAE', 'الإمارات', (c, w, h) => { hs(c, w, h, ['#00732f', '#fff', '#000']); c.fillStyle = '#ff0000'; c.fillRect(0, 0, w / 4, h); }],
+    ['kw', 'Kuwait', 'الكويت', (c, w, h) => { hs(c, w, h, ['#007a3d', '#fff', '#ce1126']); c.fillStyle = '#000'; c.beginPath(); c.moveTo(0, 0); c.lineTo(w / 4, h / 3); c.lineTo(w / 4, h * 2 / 3); c.lineTo(0, h); c.closePath(); c.fill(); }],
+    ['sa', 'Saudi Arabia', 'السعودية', (c, w, h) => { c.fillStyle = '#006c35'; c.fillRect(0, 0, w, h); word(c, 'لا إله إلا الله محمد رسول الله', w / 2, h * 0.42, h * 0.11, '#fff'); c.fillStyle = '#fff'; c.fillRect(w * 0.28, h * 0.66, w * 0.44, h * 0.03); }],
+    ['qa', 'Qatar', 'قطر', (c, w, h) => { c.fillStyle = '#8a1538'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(0, 0); const n = 9; for (let i = 0; i < n; i++) { c.lineTo(w * 0.28, (i + 0) * h / n); c.lineTo(w * 0.38, (i + 0.5) * h / n); } c.lineTo(w * 0.28, h); c.lineTo(0, h); c.closePath(); c.fill(); }],
+    ['ma', 'Morocco', 'المغرب', (c, w, h) => { c.fillStyle = '#c1272d'; c.fillRect(0, 0, w, h); c.strokeStyle = '#006233'; c.lineWidth = h * 0.04; c.beginPath(); for (let i = 0; i <= 5; i++) { const a = -Math.PI / 2 + i * Math.PI * 4 / 5; c.lineTo(w / 2 + Math.cos(a) * h * 0.26, h / 2 + Math.sin(a) * h * 0.26); } c.stroke(); }],
+    ['tn', 'Tunisia', 'تونس', (c, w, h) => { c.fillStyle = '#e70013'; c.fillRect(0, 0, w, h); disc(c, w / 2, h / 2, h * 0.25, '#fff'); moon(c, w / 2 - h * 0.03, h / 2, h * 0.19, '#e70013', '#fff', h * 0.05); starP(c, w / 2 + h * 0.06, h / 2, h * 0.09, '#e70013'); }],
+    ['dz', 'Algeria', 'الجزائر', (c, w, h) => { vs(c, w, h, ['#006233', '#fff']); moon(c, w / 2, h / 2, h * 0.26, '#d21034', '#fff', h * 0.07); disc(c, w / 2 + h * 0.07, h / 2, h * 0.205, '#fff'); vs(c, w / 2, h, ['#006233']); moon(c, w / 2, h / 2, h * 0.26, '#d21034', '#fff', h * 0.07); c.save(); c.beginPath(); c.rect(0, 0, w / 2, h); c.clip(); disc(c, w / 2 + h * 0.07, h / 2, h * 0.205, '#006233'); c.restore(); starP(c, w / 2 + h * 0.08, h / 2, h * 0.1, '#d21034'); }],
+    ['tr', 'Türkiye', 'تركيا', (c, w, h) => { c.fillStyle = '#e30a17'; c.fillRect(0, 0, w, h); moon(c, w * 0.38, h / 2, h * 0.25, '#fff', '#e30a17', h * 0.06); starP(c, w * 0.53, h / 2, h * 0.12, '#fff'); }],
+    ['cl', 'Chile', 'تشيلي', (c, w, h) => { hs(c, w, h, ['#fff', '#d52b1e']); c.fillStyle = '#0039a6'; c.fillRect(0, 0, h / 2, h / 2); starP(c, h / 4, h / 4, h * 0.12, '#fff'); }],
+    ['us', 'USA', 'أمريكا', (c, w, h) => { hs(c, w, h, Array.from({ length: 13 }, (_, i) => (i % 2 ? '#fff' : '#b22234'))); c.fillStyle = '#3c3b6e'; c.fillRect(0, 0, w * 0.4, h * 7 / 13); for (let r = 0; r < 5; r++) for (let q = 0; q < 6; q++) disc(c, w * 0.035 + q * w * 0.064, h * 0.06 + r * h * 0.1, h * 0.02, '#fff'); }],
+    ['gb', 'United Kingdom', 'بريطانيا', (c, w, h) => { c.fillStyle = '#012169'; c.fillRect(0, 0, w, h); c.lineCap = 'butt'; [['#fff', h * 0.2], ['#c8102e', h * 0.07]].forEach(([col, lw]) => { c.strokeStyle = col; c.lineWidth = lw; c.beginPath(); c.moveTo(0, 0); c.lineTo(w, h); c.moveTo(w, 0); c.lineTo(0, h); c.stroke(); }); c.fillStyle = '#fff'; c.fillRect(w / 2 - h / 6, 0, h / 3, h); c.fillRect(0, h / 3, w, h / 3); c.fillStyle = '#c8102e'; c.fillRect(w / 2 - h / 10, 0, h / 5, h); c.fillRect(0, h * 0.4, w, h / 5); }],
+    ['fr', 'France', 'فرنسا', (c, w, h) => vs(c, w, h, ['#0055a4', '#fff', '#ef4135'])],
+    ['de', 'Germany', 'ألمانيا', (c, w, h) => hs(c, w, h, ['#000', '#dd0000', '#ffce00'])],
+    ['it', 'Italy', 'إيطاليا', (c, w, h) => vs(c, w, h, ['#009246', '#fff', '#ce2b37'])],
+    ['es', 'Spain', 'إسبانيا', (c, w, h) => hs(c, w, h, ['#aa151b', '#f1bf00', '#f1bf00', '#aa151b'])],
+    ['ie', 'Ireland', 'أيرلندا', (c, w, h) => vs(c, w, h, ['#169b62', '#fff', '#ff883e'])],
+    ['jp', 'Japan', 'اليابان', (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); disc(c, w / 2, h / 2, h * 0.3, '#bc002d'); }],
+    ['br', 'Brazil', 'البرازيل', (c, w, h) => { c.fillStyle = '#009c3b'; c.fillRect(0, 0, w, h); c.fillStyle = '#ffdf00'; c.beginPath(); c.moveTo(w * 0.08, h / 2); c.lineTo(w / 2, h * 0.1); c.lineTo(w * 0.92, h / 2); c.lineTo(w / 2, h * 0.9); c.closePath(); c.fill(); disc(c, w / 2, h / 2, h * 0.22, '#002776'); }],
+    ['ca', 'Canada', 'كندا', (c, w, h) => { c.fillStyle = '#d80621'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.fillRect(w / 4, 0, w / 2, h); starP(c, w / 2, h * 0.48, h * 0.3, '#d80621', 11, 0.55); c.fillStyle = '#d80621'; c.fillRect(w / 2 - h * 0.02, h * 0.6, h * 0.04, h * 0.2); }],
+    ['in', 'India', 'الهند', (c, w, h) => { hs(c, w, h, ['#ff9933', '#fff', '#138808']); c.strokeStyle = '#000080'; c.lineWidth = h * 0.025; c.beginPath(); c.arc(w / 2, h / 2, h * 0.13, 0, Math.PI * 2); c.stroke(); }],
+    ['cn', 'China', 'الصين', (c, w, h) => { c.fillStyle = '#de2910'; c.fillRect(0, 0, w, h); starP(c, w * 0.17, h * 0.27, h * 0.16, '#ffde00'); [[0.33, 0.1], [0.4, 0.2], [0.4, 0.35], [0.33, 0.45]].forEach(([x, y]) => starP(c, w * x, h * y, h * 0.055, '#ffde00')); }],
+    ['ng', 'Nigeria', 'نيجيريا', (c, w, h) => vs(c, w, h, ['#008751', '#fff', '#008751'])],
+    ['id', 'Indonesia', 'إندونيسيا', (c, w, h) => hs(c, w, h, ['#ce1126', '#fff'])],
+    ['ua', 'Ukraine', 'أوكرانيا', (c, w, h) => hs(c, w, h, ['#0057b7', '#ffd700'])],
+    ['pk', 'Pakistan', 'باكستان', (c, w, h) => { c.fillStyle = '#01411c'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.fillRect(0, 0, w / 4, h); moon(c, w * 0.62, h / 2, h * 0.27, '#fff', '#01411c', h * 0.07); starP(c, w * 0.7, h * 0.38, h * 0.09, '#fff'); }],
+  ];
+  const PAL = ['#ec5a50', '#ec8a3c', '#ffc22e', '#5fbf2a', '#3a9cf0', '#1f3a68', '#b07aff', '#ffffff', '#2b2726'];
+  const PATS = ['plain', 'hstripe', 'vstripe', 'diag', 'border', 'circle'];
+  const SYMS = ['none', 'star', 'rocket', 'sun', 'night', 'safety', 'satellite', 'greenhouse']; SYMS.forEach((q) => q !== 'none' && q !== 'star' && ICONS.img(q));
+  function drawFlag(c, w, h, f) {
+    c.clearRect(0, 0, w, h);
+    if (f && f.c) { const e = COUNTRY.find((q) => q[0] === f.c); if (e) { e[3](c, w, h); return; } }
+    f = f || { bg: '#ec8a3c', pat: 'plain', c2: '#ffffff', sym: 'star' };
+    c.fillStyle = f.bg; c.fillRect(0, 0, w, h); c.fillStyle = f.c2;
+    if (f.pat === 'hstripe') c.fillRect(0, h / 3, w, h / 3);
+    else if (f.pat === 'vstripe') c.fillRect(w / 3, 0, w / 3, h);
+    else if (f.pat === 'diag') { c.beginPath(); c.moveTo(0, h); c.lineTo(w, 0); c.lineTo(w, h * 0.35); c.lineTo(w * 0.35, h); c.closePath(); c.fill(); }
+    else if (f.pat === 'border') { c.fillRect(0, 0, w, h); c.fillStyle = f.bg; c.fillRect(h * 0.1, h * 0.1, w - h * 0.2, h * 0.8); }
+    else if (f.pat === 'circle') disc(c, w / 2, h / 2, h * 0.36, f.c2);
+    if (f.sym === 'star') starP(c, w / 2, h / 2 - (f.name ? h * 0.06 : 0), h * 0.26, f.c2 === f.bg ? '#ffffff' : (f.pat === 'plain' || f.pat === 'border' ? f.c2 : '#ffc22e'));
+    else if (f.sym && f.sym !== 'none') { const im = ICONS.img(f.sym), s = h * 0.5; if (im.complete && im.naturalWidth) c.drawImage(im, w / 2 - s / 2, h / 2 - s / 2 - (f.name ? h * 0.06 : 0), s, s); else im.addEventListener('load', () => { redrawFlag(); }, { once: true }); }
+    if (f.name && G.name) { c.font = `900 ${Math.round(h * 0.14)}px Fredoka, "Segoe UI", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = h * 0.03; c.strokeStyle = '#1f3a68'; c.strokeText(G.name.slice(0, 14), w / 2, h * 0.84); c.fillStyle = '#fffaf0'; c.fillText(G.name.slice(0, 14), w / 2, h * 0.84); }
+  }
+  const flagCv = document.createElement('canvas'); flagCv.width = 256; flagCv.height = 160;
+  const flagTex = new T.CanvasTexture(flagCv); if ('colorSpace' in flagTex) flagTex.colorSpace = T.SRGBColorSpace;
+  const flagMat = new T.MeshStandardMaterial({ map: flagTex, side: T.DoubleSide, roughness: 0.8 });
+  const blankMat = mat(0xec8a3c, { side: T.DoubleSide });
+  function redrawFlag() { if (!S || !S.flag) return; drawFlag(flagCv.getContext('2d'), 256, 160, S.flag); flagTex.needsUpdate = true; }
+  const flagURL = (f, w = 96, h = 60) => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; drawFlag(cv.getContext('2d'), w, h, f); return cv.toDataURL(); };
+  // the base flag pole, next to the habitat
+  const baseFlag = new T.Group(); baseFlag.position.set(3.5, 0, 16); W4.add(baseFlag);
+  mesh(new T.CylinderGeometry(0.07, 0.09, 4.2, 8), mat(0xdde3ea, { metalness: 0.4 }), 0, 2.1, 0, baseFlag); mesh(new T.SphereGeometry(0.12, 10, 8), mat(0xffc22e), 0, 4.25, 0, baseFlag);
+  const baseCloth = mesh(new T.PlaneGeometry(1.8, 1.12), blankMat, 0.92, 3.6, 0, baseFlag, false);
+  function setCloths() { for (const k of FLAGS) flagG[k].userData.cl.material = S.mis.flags[k] && S.flag ? flagMat : blankMat; baseCloth.material = S.flag ? flagMat : blankMat; }
+  function flagPanel(after) {
+    let draft = Object.assign({}, S.flag || { bg: '#3a9cf0', pat: 'hstripe', c2: '#ffffff', sym: 'rocket', name: true }), tab = draft.c ? 'c' : 'own';
+    const render = () => {
+      const sw = (key, cols) => `<div class="swatch">${cols.map((col) => `<button class="sw5 ${draft[key] === col ? 'sel' : ''}" data-k="${key}" data-v="${col}" style="background:${col}"></button>`).join('')}</div>`;
+      const own = `<div class="fopt"><b>${tr3(FT.bg)}</b>${sw('bg', PAL)}<b>${tr3(FT.pat)}</b><div class="swatch">${PATS.map((p) => `<button class="pt5 ${draft.pat === p ? 'sel' : ''}" data-k="pat" data-v="${p}"><img src="${flagURL({ bg: '#c9c2b4', pat: p, c2: '#1f3a68', sym: 'none' }, 48, 30)}" alt=""></button>`).join('')}</div>`
+        + `<b>${tr3(FT.c2)}</b>${sw('c2', PAL)}<b>${tr3(FT.sym)}</b><div class="swatch">${SYMS.map((s) => `<button class="pt5 sy ${draft.sym === s ? 'sel' : ''}" data-k="sym" data-v="${s}">${s === 'none' ? '✕' : s === 'star' ? '★' : ico(s, 26)}</button>`).join('')}</div>`
+        + `<label class="nm5"><input type="checkbox" id="fname" ${draft.name ? 'checked' : ''}> ${tr3(FT.name)}</label></div>`;
+      const cty = `<div class="flaggrid">${COUNTRY.map(([k, en, ar]) => `<button class="fl5 ${draft.c === k ? 'sel' : ''}" data-c="${k}"><img src="${flagURL({ c: k })}" alt=""><span>${LANG === 'ar' ? ar : en}</span></button>`).join('')}</div>`;
+      panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('flag', 30)} ${tr3(FT.title)}</h2><div class="fprev"><img src="${flagURL(draft, 240, 150)}" alt=""></div>`
+        + `<div class="stabs"><button class="btn small ${tab === 'c' ? 'on' : 'ghost'}" data-t="c">${tr3(FT.countries)}</button><button class="btn small ${tab === 'own' ? 'on' : 'ghost'}" data-t="own">${tr3(FT.own)}</button></div>${tab === 'c' ? cty : own}`
+        + `<p class="shop-note">${tr3(FT.note)}</p><div class="actions"><button class="btn ghost" id="fcancel">${tr3(T5.close)}</button><button class="btn green" id="fuse">${ico('flag', 18)} ${tr3(FT.use)}</button></div>`, (el) => {
+        el.querySelectorAll('[data-t]').forEach((b) => (b.onclick = () => { tab = b.dataset.t; if (tab === 'own' && draft.c) draft = { bg: '#3a9cf0', pat: 'hstripe', c2: '#ffffff', sym: 'rocket', name: true }; render(); }));
+        el.querySelectorAll('[data-c]').forEach((b) => (b.onclick = () => { draft = { c: b.dataset.c }; SFX.pick(); render(); }));
+        el.querySelectorAll('[data-k]').forEach((b) => (b.onclick = () => { delete draft.c; draft[b.dataset.k] = b.dataset.v; SFX.pick(); render(); }));
+        const nm = el.querySelector('#fname'); if (nm) nm.onchange = () => { draft.name = nm.checked; render(); };
+        el.querySelector('#fcancel').onclick = () => { closePanel(); giveControl(); };
+        el.querySelector('#fuse').onclick = () => { S.flag = draft; redrawFlag(); setCloths(); SFX.stamp(); save5(); closePanel(); if (after) after(); else giveControl(); };
+      });
+    };
+    render();
+  }
+  function claimAction() {
+    const k = FLAGS.find((q) => !S.mis.flags[q] && near(FAR[q], 5)); if (!k) return null;
+    return { at: flagG[k].position, r: 5, text: `${ico('flag', 20)} ${tr3(FT.claim, tr3(PLACE[k]))}`, fn: () => claim(k) };
+  }
+  function claim(k) {
+    if (!S.flag) { flagPanel(() => { giveControl(); claim(k); }); return; }
+    const u = flagG[k].userData; S.mis.flags[k] = true; u.rise = 0; u.cl.material = flagMat; earn(10); SFX.fanfare();
+    burst(new T.Vector3(FAR[k].x, h(FAR[k].x, FAR[k].z) + 2, FAR[k].z), 0xffc22e, 34, 3, 1.3);
+    chip('flag', LL(FT.claimed, tr3(PLACE[k]), tr3(PLACE[k])), 2600); setTimeout(() => S && chip('flag', F5[k], 5000), 2700); save5();
+  }
 
   // ---------- small helpers ----------
   function markFault(p) { const bad = !!(p.fault || p.dirty || p.broken || p.crack); if (bad && !p.fm) { p.fm = sprite('fix', 0.9); p.fm.position.y = 2.9; p.obj.add(p.fm); } if (p.fm) p.fm.visible = bad; }
@@ -5701,7 +5828,7 @@ const MARS = (() => {
     const due = S.orders.filter((o) => o.at <= m.sol); S.orders = S.orders.filter((o) => o.at > m.sol); due.forEach(dropPod);
     if (!resume || !S.tasks.length) S.tasks = ['fix', 'harvest', 'report', m.sol % 2 ? 'keep' : 'study'];
     S.today = { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 };
-    m.events = [{ kind: S.deck[(m.sol - 1) % S.deck.length], at: (m.sol - 1) * SOL + 18 + Math.random() * 22, done: false }];
+    m.events = [{ kind: S.deck[(m.sol - 1) % S.deck.length], at: (m.sol - 1) * SOL + 30 + Math.random() * 60, done: false }];
     m.stormIn = 0; m.stormOn = 0; vig.hidden = true;
     S.am = snapshot(); save5(); regrade(); lamps(); buildLinks();
     const pr = problems().length, facts = [F5.chapea, F5.water, F5.air, F5.plants2, F5.cargo, F5.lab, F5.dust], f = facts[(m.sol - 1) % facts.length];
@@ -5812,7 +5939,7 @@ const MARS = (() => {
   function pickRescue() { S.mis.rescue = 1; RV4.add(stuck); stuck.position.set(0, 0.95, -0.55); stuck.rotation.set(0, 0, 0); resIc.visible = false; SFX.success(); chip('sos', T5.resGot, 3500); }
   function driveAction() {
     if (S.mis.rescue === 0 && S.m.sol >= 2 && near(FAR.rescue, 6)) return { at: resG.position, r: 6, text: `${ico('sos', 20)} ${tr3(T5.aboard)}`, fn: pickRescue };
-    const ra = relayAction(); if (ra) return ra;
+    const ra = relayAction(); if (ra) return ra; const ca = claimAction(); if (ca) return ca;
     return { at: RV4.position, r: 99, text: `${ico('up', 18)} ${tr3(T5.out)}`, fn: () => exitRover4() };
   }
   function updateRover4(dt) {
@@ -5849,7 +5976,8 @@ const MARS = (() => {
     beacon.visible = S.mis.rescue === 0 && m.sol >= 2 && Math.sin(time * 6) > 0; resIc.visible = S.mis.rescue === 0 && m.sol >= 2; resIc.position.y = 3.4 + Math.sin(time * 2) * 0.2;
     relIc.visible = !S.mis.repair && m.sol >= 2;
     for (const k of FLAGS) { const u = flagG[k].userData; u.ring.visible = !S.mis.flags[k]; u.ring.scale.setScalar(1 + Math.sin(time * 3) * 0.05); u.cl.rotation.y = Math.sin(time * 2 + k.length) * 0.3;
-      if (running && !S.mis.flags[k] && near(FAR[k], 5)) { S.mis.flags[k] = true; u.cl.material = mat(0x9ccc3c, { side: T.DoubleSide }); earn(10); SFX.discover(); burst(new T.Vector3(FAR[k].x, h(FAR[k].x, FAR[k].z) + 2, FAR[k].z), 0xffc22e, 30, 3, 1.2); chip('flag', F5[k], 5000); } }
+      if (u.rise != null) { u.rise = Math.min(1, u.rise + dt * 0.8); u.cl.position.y = 0.9 + u.rise * 1.9; if (u.rise >= 1) u.rise = null; } }
+    baseCloth.rotation.y = Math.sin(time * 1.7) * 0.25;
     for (const pd of S.pods) pd.g.userData.ic.position.y = 2.2 + Math.sin(time * 2 + pd.x) * 0.15;
     if (running && S.mis.rescue === 1 && Math.hypot(S.rv.x, S.rv.z - 3) < 7) {
       S.mis.rescue = 2; RV4.remove(stuck); stuck.position.set(S.rv.x + 1.5, 0, S.rv.z); W4.add(stuck); crew.push(stuck); stuck.userData.tgt = new T.Vector3(0, 0, 2.2); stuck.userData.wait = 0;
@@ -5894,9 +6022,9 @@ const MARS = (() => {
   }
   function commPanel() { const m = S.m; if (!(m.sw.comm && m.run)) { chip('antenna', T5.commOff, 3000); SFX.nope(); return; } shopPanel('earth'); }
   function misPanel() {
-    const m = S.m, st = { science: [Math.min(S.mis.studied, 3), 3], explore: [FLAGS.filter((k) => S.mis.flags[k]).length, 3], repair: [S.mis.repair ? 1 : 0, 1], rescue: [S.mis.rescue >= 2 ? 1 : 0, 1] };
-    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 30)} ${tr3(T5.misT)}</h2><p>${tr3(T5.misP)}</p><div class="mis">${MIS.map((q) => { const [a, b] = st[q.k], lock = q.from && m.sol < q.from, ok = a >= b; return `<div class="mi ${ok ? 'ok' : lock ? 'lock' : ''}">${ico(q.ic, 40)}<span><b>${tr3(q.n)}</b><small>${tr3(q.d)}</small></span><span class="mc">${ok ? ico('check', 22) : lock ? tr3(T5.locked, q.from) : `${a}/${b} · ${ico('coin', 16)} ${q.mc}`}</span></div>`; }).join('')}</div><div class="actions"><span></span><button class="btn green" id="mclose">${tr3(T5.close)}</button></div>`,
-    (el) => { el.querySelector('#mclose').onclick = () => { closePanel(); giveControl(); }; });
+    const m = S.m, st = { science: [Math.min(S.mis.studied, 3), 3], explore: [FLAGS.filter((k) => S.mis.flags[k]).length, FLAGS.length], repair: [S.mis.repair ? 1 : 0, 1], rescue: [S.mis.rescue >= 2 ? 1 : 0, 1] };
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 30)} ${tr3(T5.misT)}</h2><p>${tr3(T5.misP)}</p><div class="mis">${MIS.map((q) => { const [a, b] = st[q.k], lock = q.from && m.sol < q.from, ok = a >= b; return `<div class="mi ${ok ? 'ok' : lock ? 'lock' : ''}">${ico(q.ic, 40)}<span><b>${tr3(q.n)}</b><small>${tr3(q.d)}</small></span><span class="mc">${ok ? ico('check', 22) : lock ? tr3(T5.locked, q.from) : `${a}/${b} · ${ico('coin', 16)} ${q.mc}`}</span></div>`; }).join('')}</div><div class="actions"><button class="btn ghost" id="mflag">${ico('flag', 18)} ${tr3(FT.change)}</button><button class="btn green" id="mclose">${tr3(T5.close)}</button></div>`,
+    (el) => { el.querySelector('#mclose').onclick = () => { closePanel(); giveControl(); }; el.querySelector('#mflag').onclick = () => flagPanel(misPanel); });
   }
   // ---------- saving: the world waits for you (nothing breaks while you are away) ----------
   const SKEY = 'ja_mars_base';
@@ -5905,7 +6033,7 @@ const MARS = (() => {
     try { const m = S.m; localStorage.setItem(SKEY, JSON.stringify({ v: 1, credits: G.credits, gear: Object.keys(G.gear).filter((k) => k.startsWith('mars_')),
       m: { sol: m.sol, bat: m.bat, water: m.water, air: m.air, food: m.food, used: m.used, dose: m.dose, energy: m.energy, safety: m.safety, sw: m.sw },
       placed: S.placed.map((p) => [p.type, p.i, p.j, p.rot, { broken: !!p.broken, crack: !!p.crack, fault: p.fault || null, sym: p.sym, crop: p.crop || 0, dirty: !!p.dirty }]),
-      inv: S.inv, store: S.store, parts: S.parts, up: S.up, look: S.look, orders: S.orders.concat(S.pods.map((p) => ({ k: p.k, at: 0 }))), mis: S.mis,
+      inv: S.inv, store: S.store, parts: S.parts, up: S.up, look: S.look, flag: S.flag || null, orders: S.orders.concat(S.pods.map((p) => ({ k: p.k, at: 0 }))), mis: S.mis,
       rv: { x: S.rv.x, z: S.rv.z, h: S.rv.h, bat: S.rv.bat }, crew4: S.crew4, podTaken: S.podTaken, tasks: S.tasks, deck: S.deck, seedBoost: S.seedBoost || 0 })); } catch (e) {}
   }
   function load5() { try { const s = JSON.parse(localStorage.getItem(SKEY) || 'null'); return s && s.v === 1 && Array.isArray(s.placed) ? s : null; } catch (e) { return null; } }
@@ -5946,7 +6074,7 @@ const MARS = (() => {
     if (S.mis.rescue < 2) { resG.add(stuck); stuck.position.set(1.6, 0, 0); stuck.rotation.set(0, -0.6, 0); if (S.mis.rescue === 1) S.mis.rescue = 0; }
     else { W4.add(stuck); stuck.position.set(1.5, 0, 3); crew.push(stuck); }
     relLamp.material.color.set(S.mis.repair ? 0x9ccc3c : 0xec5a50);
-    FLAGS.forEach((k) => (flagG[k].userData.cl.material = mat(S.mis.flags[k] ? 0x9ccc3c : 0xec8a3c, { side: T.DoubleSide })));
+    S.flag = (sv && sv.flag) || S.flag || null; FLAGS.forEach((k) => { S.mis.flags[k] = !!S.mis.flags[k]; flagG[k].userData.cl.position.y = 2.8; }); redrawFlag(); setCloths();
     RV4.position.set(S.rv.x, h(S.rv.x, S.rv.z), S.rv.z); RV4.rotation.set(0, S.rv.h, 0); rvSolid.x = S.rv.x; rvSolid.z = S.rv.z; solids.push(rvSolid);
     capsule.position.set(landAt.x, 0, landAt.z); capsule.visible = true;
     suitUp(true); applyLook(); girl.visible = true; girl.scale.setScalar(1); setExpr(girl, 'happy');
