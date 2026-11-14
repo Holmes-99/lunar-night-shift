@@ -94,6 +94,14 @@
 .swatch { display: flex; flex-wrap: wrap; gap: 6px; } .sw5 { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #1f3a6833; cursor: pointer; }
 .pt5 { border: 2px solid #1f3a6822; background: #fffaf0; border-radius: 8px; padding: 3px; cursor: pointer; min-width: 40px; min-height: 36px; display: grid; place-items: center; font-weight: 900; color: #1f3a68; } .pt5 img { display: block; }
 .nm5 { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-weight: 700; color: #1f3a68; }
+.ev3 { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 8px; } @media (max-width: 560px) { .ev3 { grid-template-columns: 1fr; } }
+.evopt .tags i.tg.g { background: #e6f6c8; color: #2d4a08; } .evopt .tags i.tg.r { background: #fde0dc; color: #8a2218; }
+.cd5 { display: inline-grid; place-items: center; min-width: 44px; height: 44px; border-radius: 50%; background: #ec5a50; color: #fff; font-size: 24px; vertical-align: middle; animation: pop2 1s ease-out infinite; }
+.flash5 { position: absolute; inset: 0; background: #fff; pointer-events: none; z-index: 30; opacity: 0; } .flash5.go { animation: flash5 .55s ease-out; } @keyframes flash5 { 0% { opacity: .95; } 100% { opacity: 0; } }
+.album5 { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; max-height: 340px; overflow: auto; }
+.ph5 { background: #fff; border-radius: 10px; padding: 6px; box-shadow: 0 3px 0 #1f3a6822; transform: rotate(-1deg); } .ph5:nth-child(2n) { transform: rotate(1.2deg); } .ph5 img { display: block; width: 100%; border-radius: 4px; }
+.ph5 .pb { display: flex; gap: 6px; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.pbar { display: block; height: 7px; border-radius: 4px; background: #e8e1d2; margin-top: 4px; overflow: hidden; } .pbar i { display: block; height: 100%; background: #9ccc3c; }
 .stabs { display: flex; gap: 6px; justify-content: center; margin: 6px 0 10px; flex-wrap: wrap; }
 @media (max-width: 640px) { .rep { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .m4lab { display: none; } }
@@ -657,6 +665,67 @@ body {
 .badge-card .four i { position: absolute; right: -6px; bottom: -6px; width: 22px; height: 22px; border-radius: 50%; background: #4caf50; color: #fff; font-size: 13px; font-style: normal; display: grid; place-items: center; }
 .has-st .help-btn { bottom: 104px; }
 @media (max-width: 640px) { .map-hud { top: 62px; width: 96px; } #mmap { width: 96px; height: 96px; } .clist { display: none; position: absolute; top: 104px; right: 0; width: 170px; } .map-hud[dir="rtl"] .clist { right: auto; left: 0; } .clist.open { display: block; } .st-hud { flex-wrap: wrap; bottom: 10px; } .st-hud .st-ic { width: 44px; height: 44px; font-size: 26px; } }
+
+/* ===== Splash + home menu ===== */
+.splash5[hidden], .h5sheet[hidden], .flash5[hidden] { display: none !important; }
+.splash5 { position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 20px; text-align: center; color: #fffaf0; background: radial-gradient(circle at 50% 125%, #e0763a 0, #8a3a33 22%, #2a2348 52%, #0c1226 100%); overflow: hidden; }
+.stars5 { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(2px 2px at 12% 22%, #fff, transparent), radial-gradient(1.5px 1.5px at 30% 70%, #fff, transparent), radial-gradient(2px 2px at 54% 14%, #ffe9b0, transparent), radial-gradient(1.5px 1.5px at 72% 38%, #fff, transparent), radial-gradient(2px 2px at 88% 18%, #fff, transparent), radial-gradient(1.5px 1.5px at 64% 62%, #cfe8ff, transparent), radial-gradient(1px 1px at 22% 48%, #fff, transparent), radial-gradient(1.5px 1.5px at 92% 56%, #fff, transparent), radial-gradient(1px 1px at 42% 34%, #fff, transparent), radial-gradient(1.5px 1.5px at 6% 64%, #fff, transparent); animation: tw5 3.2s ease-in-out infinite alternate; }
+.stars5.b { transform: rotate(180deg); animation-delay: -1.6s; opacity: .7; }
+@keyframes tw5 { from { opacity: .45; } to { opacity: 1; } }
+.sp-patch { width: 150px; height: 150px; filter: drop-shadow(0 7px 0 rgba(0,0,0,.35)); animation: patchIn5 1s cubic-bezier(.2,1.6,.4,1) both; position: relative; }
+@keyframes patchIn5 { from { transform: scale(.2) rotate(-200deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.sp-title { font-family: var(--f-display); font-weight: 800; font-size: clamp(40px, 9vw, 64px); line-height: .95; margin: 0; position: relative; text-shadow: 0 5px 0 rgba(0,0,0,.35); animation: rise5 .7s .35s ease-out both; }
+.sp-title span { color: #ec8a3c; } .sp-title small { display: block; font-size: .42em; color: #ffc22e; margin-top: 8px; }
+.sp-team { font-weight: 800; letter-spacing: .08em; font-size: 13px; color: #cfc6e6; position: relative; animation: rise5 .7s .55s ease-out both; }
+.sp-bar { width: 220px; height: 14px; border-radius: 9px; border: 2.5px solid #fffaf0; overflow: hidden; position: relative; }
+.sp-bar i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(-45deg, #ffc22e 0 8px, #ec8a3c 8px 16px); animation: load5 1.8s ease-in-out forwards; }
+@keyframes load5 { to { width: 100%; } }
+@keyframes rise5 { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sp-tap { all: unset; cursor: pointer; position: relative; font-family: var(--f-display); font-weight: 800; font-size: 22px; color: #fff; padding: 12px 30px 10px; border-radius: 18px; background: #ec8a3c; box-shadow: 0 6px 0 #b5611f; outline: 2px dashed rgba(255,255,255,.65); outline-offset: -6px; animation: pulse5 1.1s ease-in-out infinite; }
+@keyframes pulse5 { 50% { transform: scale(1.07); } }
+.splash5.out { animation: fade5 .45s ease-in forwards; } @keyframes fade5 { to { opacity: 0; visibility: hidden; } }
+.home5 { place-items: stretch; align-content: center; padding: 76px 22px 22px; backdrop-filter: none; background: radial-gradient(circle at 85% 115%, #e0763a 0, #7a3434 22%, #222046 52%, #0c1226 100%); }
+.home5 > .stars5 { z-index: 0; }
+.h5top { position: absolute; top: 14px; inset-inline-start: 16px; display: flex; gap: 8px; z-index: 2; }
+.h5coin, .h5rank { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,250,240,.95); color: var(--navy); font-family: var(--f-display); font-weight: 800; font-size: 17px; padding: 6px 14px 4px; border-radius: 999px; border: 2.5px solid var(--navy); outline: 1.5px dashed rgba(31,58,104,.35); outline-offset: -6px; }
+.h5rank:empty { display: none; }
+.h5main { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: 18px; width: min(980px, 100%); margin: 0 auto; }
+.h5hero { display: flex; flex-direction: column; gap: 12px; color: #fffaf0; }
+.h5hero h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(42px, 7vw, 76px); line-height: .92; margin: 0; color: #fffaf0; text-shadow: 0 6px 0 rgba(0,0,0,.35); }
+.h5hero h1 span { color: var(--orange); }
+.h5hero .sub { font-family: var(--f-display); font-weight: 700; font-size: 20px; color: #ffc22e; }
+.h5hero p { margin: 0; color: #ddd6ee; font-size: 16px; max-width: 460px; }
+.h5play { font-size: 30px; padding: 16px 44px 13px; align-self: flex-start; border-radius: 20px; box-shadow: 0 7px 0 var(--orange-dk); }
+.h5cont { align-self: flex-start; }
+.h5row { display: flex; gap: 10px; flex-wrap: wrap; }
+.h5b { display: inline-flex; align-items: center; gap: 8px; }
+.h5avatar { text-align: center; }
+.h5avatar svg { width: 100%; max-width: 330px; display: block; margin: 0 auto; animation: float5 4s ease-in-out infinite; filter: drop-shadow(0 18px 18px rgba(0,0,0,.35)); }
+@keyframes float5 { 50% { transform: translateY(-12px) rotate(-2deg); } }
+.h5name { display: inline-block; font-family: var(--f-display); font-weight: 800; font-size: 20px; color: var(--navy); background: #ffc22e; padding: 4px 16px 2px; border-radius: 10px; transform: rotate(-3deg); margin-bottom: 4px; }
+.h5name:empty { display: none; }
+.h5sheet { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; margin: 0 auto; width: min(580px, 100%); max-height: 82%; overflow: auto; padding: 18px 20px 22px; border-radius: 24px 24px 0 0 !important; animation: up5 .28s ease-out; display: flex; flex-direction: column; gap: 12px; }
+@keyframes up5 { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.h5sheet section { display: none; flex-direction: column; gap: 12px; } .h5sheet section.on { display: flex; }
+.h5head { display: flex; align-items: center; justify-content: space-between; } .h5head h2 { font-family: var(--f-display); font-weight: 800; font-size: 26px; margin: 0; color: var(--navy); }
+.h5lv { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; } .h5p { margin: 0; color: var(--muted); }
+.avrow b { display: block; font-size: 14px; color: var(--navy); margin-bottom: 4px; } .avrow .swatch { display: flex; gap: 8px; flex-wrap: wrap; }
+.avsw { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px rgba(31,58,104,.25); cursor: pointer; }
+.avsw.sel { box-shadow: 0 0 0 3px #ffc22e, 0 0 0 5px var(--navy); }
+.setrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 12px; background: #fff; font-weight: 800; color: var(--navy); }
+.setrow .tog { min-width: 70px; }
+@media (min-width: 721px) { .h5sheet { left: 24px; right: auto; margin: 0; width: min(520px, 52%); } [dir="rtl"] .h5sheet { left: auto; right: 24px; } }
+@media (max-width: 720px) { .h5main { grid-template-columns: 1fr; } .h5avatar { order: -1; } .h5avatar svg { max-width: 170px; } .h5play { align-self: stretch; text-align: center; } .h5cont { align-self: stretch; text-align: center; } .h5hero { align-items: stretch; text-align: center; } .h5hero p { max-width: none; } .h5row { justify-content: center; } }
+
+/* ===== Mission-patch look: everything is stitched like an astronaut patch ===== */
+.card { border: 3px solid var(--navy); outline: 2px dashed rgba(31,58,104,.3); outline-offset: -9px; background-image: repeating-linear-gradient(45deg, rgba(31,58,104,.028) 0 2px, transparent 2px 6px); }
+.btn { outline: 2px dashed rgba(255,255,255,.6); outline-offset: -5px; }
+.btn.ghost { outline-color: rgba(31,58,104,.3); }
+.icon-btn { border: 2.5px solid var(--navy); outline: 1.5px dashed rgba(31,58,104,.35); outline-offset: -6px; }
+.lvp .eyebrow { align-self: flex-start; background: var(--navy); color: #ffc22e; padding: 4px 14px 3px; border-radius: 999px; outline: 1.5px dashed rgba(255,194,46,.75); outline-offset: -4px; letter-spacing: .1em; }
+.lvp h2, .lvp h3 { text-shadow: 0 2px 0 rgba(255,194,46,.5); }
+.meters .bar { border: 2px solid var(--navy); }
+
 .sticker p.alt { font-size: 14.5px; font-weight: 600; color: #6a5a48; border-top: 2px dashed #efe1c4; padding-top: 6px; margin-top: 2px; }
 </style>
 
@@ -709,16 +778,44 @@ body {
     <div class="note" id="askNote"></div>
   </section>
 
-  <div class="overlay" id="titleScreen" hidden>
-    <div class="card title-card">
-      <div class="lang-row"><button class="seg" data-lang="en">English</button><button class="seg" data-lang="ar">عربي</button></div>
-      <h1 id="tTitle"></h1>
-      <div class="sub" id="tSub"></div>
-      <p id="tIntro"></p>
-      <div class="field"><label for="nameInput" id="tNameLbl"></label><input id="nameInput" maxlength="16" autocomplete="off"><small id="tNameNote"></small></div>
-      <div class="controls-mini" id="tControls"></div>
-      <button class="btn" id="startBtn"></button>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipL2Btn"></button><button class="btn ghost small" id="skipACBtn"></button><button class="btn ghost small" id="skipL3Btn"></button><button class="btn ghost small" id="skipL4Btn"></button></div>
+  <div class="splash5" id="splash" hidden>
+    <div class="stars5"></div><div class="stars5 b"></div>
+    <svg class="sp-patch" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="#1f3a68" stroke="#ffc22e" stroke-width="5"/><circle cx="60" cy="60" r="47" fill="none" stroke="#fffaf0" stroke-width="2" stroke-dasharray="4 4"/><g fill="#fff"><circle cx="30" cy="38" r="1.6"/><circle cx="88" cy="30" r="1.3"/><circle cx="92" cy="74" r="1.6"/><circle cx="40" cy="86" r="1.2"/><circle cx="72" cy="22" r="1"/></g><circle cx="62" cy="64" r="20" fill="#d8433a"/><circle cx="55" cy="58" r="4" fill="#b8352d"/><circle cx="69" cy="70" r="3" fill="#b8352d"/><ellipse cx="60" cy="64" rx="38" ry="11" fill="none" stroke="#8fd0ef" stroke-width="3" transform="rotate(-20 60 64)"/><path d="M60 14 l3.5 8 8.5.6-6.5 5.4 2 8.4-7.5-4.6-7.5 4.6 2-8.4-6.5-5.4 8.5-.6z" fill="#ec8a3c"/><circle cx="94" cy="46" r="5" fill="#9ccc3c"/></svg>
+    <h1 class="sp-title">Junior <span>Astronaut</span><small>رائد الفضاء الصغير</small></h1>
+    <div class="sp-team">Team SHEclipse · NASA Space Apps Challenge 2026</div>
+    <div class="sp-bar"><i></i></div>
+    <button class="sp-tap" id="spTap" hidden>Tap to start · اضغط للبدء</button>
+  </div>
+
+  <div class="overlay home5" id="titleScreen" hidden>
+    <div class="stars5"></div>
+    <div class="h5top"><span class="h5coin" id="h5coin"></span><span class="h5rank" id="h5rank"></span></div>
+    <div class="h5main">
+      <div class="h5hero">
+        <h1 id="tTitle"></h1>
+        <div class="sub" id="tSub"></div>
+        <p id="tIntro"></p>
+        <button class="btn h5play" id="startBtn"></button>
+        <button class="btn green h5cont" id="contBtn" hidden></button>
+        <div class="h5row"><button class="btn ghost h5b" id="hCustom"></button><button class="btn ghost h5b" id="hLevels"></button><button class="btn ghost h5b" id="hSet"></button></div>
+      </div>
+      <div class="h5avatar"><div class="h5name" id="h5name"></div><div id="h5av"></div></div>
+    </div>
+    <div class="card h5sheet" id="h5sheet" hidden>
+      <div class="h5head"><h2 id="h5sTitle"></h2><button class="btn ghost small" id="h5close">✕</button></div>
+      <section data-s="custom">
+        <div class="field"><label for="nameInput" id="tNameLbl"></label><input id="nameInput" maxlength="16" autocomplete="off"><small id="tNameNote"></small></div>
+        <div id="avPick"></div>
+      </section>
+      <section data-s="levels">
+        <p class="h5p" id="h5lvP"></p>
+        <div class="h5lv"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipL2Btn"></button><button class="btn ghost small" id="skipACBtn"></button><button class="btn ghost small" id="skipL3Btn"></button><button class="btn ghost small" id="skipL4Btn"></button></div>
+        <div class="controls-mini" id="tControls"></div>
+      </section>
+      <section data-s="settings">
+        <div class="lang-row"><button class="seg" data-lang="en">English</button><button class="seg" data-lang="ar">عربي</button></div>
+        <div id="setRows"></div>
+      </section>
     </div>
   </div>
 
@@ -1141,7 +1238,7 @@ function animateNuri(n, time, dt) {
 // put the spacesuit on or take it off
 function setSuit(g, on) {
   const u = g.userData; u.suitOn = on; u.helmet.visible = on; u.lsPack.visible = on; u.pack.visible = !on;
-  u.tail.visible = !on; u.navyM.color.set(on ? 0xeef1f6 : 0x4f6488); u.bootM.color.set(on ? 0xec8a3c : 0xf7f5f0);
+  u.tail.visible = !on; const mine = typeof girl !== 'undefined' && g === girl && typeof AV !== 'undefined'; u.navyM.color.set(on ? (mine ? AV.suit : 0xeef1f6) : 0x4f6488); if (mine && u.topMats) u.topMats.forEach((m) => m.color.set(on ? AV.suit : 0xf3ede2)); u.bootM.color.set(on ? 0xec8a3c : 0xf7f5f0);
 }
 
 function makeShip() {
@@ -1393,6 +1490,15 @@ function setEnv(name) {
 
 // ============================== Actors ==============================
 const girl = makeGirl(); scene.add(girl); girl.traverse((o) => { if (o.isMesh) o.castShadow = true; }); addOutline(girl, 0.011);
+// your look: skin, hair, suit and trim colors (picked on the home screen, saved on this device)
+const AV_OPT = { skin: [0xf2c39b, 0xe0a77f, 0xc68863, 0x8d5a3b, 0x5c3a24], hair: [0x7a4a2a, 0x2b1d14, 0xd9a441, 0xa13b2a, 0x3d3d46], suit: [0xeef1f6, 0xec8a3c, 0x3a9cf0, 0xb07aff, 0x5fbf2a], trim: [0xd8433a, 0xffc22e, 0x1f3a68, 0xec8a3c, 0x9ccc3c] };
+let AV = { skin: 0xf2c39b, hair: 0x7a4a2a, suit: 0xeef1f6, trim: 0xd8433a, name: '' };
+try { Object.assign(AV, JSON.parse(localStorage.getItem('ja_avatar') || '{}')); } catch (e) {}
+const AVM = { skin: [], hair: [], trim: [] };
+{ const seen = new Set(); girl.traverse((o) => { if (!o.isMesh || !o.material || !o.material.color || seen.has(o.material)) return; seen.add(o.material); const c = o.material.color.getHex(); if (c === 0xf2c39b) AVM.skin.push(o.material); else if (c === 0x7a4a2a) AVM.hair.push(o.material); else if (c === 0xd8433a) AVM.trim.push(o.material); else if (c === 0xf3ede2) (girl.userData.topMats = girl.userData.topMats || []).push(o.material); }); }
+function applyAvatar() { AVM.skin.forEach((m) => m.color.set(AV.skin)); AVM.hair.forEach((m) => m.color.set(AV.hair)); AVM.trim.forEach((m) => m.color.set(AV.trim)); if (girl.userData.suitOn) setSuit(girl, true); }
+function saveAvatar() { try { localStorage.setItem('ja_avatar', JSON.stringify(AV)); } catch (e) {} }
+applyAvatar();
 const nuri = makeNuri(); nuri.scale.setScalar(0.6); scene.add(nuri); nuri.visible = false; addOutline(nuri, 0.022, 0.05);
 const ship = makeShip(); scene.add(ship); ship.visible = false;
 const P = { pos: new T.Vector3(), vel: new T.Vector3(), vy: 0, yaw: 0, onGround: true, speed: 0 };
@@ -1803,6 +1909,7 @@ function applyLang() {
   if (!$('chat').hidden) { $('chatLog').innerHTML = ''; openChat(); }
   if (!$('doneCard').hidden) showDone();
   $('skipBtn').textContent = t('skip');
+  renderHome();
 }
 document.querySelectorAll('.seg').forEach((b) => b.addEventListener('click', () => { LANG = b.dataset.lang; applyLang(); }));
 $('langBtn').addEventListener('click', () => { LANG = LANG === 'ar' ? 'en' : 'ar'; applyLang(); });
@@ -1811,6 +1918,66 @@ $('skipL2Btn').addEventListener('click', () => { G.name = $('nameInput').value; 
 $('skipL3Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start4({ cont: true }); });
 $('skipL4Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start4(); });
 $('skipL4Btn').hidden = true;
+const H5 = {
+  custom: { en: 'Customize', ar: 'خصّص' }, levels: { en: 'Levels', ar: 'المراحل' }, settings: { en: 'Settings', ar: 'الإعدادات' },
+  cont: { en: (n) => `Continue on Mars · Sol ${n}`, ar: (n) => `تابع على المريخ · اليوم ${n}` }, play: { en: 'Play', ar: 'العب' },
+  skin: { en: 'Skin', ar: 'البشرة' }, hair: { en: 'Hair', ar: 'الشعر' }, suit: { en: 'Space suit', ar: 'بدلة الفضاء' }, trim: { en: 'Scarf and trim', ar: 'الوشاح والحواف' },
+  music: { en: 'Music', ar: 'الموسيقى' }, sound: { en: 'Sound effects', ar: 'المؤثرات الصوتية' }, voice: { en: 'Read aloud', ar: 'القراءة بصوت' },
+  on: { en: 'On', ar: 'تشغيل' }, off: { en: 'Off', ar: 'إيقاف' }, reset: { en: 'Start Mars over', ar: 'ابدأ المريخ من جديد' }, resetB: { en: 'Reset', ar: 'إعادة' },
+  resetQ: { en: 'Delete your Mars base save and start Level 4 fresh?', ar: 'هل تريد حذف حفظ قاعدتك على المريخ والبدء من جديد في المرحلة 4؟' },
+  lvP: { en: 'Jump straight to any part of the mission.', ar: 'انتقل مباشرة إلى أي جزء من المهمة.' }, lang: { en: 'Language', ar: 'اللغة' },
+};
+const h5 = (k, ...a) => { const v = H5[k][LANG]; return typeof v === 'function' ? v(...a) : v; };
+const hexS = (n) => '#' + n.toString(16).padStart(6, '0');
+function avatarSVG() {
+  const sk = hexS(AV.skin), hr = hexS(AV.hair), su = hexS(AV.suit), tr = hexS(AV.trim);
+  return `<svg viewBox="0 0 200 240" aria-hidden="true"><ellipse cx="100" cy="232" rx="58" ry="7" fill="rgba(0,0,0,.25)"/>
+  <rect x="58" y="128" width="84" height="88" rx="30" fill="${su}" stroke="#1f3a68" stroke-width="5"/><rect x="40" y="134" width="26" height="62" rx="13" fill="${su}" stroke="#1f3a68" stroke-width="5"/><rect x="134" y="134" width="26" height="62" rx="13" fill="${su}" stroke="#1f3a68" stroke-width="5"/>
+  <rect x="76" y="150" width="48" height="30" rx="8" fill="#fffaf0" stroke="#1f3a68" stroke-width="4"/><circle cx="90" cy="165" r="5" fill="#ec5a50"/><circle cx="106" cy="165" r="5" fill="#9ccc3c"/><rect x="66" y="196" width="68" height="10" rx="5" fill="${tr}"/>
+  <path d="M66 132 q34 20 68 0" fill="none" stroke="${tr}" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="100" cy="82" r="62" fill="rgba(207,232,255,.35)" stroke="#1f3a68" stroke-width="6"/><circle cx="100" cy="86" r="34" fill="${sk}"/>
+  <path d="M64 84 q4 -40 36 -40 q32 0 36 40 q-10 -22 -36 -22 q-26 0 -36 22z" fill="${hr}"/><path d="M128 80 q16 22 6 48" fill="none" stroke="${hr}" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="88" cy="90" r="4.5" fill="#1a1420"/><circle cx="112" cy="90" r="4.5" fill="#1a1420"/><path d="M90 103 q10 8 20 0" fill="none" stroke="#1a1420" stroke-width="3.5" stroke-linecap="round"/><circle cx="80" cy="99" r="5" fill="rgba(236,90,80,.3)"/><circle cx="120" cy="99" r="5" fill="rgba(236,90,80,.3)"/>
+  <path d="M60 52 q22 -26 50 -24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".7"/><circle cx="100" cy="82" r="62" fill="none" stroke="${tr}" stroke-width="3" stroke-dasharray="6 6" opacity=".9"/></svg>`;
+}
+let h5sheetOn = null;
+function marsSave() { try { const s = JSON.parse(localStorage.getItem('ja_mars_base') || 'null'); return s && s.m ? s : null; } catch (e) { return null; } }
+function renderHome() {
+  if (!$('titleScreen')) return;
+  $('startBtn').textContent = h5('play'); const sv = marsSave(); $('contBtn').hidden = !sv; if (sv) $('contBtn').textContent = h5('cont', sv.m.sol || 1);
+  $('hCustom').innerHTML = `${ico('suit', 22)} ${h5('custom')}`; $('hLevels').innerHTML = `${ico('rocket', 22)} ${h5('levels')}`; $('hSet').innerHTML = `${ico('fix', 22)} ${h5('settings')}`;
+  $('h5coin').innerHTML = `${ico('coin', 20)} ${G.credits || 0}`; $('h5rank').innerHTML = sv && sv.rank ? `${ico('trophy', 20)} ${sv.rank}` : '';
+  $('h5av').innerHTML = avatarSVG(); $('h5name').textContent = AV.name || '';
+  $('h5lvP').textContent = h5('lvP');
+  if (h5sheetOn) renderSheet();
+}
+function renderSheet() {
+  const k = h5sheetOn; $('h5sTitle').textContent = h5(k === 'custom' ? 'custom' : k === 'levels' ? 'levels' : 'settings');
+  document.querySelectorAll('#h5sheet section').forEach((x) => x.classList.toggle('on', x.dataset.s === k));
+  if (k === 'custom') {
+    $('avPick').innerHTML = ['skin', 'hair', 'suit', 'trim'].map((p) => `<div class="avrow"><b>${h5(p)}</b><div class="swatch">${AV_OPT[p].map((c) => `<button class="avsw ${AV[p] === c ? 'sel' : ''}" data-p="${p}" data-c="${c}" style="background:${hexS(c)}"></button>`).join('')}</div></div>`).join('');
+    $('avPick').querySelectorAll('.avsw').forEach((b) => (b.onclick = () => { AV[b.dataset.p] = Number(b.dataset.c); applyAvatar(); saveAvatar(); renderHome(); }));
+  }
+  if (k === 'settings') {
+    const row = (lab, on, id) => `<div class="setrow"><span>${lab}</span><button class="btn small ${on ? 'green' : 'ghost'} tog" data-t="${id}">${on ? h5('on') : h5('off')}</button></div>`;
+    $('setRows').innerHTML = row(h5('music'), $('musBtn').getAttribute('aria-pressed') === 'true', 'musBtn') + row(h5('sound'), $('sndBtn').textContent !== '\u{1F507}', 'sndBtn') + row(h5('voice'), $('voiceBtn').getAttribute('aria-pressed') === 'true', 'voiceBtn')
+      + `<div class="setrow"><span>${h5('reset')}</span><button class="btn small ghost tog" id="h5reset">${h5('resetB')}</button></div>`;
+    $('setRows').querySelectorAll('[data-t]').forEach((b) => (b.onclick = () => { $(b.dataset.t).click(); renderSheet(); }));
+    $('h5reset').onclick = () => { if (confirm(h5('resetQ'))) { try { localStorage.removeItem('ja_mars_base'); } catch (e) {} renderHome(); } };
+  }
+}
+function openSheet(k) { h5sheetOn = k; $('h5sheet').hidden = false; renderSheet(); }
+$('hCustom').addEventListener('click', () => openSheet('custom')); $('hLevels').addEventListener('click', () => openSheet('levels')); $('hSet').addEventListener('click', () => openSheet('settings'));
+$('h5close').addEventListener('click', () => { h5sheetOn = null; $('h5sheet').hidden = true; });
+$('nameInput').value = AV.name || '';
+$('nameInput').addEventListener('input', () => { AV.name = $('nameInput').value.trim(); saveAvatar(); $('h5name').textContent = AV.name; });
+$('contBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start4({ cont: true }); });
+for (const id of ['startBtn', 'skipL1Btn', 'skipL2Btn', 'skipACBtn', 'skipL3Btn', 'skipL4Btn', 'contBtn']) $(id).addEventListener('click', () => { h5sheetOn = null; $('h5sheet').hidden = true; });
+function showSplash() {
+  const sp = $('splash'); sp.hidden = false; setTimeout(() => { $('spTap').hidden = false; }, 1850);
+  const go = () => { if ($('spTap').hidden) return; sp.classList.add('out'); setTimeout(() => (sp.hidden = true), 460); renderHome(); $('titleScreen').hidden = false; };
+  sp.addEventListener('click', go); addEventListener('keydown', function k(e) { if (!sp.hidden && !$('spTap').hidden) { go(); removeEventListener('keydown', k); } });
+}
 $('skipL1Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L1.start(); });
 $('skipACBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; LAUNCH.start(); });
 $('devSkip').addEventListener('click', () => { if (G.dialog) return; if (G.scene === 'level1') L1.devSkip(); else if (G.scene === 'academy') ACAD.devSkip(); else if (G.scene === 'level2') L2.devSkip(); else if (G.scene === 'mars') MARS.devSkip(); else if (G.scene === 'cabin') LAUNCH.devSkip(); });
@@ -5280,7 +5447,7 @@ const MARS = (() => {
   }
   let crew = [], extras = [];
   function walkCrew(dt) {
-    const home = S.m && (S.m.stormIn > 0 || S.m.stormOn > 0 || S.m.night);
+    const home = S.m && ((S.m.stormIn > 0 || S.m.stormOn > 0) && S.m.stormChoice !== 'work' || S.m.night);
     for (const c of crew) {
       const u = c.userData;
       if (!u.tgt) { u.wait -= dt; u.legs.forEach((l) => (l.rotation.x = 0)); if (u.wait <= 0) { const opts = home ? [new T.Vector3(c === crew[0] ? -0.8 : 0.8, 0, 2.1)] : [new T.Vector3(0, 0, 2.1), new T.Vector3(PR.i * TILE, 0, PR.j * TILE + 1.6), ...S.placed.filter((p) => ['greenhouse', 'oxygen', 'ice', 'recycler'].includes(p.type)).map((p) => new T.Vector3(p.obj.position.x, 0, p.obj.position.z + 1.6))]; u.tgt = opts[Math.floor(Math.random() * opts.length)]; } continue; }
@@ -5338,7 +5505,7 @@ const MARS = (() => {
     for (const e of m.events) if (!e.done && m.t >= e.at) { e.done = true; fire(e.kind); return; }
     // power: panels charge by day, machines use it all the time
     const sunAmt = night ? 0 : Math.min(1, st / 5, (DAY - st) / 5);
-    m.gen = (S.placed.filter((p) => p.type === 'solar').reduce((a, p) => a + 0.16 * p.q * (p.dirty ? (S.up && S.up.coat ? 0.75 : 0.45) : 1), 0) + (S.mis && S.mis.repair ? 0.14 : 0)) * sunAmt * (m.dustT > 0 ? 0.3 : 1);
+    m.gen = (S.placed.filter((p) => p.type === 'solar').reduce((a, p) => a + 0.16 * p.q * (p.crack ? 0.5 : 1) * (p.dirty ? (S.up && S.up.coat ? 0.75 : 0.45) : 1), 0) + (S.mis && S.mis.repair ? 0.14 : 0)) * sunAmt * (m.dustT > 0 ? (m.stow ? 0 : 0.3) : 1);
     m.use = BASE_USE; for (const k in MACH) if (m.sw[k] && machines(k) && (k !== 'heater' || night) && (k !== 'garage' || S.rvCharging)) m.use += MACH[k].pw * machines(k);
     const rdt = dt * K5; m.bat = Math.min(batCap(), m.bat + (m.gen - m.use) * rdt);
     const run = m.bat > 0 || m.gen >= m.use;
@@ -5353,7 +5520,7 @@ const MARS = (() => {
     if (on('ice')) dW += 0.06 * machines('ice');
     dW -= 0.05 * faultN('leak');
     if (on('recycler') && m.used > 0) { const r = Math.min(m.used, 0.05 * (S.up && S.up.rec98 ? 1.6 : 1) * (faultN('leak', 'recycler') ? 0 : 1) * machines('recycler') * rdt); m.used -= r; dW += r / rdt; }
-    if (on('greenhouse')) { const g = Math.max(0, machines('greenhouse') - faultN('wilt')); dF += (night ? 0.01 : 0.03) * g; dA += (night ? 0 : 0.02) * g; dW -= 0.02 * g; }
+    if (on('greenhouse') && !(S.lvl === 4 && m.stormOn > 0 && m.stormChoice === 'hide')) { const g = Math.max(0, machines('greenhouse') - faultN('wilt')); dF += (night ? 0.01 : 0.03) * g; dA += (night ? 0 : 0.02) * g; dW -= 0.02 * g; }
     m.water = clamp10(m.water + dW * rdt); m.air = clamp10(m.air + dA * rdt); m.food = clamp10(m.food + dF * rdt);
     for (const k of ['water', 'air', 'food']) {
       if (m[k] < 2.5 && !m.warned[k]) { m.warned[k] = true; chip(k === 'water' ? 'ice' : k === 'air' ? 'oxygen' : 'greenhouse', T4.low[k], 3000); SFX.alarm(); } else if (m[k] > 4) m.warned[k] = false;
@@ -5363,11 +5530,12 @@ const MARS = (() => {
     const R = Math.hypot(P.pos.x, P.pos.z), inHab = Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2, inBase = R < 14, wf = Math.max(0.15, 1 - 0.3 * goodWalls());
     let rate = inBase ? 0.03 * wf : 0.22;
     if (m.stormOn > 0) rate = inHab ? 0.25 * wf : inBase ? 1.2 * wf + 0.2 : 2.6;
+    if (m.stormOn > 0 && S.lvl === 4) { rate *= SWM(); if (m.stormChoice === 'wall' && inBase) rate *= 0.35; stormTick5(dt); }
     m.dose += rate * (m.stormOn > 0 ? dt : rdt); if (m.stormOn > 0) m.stormDose += rate * dt;
     m.dose = Math.min(m.dose, 100);
     if (m.stormIn > 0) { m.stormIn -= dt; if (m.stormIn <= 0) { m.stormOn = 15; vig.hidden = false; SFX.alarm(); } }
-    else if (m.stormOn > 0) { m.stormOn -= dt; if (m.stormOn <= 0) { vig.hidden = true; const d = Math.round(m.stormDose); if (d < 6) { chip('hide', T4.stormOk, 3000); SFX.success(); } else { chip('rad', L4(T4.stormBad.en(d), T4.stormBad.ar(d)), 3500); } m.stormDoseR = d; } }
-    if (m.dustT > 0) { m.dustT -= dt; if (m.dustT <= 0) { S.placed.forEach((p) => { if (p.type === 'solar') dirty(p, true); }); chip('dust', T4.dusty, 4500); } }
+    else if (m.stormOn > 0) { m.stormOn -= dt; if (m.stormOn <= 0) { vig.hidden = true; if (S.lvl === 4) stormEnd5(); const d = Math.round(m.stormDose); if (d < 6) { chip('hide', T4.stormOk, 3000); SFX.success(); } else { chip('rad', L4(T4.stormBad.en(d), T4.stormBad.ar(d)), 3500); } m.stormDoseR = d; } }
+    if (m.dustT > 0) { m.dustT -= dt; if (m.dustT <= 0) { if (S.lvl === 4) dustEnd5(); else { S.placed.forEach((p) => { if (p.type === 'solar') dirty(p, true); }); chip('dust', T4.dusty, 4500); } } }
     // your own energy: walking uses a little, running a lot
     const sp = P.speed; m.energy = Math.max(0, Math.min(10, m.energy - (sp > 4.6 ? 0.14 : sp > 0.6 ? 0.025 : -0.01) * dt));
     if (sp > 4.6) m.runT += dt;
@@ -5387,6 +5555,7 @@ const MARS = (() => {
   function fire(kind) {
     const m = S.m;
     if (kind === 'water' || kind === 'greenhouse') return fire5(kind);
+    if (S.lvl === 4 && kind === 'storm') return storm5(); if (S.lvl === 4 && kind === 'dust') return dust5();
     if (kind === 'storm') {
       m.stormSeen = true; const ev = STORMS[m.stormI % STORMS.length]; SFX.alarm();
       panel(`<div class="eyebrow">${ico('msg', 18)} ${tr3(T4.msgT)}</div><h2>${ico('storm', 34)} ${tr3(T4.stormW)}</h2><p class="evt">${tr3(T4.sent, m.delay)}</p><div class="fact"><span class="ic">${ico('rad', 26)}</span><span><b>${ev.date} · ${ev.cls}</b><br>${tr3(ev.t)}<br><small>${ev.src}</small></span></div><div class="evbig"><button class="opt evopt" id="sHide">${ico('hide', 50, 'eic')}<span class="et">${tr3(T4.hideB)}</span></button><button class="opt evopt" id="sWork">${ico('rover', 50, 'eic')}<span class="et">${tr3(T4.workB)}</span></button></div>`, (el) => {
@@ -5416,12 +5585,13 @@ const MARS = (() => {
         + row('energy', 'energy', tr3(T5.you), '#b07aff', 'sub') + row('rv', 'rover', tr3(T5.rvBat), '#9ccc3c', 'sub')
         + `<div class="m4sw">${Object.keys(MACH).map((k) => `<button class="sw" data-k="${k}" title="${tr3(MACH[k].n)}">${ico(MACH[k].ic, 20)}<b></b></button>`).join('')}</div>`
         + `<div class="m4mc"><span title="${tr3(T5.mc)}">${ico('coin', 18)} <b class="mcv"></b></span><span title="${tr3(T5.parts)}">${ico('part', 18)} <b class="ptv"></b></span><span class="bag" data-b="bag"></span></div>`
-        + `<div class="m4btns"><button class="btn small ghost" id="b4mis">${ico('compass', 16)} ${tr3(T5.missions)}</button><button class="btn small ghost" id="b4shop">${ico('cart', 16)} ${tr3(T5.shop)}</button><button class="btn small ghost" id="b4build">${ico('hammer', 16)} ${tr3(T5.build)}</button><button class="btn small ghost" id="b4loop">${ico('loop', 16)} ${tr3(T5.loop)}</button></div>`;
+        + `<div class="m4btns"><button class="btn small ghost" id="b4mis">${ico('compass', 16)} ${tr3(T5.missions)}</button><button class="btn small ghost" id="b4shop">${ico('cart', 16)} ${tr3(T5.shop)}</button><button class="btn small ghost" id="b4build">${ico('hammer', 16)} ${tr3(T5.build)}</button><button class="btn small ghost" id="b4loop">${ico('loop', 16)} ${tr3(T5.loop)}</button><button class="btn small ghost" id="b4cam">${ico('photo', 16)} ${tr3(PH.snap)}</button><button class="btn small ghost" id="b4alb">${ico('book', 16)} ${tr3(PH.album)}</button></div>`;
       box.querySelectorAll('.sw').forEach((b) => (b.onclick = () => { if (!G.control || S.over) return; const k = b.dataset.k; m.sw[k] = !m.sw[k]; SFX.pick(); renderMeters4(); buildLinks(); }));
       box.querySelector('#b4loop').onclick = () => { if (G.control) loopCard(() => { closePanel(); giveControl(); }); };
       box.querySelector('#b4build').onclick = () => { if (!G.control || S.drive) return; S.build = !S.build; if (!S.build) { S.hold = null; setGhost(null); } SFX.pick(); renderInv(); renderMeters4(); };
       box.querySelector('#b4shop').onclick = () => { if (G.control) shopPanel(); };
       box.querySelector('#b4mis').onclick = () => { if (G.control) misPanel(); };
+      box.querySelector('#b4cam').onclick = () => snap(); box.querySelector('#b4alb').onclick = () => { if (G.control) albumPanel(); };
       box.querySelector('#b4pause').onclick = () => { if (S.over) return; S.paused = !S.paused; SFX.pick(); chip(S.paused ? 'night' : 'sun', S.paused ? T5.paused : T5.resumed, 2400); renderMeters4(); };
     }
     const st = m.t % SOL, set = (id, v, max, txt) => { const r = box.querySelector(`[data-id="${id}"]`), p = Math.max(0, Math.min(1, v / max)); r.querySelector('.fill').style.width = p * 100 + '%'; r.querySelector('.n').textContent = txt; r.classList.toggle('low', p < 0.3); };
@@ -5764,6 +5934,178 @@ const MARS = (() => {
     burst(new T.Vector3(FAR[k].x, h(FAR[k].x, FAR[k].z) + 2, FAR[k].z), 0xffc22e, 34, 3, 1.3);
     chip('flag', LL(FT.claimed, tr3(PLACE[k]), tr3(PLACE[k])), 2600); setTimeout(() => S && chip('flag', F5[k], 5000), 2700); save5();
   }
+  // ---------- real space weather: live from NASA DONKI (falls back to the archived storm list) ----------
+  const SW = { live: false, n: 0, top: null, date: null, lvl: 1, got: false, day: null };
+  const flareRank = (c) => { if (!c) return 0; const L = 'ABCMX'.indexOf(c[0]); return L < 0 ? 0 : (L + 1) * 10 + Math.min(9.9, parseFloat(c.slice(1)) || 1); };
+  function swApply(j) { Object.assign(SW, j, { got: true }); SW.lvl = SW.live ? (SW.top && SW.top[0] === 'X' ? 2 : SW.top && SW.top[0] === 'M' ? 1 : 0) : 1; }
+  (async () => {
+    // 1) today's flares saved from NASA DONKI when the game was published (if the site has them)
+    try { const r = await fetch('../data/space-weather.json', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && j.day && typeof j.n === 'number') { swApply({ live: true, n: j.n, top: j.top, date: j.date, day: j.day }); return; } } } catch (e) {}
+    // 2) ask NASA directly (shared demo key, can be busy), 3) otherwise the archived storms
+    try { const c = JSON.parse(localStorage.getItem('ja_sw') || 'null'); if (c && c.live && Date.now() - c.at < 6 * 3600e3) { swApply(c); return; } } catch (e) {}
+    try {
+      const d = (x) => new Date(Date.now() - x * 864e5).toISOString().slice(0, 10);
+      const r = await fetch(`https://api.nasa.gov/DONKI/FLR?startDate=${d(7)}&endDate=${d(0)}&api_key=DEMO_KEY`); if (!r.ok) throw new Error('donki');
+      const a = await r.json(), list = Array.isArray(a) ? a : []; let top = null, date = null;
+      for (const f of list) if (flareRank(f.classType) > flareRank(top)) { top = f.classType; date = (f.peakTime || f.beginTime || '').slice(0, 10); }
+      const j = { live: true, n: list.length, top, date, at: Date.now(), day: d(0) }; swApply(j); try { localStorage.setItem('ja_sw', JSON.stringify(j)); } catch (e) {}
+    } catch (e) { swApply({ live: false }); }
+  })();
+  const SWM = () => [0.8, 1, 1.35][SW.lvl];
+  const SWT = {
+    title: L4('Real space weather today', 'طقس الفضاء الحقيقي اليوم'),
+    live: L4((n, top, date, day) => `Live from NASA’s DONKI space weather database (checked ${day}): the Sun made ${n} flare${n === 1 ? '' : 's'} in the last 7 days.${top ? ` The biggest was class ${top} on ${date}.` : ''}`,
+      (n, top, date, day) => `مباشرة من قاعدة بيانات طقس الفضاء DONKI التابعة لناسا (فُحصت ${day}): أطلقت الشمس ${n} توهّجاً في آخر 7 أيام.${top ? ` أكبرها من فئة ${top} بتاريخ ${date}.` : ''}`),
+    off: L4('We could not reach NASA right now, so the game uses real storms from NASA’s archive (not live).', 'تعذّر الوصول إلى ناسا الآن، لذلك تستخدم اللعبة عواصف حقيقية من أرشيف ناسا (ليست مباشرة).'),
+    lvl: [L4('Quiet Sun', 'شمس هادئة'), L4('Busy Sun', 'شمس نشطة'), L4('Stormy Sun!', 'شمس عاصفة!')],
+    eff: [L4('Fewer radiation storms today, and weaker ones.', 'عواصف إشعاعية أقل وأضعف اليوم.'), L4('Radiation storms can happen today.', 'قد تحدث عواصف إشعاعية اليوم.'), L4('More radiation storms today, and stronger ones. Keep the shelter ready!', 'عواصف إشعاعية أكثر وأقوى اليوم. جهّز الملجأ!')],
+    what: L4('Flares are bursts of energy from the Sun. Big ones (class M and X) can send radiation out into space. The busier the real Sun is, the riskier your mission.', 'التوهّجات انفجارات طاقة من الشمس. الكبيرة منها (فئة M وX) قد ترسل إشعاعاً إلى الفضاء. كلما نشطت الشمس الحقيقية زادت خطورة مهمتك.'),
+  };
+  function swCard() {
+    const c = ['g', 'y', 'r'][SW.lvl];
+    return `<div class="fact swc"><span class="ic">${ico('sun', 28)}</span><span><b>${tr3(SWT.title)}: <span class="why ${c}">${tr3(SWT.lvl[SW.lvl])}</span></b><br>${SW.live ? tr3(SWT.live, SW.n, SW.top, SW.date, SW.day) : tr3(SWT.off)}<br>${tr3(SWT.eff[SW.lvl])}<br><small>${tr3(SWT.what)}</small></span></div>`;
+  }
+  // ---------- radiation storms: protect the whole team (every choice costs something) ----------
+  const RT = {
+    h: L4('Protect your team', 'احمِ فريقك'),
+    hide: L4('Everyone into the storm shelter', 'الجميع إلى ملجأ العاصفة'), wall: L4('Pump water into the shelter walls', 'اضخّ الماء في جدران الملجأ'), work: L4('Keep working outside', 'تابعوا العمل في الخارج'),
+    tSafe: L4('Team stays safe', 'الفريق بأمان'), tFood: L4('No one tends the plants', 'لا أحد يعتني بالنباتات'), tBase: L4('Safe anywhere in the base', 'أمان في كل القاعدة'),
+    tPow: L4('−3 power tonight', '−3 طاقة الليلة'), tSci: L4('+15 credits of science', '+15 نقطة من العلم'), tDose: L4('Big dose for the team', 'جرعة كبيرة للفريق'),
+    res: L4((d) => `Storm over. Team dose: ${d}`, (d) => `انتهت العاصفة. جرعة الفريق: ${d}`), good: L4('Great call! Your team is safe.', 'قرار رائع! فريقك بأمان.'),
+    bad: L4('Ouch. Your team soaked up a lot of radiation.', 'أوه. امتصّ فريقك إشعاعاً كثيراً.'), back: L4('The water drained back into the tanks.', 'عاد الماء إلى الخزانات.'),
+    sci: L4('Your team finished the science work. +15', 'أنهى فريقك العمل العلمي. +15'), dose: L4('Team dose', 'جرعة الفريق'),
+  };
+  F5.rad = L4('Real: NASA’s Curiosity rover measures about 0.7 millisieverts of radiation a day on Mars. On Earth, people get about that much in 3 months.', 'حقيقة: تقيس مركبة كيوريوسيتي نحو 0.7 ملّي سيفرت من الإشعاع يومياً على المريخ. على الأرض يتلقّى الناس هذا القدر في نحو 3 أشهر.');
+  F5.shelter = L4('Real: in NASA’s Orion capsule, astronauts build a storm shelter by packing supplies around themselves. Water is one of the best shields because it is full of hydrogen.', 'حقيقة: في كبسولة أوريون التابعة لناسا يبني الروّاد ملجأً من العواصف بتكديس المؤن حولهم. والماء من أفضل الدروع لأنه غنيّ بالهيدروجين.');
+  F5.limit = L4('Real: NASA keeps every astronaut under a lifetime radiation limit of 600 millisieverts. Every storm you hide from keeps your team further from it.', 'حقيقة: تُبقي ناسا كل رائد فضاء تحت حدّ إشعاع مدى الحياة قدره 600 ملّي سيفرت. كل عاصفة تختبئون منها تُبعد فريقك عن هذا الحدّ.');
+  const opt5 = (id, ic, t, tags) => `<button class="opt evopt" id="${id}">${ico(ic, 50, 'eic')}<span class="et">${tr3(t)}</span><span class="tags">${tags.map(([i, s, c]) => `<i class="tg ${c}">${ico(i, 14)} ${tr3(s)}</i>`).join('')}</span></button>`;
+  function storm5() {
+    const m = S.m; m.stormSeen = true; const ev = STORMS[(m.stormI++) % STORMS.length]; SFX.alarm();
+    panel(`<div class="eyebrow">${ico('msg', 18)} ${tr3(T4.msgT)}</div><h2>${ico('storm', 34)} ${tr3(T4.stormW)}</h2><p class="evt">${tr3(T4.sent, m.delay)}</p>${swCard()}`
+      + `<div class="fact"><span class="ic">${ico('rad', 26)}</span><span><b>${ev.date} · ${ev.cls}</b><br>${tr3(ev.t)}<br><small>${ev.src}</small></span></div><h3>${ico('safety', 22)} ${tr3(RT.h)}</h3>`
+      + `<div class="evbig ev3">${opt5('sHide', 'hide', RT.hide, [['shield', RT.tSafe, 'g'], ['greenhouse', RT.tFood, 'r']])}${opt5('sWall', 'ice', RT.wall, [['shield', RT.tBase, 'g'], ['power', RT.tPow, 'r']])}${opt5('sWork', 'rover', RT.work, [['coin', RT.tSci, 'g'], ['rad', RT.tDose, 'r']])}</div>`, (el) => {
+      const go = (c) => { m.stormChoice = c; m.stormIn = 20; m.stormTeam = 0; if (c === 'wall') { m.bat = Math.max(0, m.bat - 3); m.water = clamp10(m.water - 1); } closePanel(); giveControl(); chip(c === 'work' ? 'rover' : 'hide', c === 'wall' ? F5.shelter : c === 'hide' ? F5.rad : T4.workB, 4200); renderMeters(); };
+      el.querySelector('#sHide').onclick = () => go('hide'); el.querySelector('#sWall').onclick = () => go('wall'); el.querySelector('#sWork').onclick = () => go('work');
+    });
+  }
+  function stormTick5(dt) { const m = S.m; if (!(m.stormOn > 0)) return; m.stormTeam = (m.stormTeam || 0) + CREW * (m.stormChoice === 'work' ? 1.6 : m.stormChoice === 'wall' ? 0.08 : 0.15) * SWM() * dt; }
+  function stormEnd5() {
+    const m = S.m, d = Math.round(m.stormTeam || 0); m.teamDose = (m.teamDose || 0) + d;
+    if (m.stormChoice === 'wall') m.water = clamp10(m.water + 1);
+    if (m.stormChoice === 'work') { earn(15); m.safety = clamp10(m.safety - 1.5); }
+    if (d < 10) S.cnt.calm++;
+    const ok = d < 10; setTimeout(() => S && S.m && chip(ok ? 'safety' : 'rad', L4(`${RT.res.en(d)}. ${ok ? RT.good.en : RT.bad.en}`, `${RT.res.ar(d)}. ${ok ? RT.good.ar : RT.bad.ar}`), 4200), 3200);
+    setTimeout(() => S && S.m && chip('rad', m.stormChoice === 'work' ? RT.sci : F5.limit, 4500), 7600);
+  }
+  // ---------- dust storm: fold the panels away or risk them (10 seconds to decide) ----------
+  const DT5 = {
+    h: L4('A dust storm is coming! Decide in', 'عاصفة غبار قادمة! قرّر خلال'), stow: L4('Fold the solar panels away', 'اطوِ الألواح الشمسية'), leave: L4('Leave the panels out', 'اترك الألواح في الخارج'),
+    t1: L4('No power until it ends', 'لا طاقة حتى تنتهي'), t2: L4('Panels stay clean and safe', 'تبقى الألواح نظيفة وسليمة'), t3: L4('A little power during the storm', 'قليل من الطاقة أثناء العاصفة'), t4: L4('Dusty panels, one may crack', 'ألواح مغبرّة، وقد يتشقّق أحدها'),
+    late: L4('Too late! The panels stayed out.', 'تأخّرت! بقيت الألواح في الخارج.'), stowOk: L4('Storm over. The panels unfold clean and ready!', 'انتهت العاصفة. تنفتح الألواح نظيفة وجاهزة!'),
+    crack: L4('A rock hit a solar panel and cracked it. Fix it with Mars soil.', 'ضرب حجر لوحاً شمسياً فشقّه. أصلحه بتربة المريخ.'),
+  };
+  F5.insight = L4('Real: NASA’s InSight lander stopped working in 2022 because dust kept covering its solar panels.', 'حقيقة: توقّف مسبار إنسايت التابع لناسا عام 2022 لأن الغبار ظلّ يغطّي ألواحه الشمسية.');
+  function dust5() {
+    const m = S.m; m.dustSeen = true; SFX.whoosh(0.6); let left = 10, done = false;
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('dust', 34)} ${tr3(DT5.h)} <span class="cd5" id="cd5">10</span></h2><div class="evbig">${opt5('dStow', 'solar', DT5.stow, [['power', DT5.t1, 'r'], ['check', DT5.t2, 'g']])}${opt5('dLeave', 'dust', DT5.leave, [['power', DT5.t3, 'g'], ['fix', DT5.t4, 'r']])}</div><div class="fact"><span class="ic">${ico('solar', 26)}</span><span>${tr3(F5.insight)}</span></div>`, (el) => {
+      const go = (c, late) => { if (done) return; done = true; clearInterval(iv); m.stow = c === 'stow'; m.dustT = 25; closePanel(); giveControl(); if (late) { SFX.nope(); chip('dust', DT5.late, 3000); } else SFX.pick(); };
+      const iv = setInterval(() => { if (!document.body.contains(el.querySelector('#cd5'))) { clearInterval(iv); return; } left--; el.querySelector('#cd5').textContent = String(left); if (left <= 3) SFX.pick(); if (left <= 0) go('leave', true); }, 1000);
+      el.querySelector('#dStow').onclick = () => go('stow'); el.querySelector('#dLeave').onclick = () => go('leave');
+    });
+  }
+  function dustEnd5() {
+    const m = S.m;
+    if (m.stow) { m.stow = false; chip('solar', DT5.stowOk, 3500); SFX.success(); return; }
+    S.placed.forEach((p) => { if (p.type === 'solar') dirty(p, true); }); chip('dust', T4.dusty, 4500);
+    const sp = S.placed.filter((p) => p.type === 'solar' && !p.crack);
+    if (sp.length && Math.random() < 0.5) { const q = sp[Math.floor(Math.random() * sp.length)]; q.crack = true; markFault(q); lamps(); setTimeout(() => S && chip('fix', DT5.crack, 3800), 4700); }
+  }
+  // ---------- camera: take photos to document the mission and send them to Earth ----------
+  const PH = {
+    snap: L4('Photo', 'صورة'), album: L4('Album', 'الألبوم'), title: L4('Mission photo album', 'ألبوم صور المهمة'),
+    p: L4('Take photos (press C or the Photo button) to document the base. Sending one to Earth uses 1 power, and the radio needs time to get there.', 'التقط صوراً (اضغط C أو زر الصورة) لتوثيق القاعدة. إرسال صورة إلى الأرض يستهلك 1 طاقة، والراديو يحتاج وقتاً ليصل.'),
+    send: L4('Send to Earth', 'أرسل إلى الأرض'), save: L4('Save', 'احفظ'), sending: L4((s) => `On its way… (${s}s)`, (s) => `في الطريق… (${s} ث)`), sent: L4('Earth got it!', 'وصلت إلى الأرض!'),
+    none: L4('No photos yet. Go take one!', 'لا صور بعد. اذهب والتقط واحدة!'), took: L4((s) => `Photo saved: ${s}`, (s) => `حُفظت الصورة: ${s}`),
+    noPow: L4('Not enough power to send a photo.', 'لا توجد طاقة كافية لإرسال صورة.'),
+    sub: { storm: L4('Radiation storm', 'عاصفة إشعاعية'), dust: L4('Dust storm', 'عاصفة غبار'), flag: L4('My flag', 'عَلَمي'), place: L4('New place', 'مكان جديد'), rover: L4('Rover trip', 'رحلة المركبة'),
+      greenhouse: L4('Greenhouse', 'البيت الزجاجي'), crew: L4('My crew', 'طاقمي'), night: L4('Mars night', 'ليل المريخ'), base: L4('Our base', 'قاعدتنا') },
+    reply: [L4('Earth got your photo! Mission Control shared it with schools all over the world.', 'وصلت صورتك إلى الأرض! شاركها مركز التحكّم مع مدارس حول العالم.'),
+      L4('Earth got your photo! Engineers zoomed in to check the base. Good job!', 'وصلت صورتك إلى الأرض! كبّرها المهندسون ليفحصوا القاعدة. عمل رائع!'),
+      L4('Earth got your photo! Scientists say thank you: every picture teaches us about Mars.', 'وصلت صورتك إلى الأرض! العلماء يشكرونك: كل صورة تعلّمنا عن المريخ.')],
+  };
+  F5.photo = L4('Real: astronauts like Christina Koch share photos from space so people on Earth can see their life and work. Mars rovers send most pictures home through orbiters.', 'حقيقة: يشارك روّاد مثل كريستينا كوك صوراً من الفضاء ليرى الناس على الأرض حياتهم وعملهم. ومركبات المريخ ترسل معظم صورها عبر المركبات المدارية.');
+  F5.delay = L4('Real: a radio message takes about 3 to 22 minutes to travel between Mars and Earth, depending on where the planets are.', 'حقيقة: تحتاج رسالة الراديو بين المريخ والأرض من 3 إلى 22 دقيقة تقريباً، حسب موقع الكوكبين.');
+  function subject() {
+    const m = S.m, R = Math.hypot(P.pos.x, P.pos.z);
+    if (m.stormOn > 0 || m.stormIn > 0) return 'storm'; if (m.dustT > 0) return 'dust';
+    const fk = FLAGS.find((k) => near(FAR[k], 16)); if (fk) return S.mis.flags[fk] ? 'flag' : 'place';
+    if (S.drive && R > 26) return 'rover';
+    if (S.placed.some((p) => p.type === 'greenhouse' && near(p.obj.position, 7))) return 'greenhouse';
+    if (crew.some((c) => near(c.position, 6))) return 'crew';
+    return m.night ? 'night' : 'base';
+  }
+  const flash5 = document.createElement('div'); flash5.className = 'flash5'; flash5.hidden = true; $('stage').appendChild(flash5);
+  function snap() {
+    if (!S || S.lvl !== 4 || S.over || !G.control) return;
+    renderer.render(scene, camera); const src = renderer.domElement, w = 480, hh = 270, cv = document.createElement('canvas'); cv.width = w; cv.height = hh + 40;
+    const c = cv.getContext('2d'), sw = src.width, sh = src.height; let cw = sw, ch = sw * hh / w; if (ch > sh) { ch = sh; cw = sh * w / hh; }
+    c.fillStyle = '#fffaf0'; c.fillRect(0, 0, w, hh + 40); c.drawImage(src, (sw - cw) / 2, (sh - ch) / 2, cw, ch, 0, 0, w, hh);
+    const k = subject(), cap = `${tr3(T4.sol)} ${S.m.sol} · ${tr3(PH.sub[k])}${G.name ? ' · ' + G.name : ''}`;
+    c.fillStyle = '#1f3a68'; c.font = '700 18px Fredoka, "Segoe UI", Tahoma, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(cap, w / 2, hh + 21);
+    const last = S.photos[0]; S.photos.unshift({ id: Date.now(), k, cap, src: cv.toDataURL('image/jpeg', 0.7), st: 0 }); S.photos = S.photos.slice(0, 12);
+    if (!last || last.k !== k) S.cnt.snap++;
+    flash5.hidden = false; flash5.classList.remove('go'); void flash5.offsetWidth; flash5.classList.add('go'); setTimeout(() => (flash5.hidden = true), 600);
+    SFX.snap(); chip('photo', LL(PH.took, tr3(PH.sub[k]), tr3(PH.sub[k])), 2200); if (!S.photoTip) { S.photoTip = true; setTimeout(() => S && chip('photo', F5.photo, 5200), 2300); } save5();
+  }
+  function albumPanel() {
+    const m = S.m, live = m.sw.comm && m.run;
+    const card = (p) => `<div class="ph5"><img src="${p.src}" alt=""><div class="pb">${p.st === 2 ? `<span class="why g">${ico('check', 14)} ${tr3(PH.sent)}</span>` : p.st === 1 ? `<span class="why y">${tr3(PH.sending, Math.max(0, Math.ceil(p.at - m.t)))}</span>` : `<button class="btn small" data-send="${p.id}">${ico('antenna', 14)} ${tr3(PH.send)}</button>`}<button class="btn small ghost" data-save="${p.id}">${tr3(PH.save)}</button></div></div>`;
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('photo', 30)} ${tr3(PH.title)}</h2><p>${tr3(PH.p)}</p>${live ? '' : `<p class="evt"><span class="why y">${ico('antenna', 18)} ${tr3(T5.commOff)}</span></p>`}`
+      + `<div class="album5">${S.photos.length ? S.photos.map(card).join('') : `<p>${tr3(PH.none)}</p>`}</div><div class="fact"><span class="ic">${ico('msg', 26)}</span><span>${tr3(F5.delay)}</span></div><div class="actions"><span></span><button class="btn green" id="aclose">${tr3(T5.close)}</button></div>`, (el) => {
+      el.querySelector('#aclose').onclick = () => { closePanel(); giveControl(); };
+      el.querySelectorAll('[data-send]').forEach((b) => (b.onclick = () => {
+        if (!(m.sw.comm && m.run)) { SFX.nope(); chip('antenna', T5.commOff, 2600); return; }
+        if (m.bat < 1) { SFX.nope(); chip('power', PH.noPow, 2600); return; }
+        const p = S.photos.find((q) => String(q.id) === b.dataset.send); if (!p) return; m.bat -= 1; p.st = 1; p.at = m.t + m.delay * 3; SFX.whoosh(0.4); save5(); albumPanel();
+      }));
+      el.querySelectorAll('[data-save]').forEach((b) => (b.onclick = () => { const p = S.photos.find((q) => String(q.id) === b.dataset.save); if (!p) return; const a = document.createElement('a'); a.href = p.src; a.download = `mars-sol${S.m.sol}-${p.k}.jpg`; document.body.appendChild(a); a.click(); a.remove(); }));
+    });
+  }
+  function photoTick5() {
+    const m = S.m; if (!S.photos) return;
+    for (const p of S.photos) if (p.st === 1 && m.t >= p.at) { p.st = 2; S.cnt.sent++; earn(6); SFX.success(); chip('antenna', PH.reply[Math.floor(Math.random() * PH.reply.length)], 4500); save5(); }
+  }
+  addEventListener('keydown', (e) => { if (e.code !== 'KeyC' || e.repeat || G.scene !== 'mars' || !S || S.lvl !== 4) return; if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return; snap(); });
+  // ---------- long missions: they never run out, and your base rank keeps growing ----------
+  const LMK = [
+    { k: 'harvest', ic: 'eat', g: 3, mc: 20, n: L4((g) => `Harvest food ${g} times`, (g) => `احصد الطعام ${g} مرات`) },
+    { k: 'sent', ic: 'antenna', g: 2, mc: 20, n: L4((g) => `Send ${g} photos to Earth`, (g) => `أرسل ${g} صور إلى الأرض`) },
+    { k: 'snap', ic: 'photo', g: 3, mc: 15, n: L4((g) => `Photograph ${g} different things`, (g) => `صوّر ${g} أشياء مختلفة`) },
+    { k: 'calm', ic: 'safety', g: 1, mc: 30, n: L4(() => 'Keep your team safe in a radiation storm', () => 'أبقِ فريقك بأمان في عاصفة إشعاعية') },
+    { k: 'walls', ic: 'shield', g: 1, mc: 25, n: L4((g) => `Build ${g} more shield wall${g > 1 ? 's' : ''}`, (g) => `ابنِ ${g} جدار حماية إضافي`) },
+    { k: 'study', ic: 'sample', g: 3, mc: 24, n: L4((g) => `Study ${g} rock samples`, (g) => `ادرس ${g} عينات صخرية`) },
+    { k: 'fix', ic: 'fix', g: 4, mc: 18, n: L4((g) => `Fix ${g} problems`, (g) => `أصلح ${g} مشاكل`) },
+    { k: 'healthy', ic: 'check', g: 2, mc: 25, n: L4((g) => `End ${g} sols with water, air and food at 5+`, (g) => `أنهِ ${g} أيام والماء والهواء والطعام 5 أو أكثر`) },
+  ];
+  const RANKS = [L4('Rookie', 'مبتدئ'), L4('Base Helper', 'مساعد القاعدة'), L4('Engineer', 'مهندس'), L4('Life Support Pro', 'خبير دعم الحياة'), L4('Commander', 'قائد'), L4('Base Chief', 'رئيس القاعدة'), L4('Mars Legend', 'أسطورة المريخ')];
+  const LT = { h: L4('Long missions (they never run out)', 'مهمات طويلة (لا تنتهي أبداً)'), rank: L4('Base rank', 'رتبة القاعدة'), done: L4((n, c) => `Long mission done: ${n}! +${c}`, (n, c) => `أنجزت مهمة طويلة: ${n}! +${c}`),
+    up: L4((r) => `Rank up! You are now: ${r}`, (r) => `ترقية! أنت الآن: ${r}`), next: L4('New missions keep coming as long as you keep the base alive.', 'تستمر المهمات الجديدة بالوصول ما دمت تُبقي القاعدة حية.') };
+  const rankName = (r) => r < RANKS.length ? tr3(RANKS[r]) : `${tr3(RANKS[RANKS.length - 1])} ${r - RANKS.length + 2}`;
+  const wallsNow = () => S.placed.filter((p) => p.type === 'shield' || p.type === 'wall').length;
+  const lmVal = (k) => k === 'walls' ? wallsNow() : (S.cnt[k] || 0);
+  function newLM() { const used = S.lm.map((q) => q.k), pool = LMK.filter((q) => !used.includes(q.k)), d = pool[Math.floor(Math.random() * pool.length)], g = d.g + (d.k === 'calm' || d.k === 'walls' ? 0 : Math.floor(S.rank / 3)); return { k: d.k, g, base: lmVal(d.k), mc: d.mc + S.rank * 2 }; }
+  function fillLM() { while (S.lm.length < 3) S.lm.push(newLM()); }
+  const lmProg = (q) => Math.max(0, Math.min(q.g, lmVal(q.k) - q.base));
+  function checkLM() {
+    if (!S.lm) return; fillLM(); for (const q of S.lm.slice()) if (lmProg(q) >= q.g) {
+      const d = LMK.find((x) => x.k === q.k); S.lm.splice(S.lm.indexOf(q), 1); earn(q.mc); S.rank++; SFX.fanfare(); confetti();
+      chip(d.ic, LL(LT.done, tr3(d.n, q.g), q.mc), 3600); const r = rankName(S.rank); setTimeout(() => S && chip('trophy', LL(LT.up, r, r), 3600), 3700); fillLM(); save5();
+    }
+  }
+  function lmHTML() {
+    fillLM();
+    return `<h3>${ico('trophy', 22)} ${tr3(LT.h)} <span class="why g">${tr3(LT.rank)}: ${rankName(S.rank)}</span></h3><div class="mis">${S.lm.map((q) => { const d = LMK.find((x) => x.k === q.k); return `<div class="mi">${ico(d.ic, 40)}<span><b>${tr3(d.n, q.g)}</b><small><span class="pbar"><i style="width:${lmProg(q) / q.g * 100}%"></i></span></small></span><span class="mc">${lmProg(q)}/${q.g} · ${ico('coin', 16)} ${q.mc}</span></div>`; }).join('')}</div><p class="shop-note">${tr3(LT.next)}</p>`;
+  }
 
   // ---------- small helpers ----------
   function markFault(p) { const bad = !!(p.fault || p.dirty || p.broken || p.crack); if (bad && !p.fm) { p.fm = sprite('fix', 0.9); p.fm.position.y = 2.9; p.obj.add(p.fm); } if (p.fm) p.fm.visible = bad; }
@@ -5829,11 +6171,12 @@ const MARS = (() => {
     if (!resume || !S.tasks.length) S.tasks = ['fix', 'harvest', 'report', m.sol % 2 ? 'keep' : 'study'];
     S.today = { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 };
     m.events = [{ kind: S.deck[(m.sol - 1) % S.deck.length], at: (m.sol - 1) * SOL + 30 + Math.random() * 60, done: false }];
+    if (m.sol >= 2 && m.events[0].kind !== 'storm' && Math.random() < [0, 0.25, 0.5][SW.lvl]) m.events.push({ kind: 'storm', at: m.events[0].at + 50 + Math.random() * 40, done: false });
     m.stormIn = 0; m.stormOn = 0; vig.hidden = true;
     S.am = snapshot(); save5(); regrade(); lamps(); buildLinks();
     const pr = problems().length, facts = [F5.chapea, F5.water, F5.air, F5.plants2, F5.cargo, F5.lab, F5.dust], f = facts[(m.sol - 1) % facts.length];
     SFX.discover();
-    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('report', 32)} ${tr3(T5.morningT, m.sol)}</h2><p>${tr3(T5.morningP)}</p>${tiles(resVals())}`
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('report', 32)} ${tr3(T5.morningT, m.sol)}</h2><p>${tr3(T5.morningP)}</p>${tiles(resVals())}${swCard()}`
       + `<div class="tasks4"><div>${ico('suit', 22)} ${tr3(T5.crew, CREW)}</div><div class="${pr ? 'bad' : 'ok'}">${ico(pr ? 'fix' : 'check', 22)} ${pr ? tr3(T5.scan, pr) : tr3(T5.scan0)}</div>${due.length ? `<div class="ok">${ico('pod', 22)} ${tr3(T5.arrive)}</div>` : ''}${m.sol === 2 ? `<div class="bad">${ico('sos', 22)} ${tr3(T5.sosMsg)}</div>` : ''}</div>`
       + `<div class="eyebrow">${tr3(T5.tasksT)}</div><div class="tasks4">${S.tasks.map((k) => `<div>${ico(TKI[k], 22)} ${tr3(T5['tk_' + k])}<span class="mc">${ico('coin', 16)} 5</span></div>`).join('')}</div>`
       + `<div class="fact"><span class="ic">${ico('book', 26)}</span><span>${tr3(f)}</span></div><div class="actions"><span></span><button class="btn green" id="mgo">${ico('sun', 20)} ${tr3(T5.startDay)}</button></div>`,
@@ -5843,7 +6186,7 @@ const MARS = (() => {
     const m = S.m, n = m.sol - 1; G.control = false; P.vel.set(0, 0, 0); P.speed = 0; vig.hidden = true;
     if (S.drive) exitRover4(true);
     const done = S.tasks.filter(tkDone).length, healthy = ['water', 'air', 'food'].every((k) => m[k] >= 5) ? 5 : 0;
-    earn(done * 5 + healthy);
+    earn(done * 5 + healthy); if (healthy && S.cnt) S.cnt.healthy++;
     const safe = m.safety >= 6 && ['water', 'air', 'food'].every((k) => m[k] >= 3);
     if (safe) SFX.fanfare(); else SFX.alarm();
     const tips = ['water', 'air', 'food'].filter((k) => m[k] < 3 && T4.tip[k]).map((k) => `<div class="fact"><span class="ic">${ico('tip', 26)}</span><span>${tr3(T4.tip[k])}</span></div>`).join('');
@@ -5900,7 +6243,7 @@ const MARS = (() => {
     });
   }
   // ---------- maintenance actions ----------
-  function fixDone(p, fact) { p.fault = null; markFault(p); regrade(); lamps(); buildLinks(); earn(5); SFX.success(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.2, 0)), 0x9ccc3c, 22, 2, 1); chip('fix', fact || T5.fixed, fact ? 4200 : 1800); renderMeters(); }
+  function fixDone(p, fact) { if (S.cnt) S.cnt.fix++; p.fault = null; markFault(p); regrade(); lamps(); buildLinks(); earn(5); SFX.success(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.2, 0)), 0x9ccc3c, 22, 2, 1); chip('fix', fact || T5.fixed, fact ? 4200 : 1800); renderMeters(); }
   function fixAction(p) {
     const at = p.obj.position, r = 2.6;
     if (p.dirty) return { at, r, text: `${ico('clean', 20)} ${tr3(T4.clean)} <span class="why y">${tr3(T4.cleanD)}</span>`, fn: () => cleanPanel(p) };
@@ -5915,13 +6258,13 @@ const MARS = (() => {
     return { at, r, text: `<span class="why r">${ico('soil', 18)} ${tr3(nm)}: ${tr3(T5.noSoil)}</span>`, fn: () => SFX.nope() };
   }
   function harvest(p) {
-    p.crop = 0; S.m.food = clamp10(S.m.food + 2); S.today.harvest++; earn(3); SFX.success();
+    p.crop = 0; S.m.food = clamp10(S.m.food + 2); S.today.harvest++; if (S.cnt) S.cnt.harvest++; earn(3); SFX.success();
     burst(p.obj.position.clone().add(new T.Vector3(0, 1, 0)), 0x5fbf2a, 24, 2, 1); chip('eat', S.harvested ? T5.harvested : F5.plants2, S.harvested ? 2000 : 4200); S.harvested = true; renderMeters();
   }
   function study(p) {
     if (!(S.m.sw.lab && S.m.run)) { chip('lab', T5.labOff, 3000); SFX.nope(); return; }
     S.store.sample += S.bag.sample; S.bag.sample = 0; const n = S.store.sample; S.store.sample = 0;
-    S.mis.studied += n; S.today.study += n; earn(8 * n); SFX.discover(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.4, 0)), 0xb07aff, 26, 2, 1);
+    S.mis.studied += n; if (S.cnt) S.cnt.study += n; S.today.study += n; earn(8 * n); SFX.discover(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.4, 0)), 0xb07aff, 26, 2, 1);
     chip('sample', LL(T5.studied, n, 8 * n), 3000); setTimeout(() => S && S.m && chip('lab', F5.lab, 4200), 3100); renderMeters();
   }
   function relayAction() {
@@ -5967,7 +6310,7 @@ const MARS = (() => {
   }
   // ---------- every frame: crops, markers, flags, rescue, charging ----------
   function tick5(dt, time, running) {
-    const m = S.m;
+    const m = S.m; photoTick5(); if (((time * 2) | 0) !== S._lmT) { S._lmT = (time * 2) | 0; checkLM(); }
     for (const p of S.placed) {
       if (p.fm && p.fm.visible) p.fm.position.y = 2.9 + Math.sin(time * 3 + p.i) * 0.15;
       if (p.type === 'greenhouse' && p.obj.userData.plants) { const s = p.fault === 'wilt' ? 0.55 : 0.45 + (p.crop || 0) * 0.75; p.obj.userData.plants.forEach((pl) => pl.scale.setScalar(s)); }
@@ -6023,7 +6366,7 @@ const MARS = (() => {
   function commPanel() { const m = S.m; if (!(m.sw.comm && m.run)) { chip('antenna', T5.commOff, 3000); SFX.nope(); return; } shopPanel('earth'); }
   function misPanel() {
     const m = S.m, st = { science: [Math.min(S.mis.studied, 3), 3], explore: [FLAGS.filter((k) => S.mis.flags[k]).length, FLAGS.length], repair: [S.mis.repair ? 1 : 0, 1], rescue: [S.mis.rescue >= 2 ? 1 : 0, 1] };
-    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 30)} ${tr3(T5.misT)}</h2><p>${tr3(T5.misP)}</p><div class="mis">${MIS.map((q) => { const [a, b] = st[q.k], lock = q.from && m.sol < q.from, ok = a >= b; return `<div class="mi ${ok ? 'ok' : lock ? 'lock' : ''}">${ico(q.ic, 40)}<span><b>${tr3(q.n)}</b><small>${tr3(q.d)}</small></span><span class="mc">${ok ? ico('check', 22) : lock ? tr3(T5.locked, q.from) : `${a}/${b} · ${ico('coin', 16)} ${q.mc}`}</span></div>`; }).join('')}</div><div class="actions"><button class="btn ghost" id="mflag">${ico('flag', 18)} ${tr3(FT.change)}</button><button class="btn green" id="mclose">${tr3(T5.close)}</button></div>`,
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 30)} ${tr3(T5.misT)}</h2><p>${tr3(T5.misP)}</p><div class="mis">${MIS.map((q) => { const [a, b] = st[q.k], lock = q.from && m.sol < q.from, ok = a >= b; return `<div class="mi ${ok ? 'ok' : lock ? 'lock' : ''}">${ico(q.ic, 40)}<span><b>${tr3(q.n)}</b><small>${tr3(q.d)}</small></span><span class="mc">${ok ? ico('check', 22) : lock ? tr3(T5.locked, q.from) : `${a}/${b} · ${ico('coin', 16)} ${q.mc}`}</span></div>`; }).join('')}</div>${lmHTML()}<div class="actions"><button class="btn ghost" id="mflag">${ico('flag', 18)} ${tr3(FT.change)}</button><button class="btn green" id="mclose">${tr3(T5.close)}</button></div>`,
     (el) => { el.querySelector('#mclose').onclick = () => { closePanel(); giveControl(); }; el.querySelector('#mflag').onclick = () => flagPanel(misPanel); });
   }
   // ---------- saving: the world waits for you (nothing breaks while you are away) ----------
@@ -6031,9 +6374,9 @@ const MARS = (() => {
   function save5() {
     if (!S || S.lvl !== 4) return;
     try { const m = S.m; localStorage.setItem(SKEY, JSON.stringify({ v: 1, credits: G.credits, gear: Object.keys(G.gear).filter((k) => k.startsWith('mars_')),
-      m: { sol: m.sol, bat: m.bat, water: m.water, air: m.air, food: m.food, used: m.used, dose: m.dose, energy: m.energy, safety: m.safety, sw: m.sw },
+      m: { sol: m.sol, bat: m.bat, water: m.water, air: m.air, food: m.food, used: m.used, dose: m.dose, energy: m.energy, safety: m.safety, teamDose: m.teamDose || 0, sw: m.sw },
       placed: S.placed.map((p) => [p.type, p.i, p.j, p.rot, { broken: !!p.broken, crack: !!p.crack, fault: p.fault || null, sym: p.sym, crop: p.crop || 0, dirty: !!p.dirty }]),
-      inv: S.inv, store: S.store, parts: S.parts, up: S.up, look: S.look, flag: S.flag || null, orders: S.orders.concat(S.pods.map((p) => ({ k: p.k, at: 0 }))), mis: S.mis,
+      inv: S.inv, store: S.store, parts: S.parts, up: S.up, look: S.look, flag: S.flag || null, photos: S.photos, cnt: S.cnt, lm: S.lm, rank: S.rank, orders: S.orders.concat(S.pods.map((p) => ({ k: p.k, at: 0 }))), mis: S.mis,
       rv: { x: S.rv.x, z: S.rv.z, h: S.rv.h, bat: S.rv.bat }, crew4: S.crew4, podTaken: S.podTaken, tasks: S.tasks, deck: S.deck, seedBoost: S.seedBoost || 0 })); } catch (e) {}
   }
   function load5() { try { const s = JSON.parse(localStorage.getItem(SKEY) || 'null'); return s && s.v === 1 && Array.isArray(s.placed) ? s : null; } catch (e) { return null; } }
@@ -6052,12 +6395,12 @@ const MARS = (() => {
     clear4();
     const sv = opts.cont ? load5() : null;
     S = fresh(); S.lvl = 4; for (const k in S.inv) S.inv[k] = 0; S.bag = { ice: 0, soil: 0, sample: 0 }; S.store = { ice: 0, soil: 2, sample: 0 }; S.podTaken = false; S.seenSite = {}; S.m = newMission();
-    Object.assign(S, { parts: 2, up: {}, look: { suit: null, boot: null }, orders: [], pods: [], mis: { flags: {}, studied: 0, repair: false, rescue: 0 }, build: false, drive: false, rv: { x: GAR.x, z: GAR.z, h: Math.PI, v: 0, bat: 10 }, crew4: false, deck: makeDeck5(), tasks: [], today: { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 } });
+    Object.assign(S, { photos: [], cnt: { harvest: 0, sent: 0, snap: 0, calm: 0, study: 0, fix: 0, healthy: 0 }, lm: [], rank: 0, parts: 2, up: {}, look: { suit: null, boot: null }, orders: [], pods: [], mis: { flags: {}, studied: 0, repair: false, rescue: 0 }, build: false, drive: false, rv: { x: GAR.x, z: GAR.z, h: Math.PI, v: 0, bat: 10 }, crew4: false, deck: makeDeck5(), tasks: [], today: { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 } });
     const m = S.m; m.safety = 8; m.events = []; m.sol = 1; m.t = 0; CREW = 2;
     if (sv) {
       G.credits = sv.credits || 0; (sv.gear || []).forEach((k) => (G.gear[k] = true));
       Object.assign(m, sv.m, { sw: Object.assign(m.sw, sv.m.sw) }); m.t = (m.sol - 1) * SOL;
-      Object.assign(S, { store: sv.store || S.store, parts: sv.parts || 0, up: sv.up || {}, look: sv.look || S.look, orders: sv.orders || [], mis: Object.assign(S.mis, sv.mis), crew4: !!sv.crew4, podTaken: !!sv.podTaken, tasks: sv.tasks || [], deck: sv.deck || S.deck, seedBoost: sv.seedBoost || 0 });
+      Object.assign(S, { photos: (sv.photos || []).map((p) => (p.st === 1 ? Object.assign(p, { at: 0 }) : p)), cnt: Object.assign(S.cnt, sv.cnt), lm: sv.lm || [], rank: sv.rank || 0, store: sv.store || S.store, parts: sv.parts || 0, up: sv.up || {}, look: sv.look || S.look, orders: sv.orders || [], mis: Object.assign(S.mis, sv.mis), crew4: !!sv.crew4, podTaken: !!sv.podTaken, tasks: sv.tasks || [], deck: sv.deck || S.deck, seedBoost: sv.seedBoost || 0 });
       Object.assign(S.inv, sv.inv || {}); S.rv = Object.assign({ v: 0 }, sv.rv); if (S.crew4) CREW = 4;
     }
     G.scene = 'mars'; setEnv('mars'); W4.visible = true; stage.classList.add('lv1'); closeChat(); hideChip();
@@ -6236,7 +6579,7 @@ function loop() {
 // ============================== Boot ==============================
 setEnv('bedroom'); G.scene = 'title';
 P.pos.set(-0.4, 0, 0.4); P.yaw = 0.6; girl.position.copy(P.pos); girl.rotation.y = P.yaw;
-$('loading').remove(); resize(); applyLang(); $('titleScreen').hidden = false;
+$('loading').remove(); resize(); applyLang(); showSplash();
 requestAnimationFrame(loop);
 (async () => {
   if (!window.claude?.use) return;
