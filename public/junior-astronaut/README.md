@@ -1,3 +1,12 @@
+# Level 1: Junior Astronaut (Atacama Desert + Training Center)
+
+This folder is **Level 1** of the team game. Open `index.html` in a browser to play.
+
+- Prologue: bedroom, invitation, flight
+- Atacama Desert: fix the map, 3 discoveries, the hill, why NASA picked this desert
+- Training Center: 4 hands-on rooms (air, water, atmosphere layers, food), fitting room with a spacesuit, hidden secrets
+- The Level 2 door leads into Razan's 5 walk-in rooms
+
 # Junior Astronaut
 
 A 3D educational space adventure for children aged 7 to 12, built by team SHEclipse for the NASA Space Apps Challenge 2026 ("Build a Junior Astronaut Mission Trainer").

@@ -1,6 +1,6 @@
 # Junior Astronaut Mission Trainer
 
-> **Team game:** the current 3D version (prologue + Level 1 in the Atacama) is in [`public/junior-astronaut/`](public/junior-astronaut/). Open `public/junior-astronaut/index.html` in a browser, or `/junior-astronaut/` on the live site.
+> **⭐ Level 1 (main team game):** [`public/junior-astronaut/index.html`](public/junior-astronaut/index.html) is **Level 1**: the prologue, the Atacama Desert, and the Training Center with 4 hands-on rooms (air, water, atmosphere layers, food), a fitting room and hidden secrets. Its exit door leads into Razan's Level 2 (5 walk-in training rooms). Open the file in a browser, or `/junior-astronaut/` on the live site.
 
 Team SHEclipse, NASA Space Apps Challenge 2026: **Build a Junior Astronaut Mission Trainer**
 
