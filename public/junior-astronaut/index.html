@@ -69,6 +69,23 @@
 .drow .dic { position: relative; } .drow .dic i { position: absolute; right: -4px; bottom: -4px; }
 .drow b { display: block; color: var(--navy); } .drow small { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.35; }
 .slab { display: flex; justify-content: center; gap: 14px; font-size: 12px; font-weight: 800; color: var(--muted); } .slab .on { color: #c98a00; }
+.m4mc { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-weight: 900; color: var(--navy); font-size: 13px; border-top: 2px dashed #ece4d4; padding-top: 5px; }
+.m4mc .bag { display: flex; gap: 6px; } .m4mc .bagi { display: inline-flex; align-items: center; gap: 1px; }
+.m4btns { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; } .m4btns .btn { pointer-events: auto; padding: 5px 6px 4px; font-size: 12.5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.m4btns .btn.on, .stabs .btn.on { background: #ffc22e; color: #1f3a68; }
+.rep { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+.rep .rt { background: #f6f1e6; border-radius: 12px; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-weight: 800; color: var(--navy); }
+.rep .rt.low { background: #fdebe8; } .rep .rt.good { background: #eef8dc; }
+.rep .rt small { font-size: 11.5px; color: var(--muted); } .rep .rt b { font-size: 20px; } .rep .up { color: #3c8a1a !important; } .rep .dn { color: #c0392b !important; }
+.tasks4 { display: flex; flex-direction: column; gap: 6px; text-align: start; margin: 8px 0; }
+.tasks4 div { display: flex; gap: 8px; align-items: center; background: #f6f1e6; border-radius: 10px; padding: 6px 10px; font-weight: 800; color: var(--navy); font-size: 14px; }
+.tasks4 div.ok { background: #eef8dc; } .tasks4 div.bad { background: #fdebe8; }
+.tasks4 .mc, .mis .mc { margin-inline-start: auto; font-weight: 900; color: #c98a00; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+.mis { display: flex; flex-direction: column; gap: 8px; text-align: start; }
+.mis .mi { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; background: #f6f1e6; border-radius: 12px; padding: 8px 10px; }
+.mis .mi.ok { background: #eef8dc; } .mis .mi.lock { opacity: .5; } .mis b { display: block; color: var(--navy); } .mis small { color: var(--muted); font-size: 12.5px; }
+.stabs { display: flex; gap: 6px; justify-content: center; margin: 6px 0 10px; flex-wrap: wrap; }
+@media (max-width: 640px) { .rep { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .m4lab { display: none; } }
 /* ===== Explorer credits, shop, rover camera flash ===== */
 .coin { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffe58a, #ffc22e 60%, #d89a10); border: 2px solid #1f3a68; vertical-align: -3px; box-sizing: border-box; }
@@ -1781,8 +1798,9 @@ document.querySelectorAll('.seg').forEach((b) => b.addEventListener('click', () 
 $('langBtn').addEventListener('click', () => { LANG = LANG === 'ar' ? 'en' : 'ar'; applyLang(); });
 $('startBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; startBedroom(); });
 $('skipL2Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L2.start(); });
-$('skipL3Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start(false); });
+$('skipL3Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start4({ cont: true }); });
 $('skipL4Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; MARS.start4(); });
+$('skipL4Btn').hidden = true;
 $('skipL1Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L1.start(); });
 $('skipACBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; LAUNCH.start(); });
 $('devSkip').addEventListener('click', () => { if (G.dialog) return; if (G.scene === 'level1') L1.devSkip(); else if (G.scene === 'academy') ACAD.devSkip(); else if (G.scene === 'level2') L2.devSkip(); else if (G.scene === 'mars') MARS.devSkip(); else if (G.scene === 'cabin') LAUNCH.devSkip(); });
@@ -1812,7 +1830,7 @@ const SHOP = (() => {
   function close() { isOpen = false; $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; const f = onClose; onClose = null; if (f) f(); else if (!G.dialog && !G.cine) giveControl(); }
   function add(n) { G.credits += n; hud(); const d = document.createElement('div'); d.className = 'cred-pop'; d.innerHTML = `<span class="coin"></span> +${n}`; stage.appendChild(d); setTimeout(() => d.remove(), 1900); SFX.sparkle(); }
   let shown = null;
-  function hud() { const b = $('credBtn'), on = ['level1', 'level2'].includes(G.scene) && (G.credits > 0 || Object.keys(G.gear).length > 0); if (on !== shown) { b.hidden = !on; shown = on; } b.innerHTML = `<span class="coin"></span> ${G.credits}`; }
+  function hud() { const b = $('credBtn'), on = G.scene === 'mars' || (['level1', 'level2', 'academy', 'cabin'].includes(G.scene) && (G.credits > 0 || Object.keys(G.gear).length > 0)); if (on !== shown) { b.hidden = !on; shown = on; } b.innerHTML = `<span class="coin"></span> ${G.credits}`; }
   // what the extras do
   let lamp = null;
   function apply() {
@@ -1825,7 +1843,7 @@ const SHOP = (() => {
     }
     if (G.gear.pack && !u.packStyled) { u.packStyled = true; let n = 0; u.pack.traverse((m) => { if (m.isMesh) { m.material = m.material.clone(); m.material.color.set(n++ % 2 ? 0xffc22e : 0x8a5ad8); } }); }
   }
-  $('credBtn').addEventListener('click', () => { if (!G.control || !$('lvOverlay').hidden) return; open(); });
+  $('credBtn').addEventListener('click', () => { if (!G.control || !$('lvOverlay').hidden) return; if (G.scene === 'mars' && MARS.shop()) return; open(); });
   return { open, add, hud, apply, isOpen: () => isOpen };
 })();
 
@@ -3194,7 +3212,7 @@ const L2 = (() => {
     if (S.cleanup) { S.cleanup(); S.cleanup = null; }
     S.stamps[i] = true; S.next = Math.max(S.next, i + 1); S.cur = -1;
     doors[i].signM.map = signTex(String(i + 1), TASKS[i].ic, '#9ccc3c', true); doors[i].signM.needsUpdate = true; doors[i].panelM.emissive.set(0x9ccc3c);
-    renderPassBtn(); SFX.stamp();
+    renderPassBtn(); SFX.stamp(); setTimeout(() => SHOP.add(15), 700);
     try { localStorage.setItem('ja_progress', JSON.stringify({ level1: true, level2: Object.keys(S.stamps).map(Number) })); } catch (e) {}
     stampToast(i); setTimeout(afterPassport, 1900);
   }
@@ -3677,7 +3695,7 @@ const ACAD = (() => {
   let toastT = null;
   function toast(txt, good) { const el = $('stToast'); if (!el) return; el.textContent = txt; el.className = 'st-toast show ' + (good ? 'good' : 'try'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 3200); if (!good) SFX.nope(); nuri.userData.talk = 1; setExpr(nuri, good ? 'happy' : 'idle'); }
   function complete(k) {
-    if (S.done[k]) return; S.done[k] = true; SFX.success(); stations[k].check.visible = true; stations[k].pad.material.opacity = 0.55; lights4[KEYS.indexOf(k)].material.color.set(0x4caf50);
+    if (S.done[k]) return; S.done[k] = true; SFX.success(); SHOP.add(10); stations[k].check.visible = true; stations[k].pad.material.opacity = 0.55; lights4[KEYS.indexOf(k)].material.color.set(0x4caf50);
     burst(new T.Vector3(POSN[k].x, 2.2, POSN[k].z), 0xffd27a, 40, 2.5, 2);
     setTimeout(() => {
       $('stHud').hidden = true; S.mode = null;
@@ -3863,6 +3881,15 @@ const ICONS = (() => {
     heater: `<rect x="8" y="22" width="32" height="18" rx="4" fill="${R}" ${k()}/><path d="M16 22v18M24 22v18M32 22v18" ${k(N, 2)}/><path d="M16 17c-2-3 2-5 0-9M24 17c-2-3 2-5 0-9M32 17c-2-3 2-5 0-9" fill="none" ${k(O, 3)}/>`,
     wall: `<path d="M6 14h36v26H6z" fill="#d9a070" ${k()}/><path d="M6 23h36M6 31h36M18 14v9M30 14v9M12 23v8M24 23v8M36 23v8M18 31v9M30 31v9" ${k('#8a4a28', 2)} fill="none"/>`,
     compass: `<circle cx="24" cy="24" r="19" fill="${W}" ${k()}/><path d="M24 8l5 16h-10z" fill="${R}"/><path d="M24 40l-5-16h10z" fill="${N}"/>`,
+    coin: `<circle cx="24" cy="24" r="18" fill="${Y}" ${k()}/><circle cx="24" cy="24" r="11" fill="none" ${k('#c98a00', 3)}/><path d="M24 17v14" ${k('#c98a00', 3)}/>`,
+    sos: `<path d="M24 5l20 36H4z" fill="${R}" ${k()}/><path d="M24 17v11" ${k(W, 4)}/><circle cx="24" cy="34" r="2.6" fill="${W}"/>`,
+    flag: `<path d="M12 44V5" ${k()}/><path d="M12 7h25l-6 7 6 7H12z" fill="${O}" ${k()}/>`,
+    antenna: `<path d="M8 18a17 17 0 0 0 22 12z" fill="${W}" ${k()}/><path d="M19 24l9-9M24 31l-6 13h13l-6-13" ${k()} fill="none"/><path d="M33 7a8 8 0 0 1 7 7M33 1a14 14 0 0 1 13 13" ${k(O, 3)} fill="none"/>`,
+    safety: `<path d="M24 42S6 31 6 18a9 9 0 0 1 18-3 9 9 0 0 1 18 3c0 13-18 24-18 24z" fill="${R}" ${k()}/><path d="M12 23h7l3-5 4 10 3-5h7" ${k(W, 3)} fill="none"/>`,
+    part: `<path d="M21 4h6v8h-6zM21 36h6v8h-6zM4 21h8v6H4zM36 21h8v6h-8z" fill="#c4ccd8" ${k()}/><circle cx="24" cy="24" r="13" fill="#c4ccd8" ${k()}/><circle cx="24" cy="24" r="5" fill="${W}" ${k()}/>`,
+    cart: `<path d="M4 9h7l5 22h22l4-15H13" fill="${W}" ${k()}/><circle cx="18" cy="39" r="3.5" fill="${N}"/><circle cx="34" cy="39" r="3.5" fill="${N}"/>`,
+    hammer: `<path d="M8 13l11-8 9 4-4 5 17 18-5 5-18-17-4 4z" fill="#c4ccd8" ${k()}/><path d="M28 9l-4 5" ${k(O, 3)}/>`,
+    report: `<rect x="10" y="8" width="28" height="36" rx="4" fill="${W}" ${k()}/><rect x="17" y="4" width="14" height="8" rx="2" fill="${O}" ${k()}/><path d="M16 22h16M16 30h16M16 38h10" ${k()}/>`,
   };
   const cache = {}, imgs = {}, texs = {};
   const ALIAS = { recycler: 'recycle' };
@@ -4247,7 +4274,7 @@ const LAUNCH = (() => {
     G.scene = 'cabin'; setEnv('cabin'); S3.walk = true; S3.zeroG = zeroG; nuri.visible = true; G.nuriJoined = true; girl.visible = true; girl.scale.setScalar(1); girl.rotation.set(0, 0, 0);
     P.pos.set(0, 0, 0.7); P.vel.set(0, 0, 0); P.yaw = Math.PI; camYaw = 0; camPitch = 0.42; camDist = 2.3; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
   }
-  function taskDone(n) { SFX.fanfare(); confetti($('stage')); chip('check', { en: L3.taskDone.en(n), ar: L3.taskDone.ar(n) }, 2200); }
+  function taskDone(n) { SHOP.add(10); SFX.fanfare(); confetti($('stage')); chip('check', { en: L3.taskDone.en(n), ar: L3.taskDone.ar(n) }, 2200); }
 
   // ---------- Task 1: the safe launch position ----------
   const posBar = document.createElement('div'); posBar.className = 'pos-bar card'; posBar.hidden = true; stage.appendChild(posBar);
@@ -4568,7 +4595,7 @@ const LAUNCH = (() => {
     });
     cap.position.set(land.x, 0, land.z); cap.rotation.set(0, 0, 0); cap.userData.chute.visible = false; cap.userData.jets.visible = false; cap.userData.glow.material.opacity = 0;
     running = false; G.nuriJoined = true;
-    MARS.start(true);
+    MARS.start4();
   }
   // an E-press answers each "until": these phases are finished by the player's own action
   const _act = action;
@@ -4631,10 +4658,10 @@ const MARS = (() => {
     recycler: { n: { en: 'Water recycler', ar: 'مُعيد تدوير الماء' }, d: { en: 'Must touch the habitat. Cleans used water.', ar: 'يجب أن يلامس المسكن. ينظّف الماء المستعمل.' }, f: { en: 'Real: the space station recycles about 98% of its water.', ar: 'حقيقة: تعيد محطة الفضاء تدوير نحو 98% من مائها.' }, use: 1, count: 0 },
     wall: { n: { en: 'Quick wall', ar: 'جدار سريع' }, d: { en: 'Put it next to the habitat. Cheap, but cracks in a marsquake.', ar: 'ضعه بجانب المسكن. رخيص لكنه يتشقّق في الزلزال.' }, use: 0, count: 0 },
   };
-  const ORDER = ['solar', 'battery', 'oxygen', 'ice', 'greenhouse', 'shield', 'lab'], ORDER4 = ['solar', 'battery', 'recycler', 'wall', 'shield', 'greenhouse'];
+  const ORDER = ['solar', 'battery', 'oxygen', 'ice', 'greenhouse', 'shield', 'lab'], ORDER4 = ['solar', 'battery', 'greenhouse', 'oxygen', 'recycler', 'lab', 'shield', 'wall'];
   const order = () => (S && S.lvl === 4 ? ORDER4 : ORDER);
   const TALL = { hab: 1, greenhouse: 1, lab: 1, ice: 1, shield: 1, wall: 1, printer: 1 };
-  const TILE = 3, NT = 3, SOLS = 5, SUN_PER_PANEL = 3, HEATER = 2, BATT_CAP = 3;
+  const TILE = 3, NT = 4, SOLS = 5, SUN_PER_PANEL = 3, HEATER = 2, BATT_CAP = 3;
   const ICE = [[2, -3], [3, -3], [3, -2]];
   const isIce = (i, j) => ICE.some(([a, b]) => a === i && b === j);
   const nextToHab = (i, j) => Math.abs(j) <= 1 && Math.abs(i) <= 2 && !(j === 0 && Math.abs(i) <= 1);
@@ -4778,7 +4805,7 @@ const MARS = (() => {
   function makeDeck() { const pool = ['calm', 'cold', 'leak', 'msg'].sort(() => Math.random() - 0.5).slice(0, 3); const d = [pool[0], pool[1], pool[2]]; d.splice(1 + Math.floor(Math.random() * 3), 0, 'dust'); d.splice(2 + Math.floor(Math.random() * 3), 0, 'storm'); return d.slice(0, SOLS); }
 
   // ---------- placement rules ----------
-  function occ(i, j, self) { if (j === 0 && Math.abs(i) <= 1) return 'hab'; if (S.lvl === 4 && i === -3 && j === 3) return 'printer'; const p = S.placed.find((q) => q.i === i && q.j === j && q !== self); return p ? p.type : null; }
+  function occ(i, j, self) { if (j === 0 && Math.abs(i) <= 1) return 'hab'; if (S.lvl === 4 && i === -3 && j === 3) return 'printer'; if (S.lvl === 4 && i === 3 && j === 4) return 'capsule'; const p = S.placed.find((q) => q.i === i && q.j === j && q !== self); return p ? p.type : null; }
   // the Sun is in the south (-z), so a tall thing shades the tile just north of it (+z)
   const shaded = (i, j, self) => { const o = occ(i, j - 1, self); return !!(o && TALL[o]); };
   function judge(type, i, j, rot, self) {
@@ -4803,7 +4830,8 @@ const MARS = (() => {
   const powerUse = () => S.placed.reduce((a, p) => a + PCS[p.type].use, 0);
   const cargoLeft = () => Object.keys(PCS).reduce((a, k) => a + S.inv[k], 0);
 
-  function barVisible() { return !!S && S.phase === 'build' && G.scene === 'mars' && !G.dialog && !G.cine && $('lvOverlay').hidden; }
+  function freeView() { return !!S && G.scene === 'mars' && !G.dialog && !G.cine && $('lvOverlay').hidden; }
+  function barVisible() { return freeView() && S.phase === 'build' && (S.lvl !== 4 || ((S.build || S.hold) && !S.drive)); }
   function renderInv() {
     const inv = $('inv'); inv.hidden = !barVisible();
     inv.innerHTML = order().map((k, i) => `<button class="slot ${S.hold === k ? 'sel' : ''} ${S.inv[k] ? '' : 'used-up'}" data-k="${k}" title="${tr3(PCS[k].n)}: ${tr3(PCS[k].d)}"><span class="k">${i + 1}</span>${ico(k, 34)}<span class="u">${S.inv[k]}</span></button>`).join('');
@@ -4824,7 +4852,7 @@ const MARS = (() => {
       + `<div class="sci"><span>${ico('star', 16)} ${tr3(TX.sci)}</span><span>${S.sci}</span></div><div class="sci"><span>${ico('cargo', 16)} ${tr3(TX.cargo)}</span><span>${cargoLeft()}</span></div>`;
     solBtn.hidden = !(S.phase === 'build' && hasBasics() && !S.over && barVisible()); solBtn.innerHTML = `${ico('sun', 22)} ${tr3(TX.startSol, S.sol + 1)}`;
   }
-  function lamps() { S.placed.forEach((p) => { const u = p.obj.userData; if (u.lamp) u.lamp.material.color.set(p.on === false ? 0xec5a50 : p.q >= 1 ? 0x9ccc3c : p.q > 0 ? 0xffc22e : 0xec5a50); }); }
+  function lamps() { S.placed.forEach((p) => { const u = p.obj.userData; if (u.lamp) u.lamp.material.color.set(p.on === false || p.fault || p.broken || p.crack ? 0xec5a50 : p.q >= 1 ? 0x9ccc3c : p.q > 0 ? 0xffc22e : 0xec5a50); }); }
 
   // ---------- building: choose, carry, place, rotate, pick up ----------
   function select(k) {
@@ -4842,10 +4870,10 @@ const MARS = (() => {
     if (!S.inv[type]) { S.hold = null; setGhost(null); }
     renderInv(); renderMeters(); if (S.lvl !== 4) checkReady();
   }
-  function pickUp(p) { W.remove(p.obj); S.placed.splice(S.placed.indexOf(p), 1); solids.splice(solids.indexOf(p.solid), 1); S.inv[p.type]++; SFX.pick(); S.hold = p.type; S.rot = p.rot; setGhost(p.type); regrade(); lamps(); renderInv(); renderMeters(); if (S.lvl !== 4) setObjective(hasBasics() ? 'l3_start' : 'l3_build'); }
+  function pickUp(p) { if (S.lvl === 4 && (p.fault || p.dirty || p.broken || p.crack)) { SFX.nope(); chip('fix', T5.fixFirst, 2600); return; } W.remove(p.obj); S.placed.splice(S.placed.indexOf(p), 1); solids.splice(solids.indexOf(p.solid), 1); S.inv[p.type]++; SFX.pick(); S.hold = p.type; S.rot = p.rot; setGhost(p.type); regrade(); lamps(); renderInv(); renderMeters(); if (S.lvl !== 4) setObjective(hasBasics() ? 'l3_start' : 'l3_build'); }
   function checkReady() { if (hasBasics()) { setObjective('l3_start'); if (!S.readySaid) { S.readySaid = true; showDialog([{ who: 'nuri', expr: 'happy', en: TX.ready.en, ar: TX.ready.ar }], giveControl); } } else setObjective('l3_build'); }
   addEventListener('keydown', (e) => {
-    if (G.scene !== 'mars' || !S || !G.control || S.phase !== 'build') return;
+    if (G.scene !== 'mars' || !S || !G.control || S.phase !== 'build' || (S.lvl === 4 && S.drive)) return;
     if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
     const n = Number(e.key), od = order(); if (n >= 1 && n <= od.length) select(od[n - 1]);
     if (e.code === 'KeyR' && S.hold) { S.rot = (S.rot + Math.PI / 2) % (Math.PI * 2); SFX.pick(); }
@@ -5090,6 +5118,81 @@ const MARS = (() => {
     s1: L4('Survived 3 sols', 'نجوت 3 أيام'), s2: L4('Dose under 50', 'جرعة أقل من 50'), s3: L4('3 rock samples', '3 عينات صخرية'),
   };
   Object.assign(TXT, { l4_obj: T4.obj });
+  // Level 4 text: life on Mars (the base is already built)
+  const T5 = {
+    eyebrow: L4('Level 4 · Life on Mars', 'المرحلة 4 · الحياة على المريخ'),
+    obj: L4('Keep the base and the crew safe', 'حافظ على أمان القاعدة والطاقم'),
+    objBuild: L4('Build mode: E picks up, 1–8 choose a piece, R turns, E places', 'وضع البناء: E للرفع، 1–8 لاختيار قطعة، R للتدوير، E للوضع'),
+    objDrive: L4('Rover: W/S to drive, A/D to turn, E to get out', 'المركبة: W/S للقيادة، A/D للانعطاف، E للنزول'),
+    hi1: L4('Welcome home! The first crew already built this base. Our job is to keep it running.', 'أهلاً بك في البيت! بنى الطاقم الأول هذه القاعدة، ومهمتنا الآن أن نُبقيها تعمل.'),
+    hi2: L4('Every sol we check the base, fix what breaks, and decide where the power goes.', 'كل يوم مريخي نفحص القاعدة، ونصلّح ما يتعطّل، ونقرّر أين تذهب الكهرباء.'),
+    hi3: L4('Good work earns Mars Credits. Spend them on upgrades, the rover and new suits!', 'العمل الجيد يكسبك نقاط المريخ. أنفقها على التطويرات والمركبة وبدلات جديدة!'),
+    b_day: L4('<b>Every sol</b>: read the morning report, inspect the base, make choices, face a surprise event, then see the end-of-day results.', '<b>كل يوم</b>: اقرأ تقرير الصباح، افحص القاعدة، اتّخذ قراراتك، واجه حدثاً مفاجئاً، ثم شاهد نتائج نهاية اليوم.'),
+    b_res: L4('<b>6 meters</b>: water, oxygen, power, food, shielding and crew safety. Keep them high!', '<b>6 مؤشرات</b>: الماء والأكسجين والطاقة والغذاء والحماية وسلامة الطاقم. أبقِها مرتفعة!'),
+    b_fix: L4('<b>Broken things</b> show a wrench. Walk to them and press E. Spare parts come from the 3D printer or from Earth.', '<b>الأشياء المعطّلة</b> فوقها مفتاح ربط. امشِ إليها واضغط E. قطع الغيار من الطابعة ثلاثية الأبعاد أو من الأرض.'),
+    b_rv: L4('<b>The rover</b> waits in the garage: explore, do science, repair far machines and rescue astronauts.', '<b>المركبة الجوّالة</b> تنتظر في المرآب: استكشف، وادرس، وأصلح الآلات البعيدة، وأنقذ الروّاد.'),
+    b_mc: L4('<b>Mars Credits</b> buy upgrades and new looks. They can’t buy air or water: you make, fix and recycle those!', '<b>نقاط المريخ</b> تشتري التطويرات والأشكال الجديدة، لكنها لا تشتري الهواء أو الماء: هذه تصنعها وتصلحها وتعيد تدويرها!'),
+    go: L4('Read the morning report', 'اقرأ تقرير الصباح'),
+    water: L4('Water', 'الماء'), oxy: L4('Oxygen', 'الأكسجين'), power: L4('Power', 'الطاقة'), food: L4('Food', 'الغذاء'), shield: L4('Shielding', 'الحماية'), safety: L4('Crew safety', 'سلامة الطاقم'), you: L4('Your energy', 'طاقتك'),
+    mc: L4('Mars Credits', 'نقاط المريخ'), parts: L4('Spare parts', 'قطع الغيار'),
+    loop: L4('Life loop', 'دائرة الحياة'), build: L4('Build', 'بناء'), shop: L4('Shop', 'المتجر'), missions: L4('Missions', 'المهام'),
+    morningT: L4((n) => `Sol ${n} · Morning report`, (n) => `اليوم ${n} · تقرير الصباح`),
+    morningP: L4('Here is how the base woke up today.', 'هكذا استيقظت القاعدة اليوم.'),
+    good: L4('Good', 'جيد'), okay: L4('OK', 'مقبول'), low: L4('Low!', 'منخفض!'),
+    crew: L4((n) => `Crew: ${n} astronauts, all well`, (n) => `الطاقم: ${n} روّاد، كلهم بخير`),
+    scan: L4((n) => `Nuri’s scan found ${n} problem(s). Look for the wrench signs!`, (n) => `وجد فحص نوري ${n} مشكلة. ابحث عن علامات مفتاح الربط!`),
+    scan0: L4('Nuri’s scan: no problems this morning.', 'فحص نوري: لا مشاكل هذا الصباح.'),
+    arrive: L4('A supply pod from Earth landed by the base!', 'هبطت حاوية إمدادات من الأرض قرب القاعدة!'),
+    sosMsg: L4('SOS on the radio: a geologist is stuck far away. Check Missions!', 'نداء استغاثة في الراديو: عالِمة جيولوجيا عالقة بعيداً. افتح المهام!'),
+    tasksT: L4('Today’s jobs', 'مهام اليوم'), startDay: L4('Start the day', 'ابدأ اليوم'),
+    endT: L4((n) => `End of sol ${n}`, (n) => `نهاية اليوم ${n}`), endP: L4('What got better, and what got worse?', 'ما الذي تحسّن، وما الذي تراجع؟'),
+    better: L4('Better', 'تحسّن'), worse: L4('Worse', 'تراجع'), same: L4('Same', 'كما هو'),
+    healthy: L4('Water, oxygen and food all 5 or more', 'الماء والأكسجين والغذاء كلها 5 أو أكثر'),
+    earned: L4((n) => `Mars Credits earned today: ${n}`, (n) => `نقاط المريخ التي كسبتها اليوم: ${n}`),
+    safeY: L4('The base and the crew are safe.', 'القاعدة والطاقم بأمان.'), safeN: L4('The crew is OK, but some things need care tomorrow.', 'الطاقم بخير، لكن بعض الأمور تحتاج عناية غداً.'),
+    nextDay: L4('Next morning', 'الصباح التالي'),
+    tk_fix: L4('Fix every problem', 'أصلح كل المشاكل'), tk_harvest: L4('Harvest the greenhouse', 'احصد الدفيئة'), tk_report: L4('Send the daily report to Earth', 'أرسل التقرير اليومي إلى الأرض'), tk_keep: L4('Keep water, oxygen and food above 3', 'أبقِ الماء والأكسجين والغذاء فوق 3'), tk_study: L4('Study a rock sample in the lab', 'ادرس عينة صخرية في المختبر'),
+    fixPart: L4('Fix it', 'أصلحه'), usePart: L4('1 spare part', 'قطعة غيار واحدة'), noPart: L4('No spare part! Print one (2 soil) or order from Earth.', 'لا توجد قطعة غيار! اطبع واحدة (تربتان) أو اطلبها من الأرض.'),
+    leakN: L4('Water leak', 'تسرّب ماء'), filterN: L4('Clogged air filter', 'فلتر هواء مسدود'), wiltN: L4('Sick plants', 'نباتات مريضة'), crackN: L4('Cracked wall', 'جدار متشقّق'), brokenN: L4('Broken wall', 'جدار مكسور'),
+    fixed: L4('Fixed! Nice work.', 'تم الإصلاح! عمل رائع.'), fixFirst: L4('Fix it first, then you can move it.', 'أصلحه أولاً، ثم يمكنك نقله.'),
+    patch: L4('Repair with Mars soil', 'رمّمه بتربة المريخ'), patchD: L4('2 soil', 'تربتان'), noSoil: L4('You need 2 soil. Dig some at the dunes.', 'تحتاج تربتين. احفر عند الكثبان.'),
+    harvest: L4('Harvest', 'احصد'), harvestD: L4('food +2', 'غذاء +2'), harvested: L4('Fresh food for the crew!', 'طعام طازج للطاقم!'), growing: L4((p) => `Growing: ${p}%`, (p) => `ينمو: ${p}%`),
+    check: L4('Check the plants', 'افحص النباتات'),
+    symDry: L4('The leaves are droopy, and the soil is dry and cracked.', 'الأوراق ذابلة، والتربة جافة ومتشقّقة.'),
+    symWet: L4('The leaves are yellow with fuzzy mold, and the soil is soaking wet.', 'الأوراق صفراء وعليها عفن، والتربة مبلّلة جداً.'),
+    whatNeed: L4('What do the plants need?', 'ماذا تحتاج النباتات؟'), giveW: L4('Give them water', 'اسقِها ماءً'), fan: L4('Dry them with the fan', 'جفّفها بالمروحة'),
+    plantsOk: L4('The plants perk up! They were thirsty.', 'انتعشت النباتات! كانت عطشى.'),
+    wrongW: L4('Oh no, even soggier! Wet soil needs drying, not more water.', 'أوه لا، صارت أكثر بللاً! التربة المبلّلة تحتاج تجفيفاً لا ماءً.'),
+    wrongF: L4('Even drier and droopier! Dry soil needs water.', 'صارت أجفّ وأكثر ذبولاً! التربة الجافة تحتاج ماءً.'),
+    lab: L4('Study rock samples', 'ادرس العينات الصخرية'), labOff: L4('The lab has no power. Switch it on.', 'لا كهرباء في المختبر. شغّله.'),
+    studied: L4((n, c) => `Studied ${n} sample(s): +${c} credits`, (n, c) => `دُرست ${n} عينة: +${c} نقطة`),
+    comm: L4('Radio Mission Control', 'تواصل مع مركز التحكم'), garage: L4('Drive the rover', 'قُد المركبة'), out: L4('Get out of the rover', 'انزل من المركبة'),
+    rvBat: L4('Rover battery', 'بطارية المركبة'), rvEmpty: L4('Rover battery empty! Crawl back to the garage to charge.', 'بطارية المركبة فارغة! عُد ببطء إلى المرآب للشحن.'),
+    aboard: L4('Help her aboard', 'ساعدها على الصعود'), resGot: L4('She is aboard! Drive back to the habitat.', 'صعدت إلى المركبة! عُد إلى المسكن.'), resDone: L4('Rescue complete! She is safe inside.', 'تم الإنقاذ! صارت بأمان في الداخل.'),
+    relayFix: L4('Fix the power station', 'أصلح محطة الطاقة'), relayDone: L4('The far station sends power again!', 'المحطة البعيدة ترسل الكهرباء من جديد!'),
+    pod: L4('Open the supply pod', 'افتح حاوية الإمدادات'), placeIt: L4('New piece! Press Build to place it.', 'قطعة جديدة! اضغط بناء لتضعها.'),
+    lowSafe: L4('Crew safety is low! Fix what is missing.', 'سلامة الطاقم منخفضة! أصلح ما ينقص.'),
+    emT: L4('Mission Control: safe mode!', 'مركز التحكم: وضع الأمان!'),
+    emP: L4('Crew safety reached zero, so the crew went into the shelter. Nobody is hurt. Let’s try this sol again with a better plan.', 'وصلت سلامة الطاقم إلى الصفر، فدخل الطاقم الملجأ. لم يتأذَّ أحد. لنجرّب هذا اليوم مجدداً بخطة أفضل.'),
+    emB: L4('Try this sol again', 'أعد هذا اليوم'),
+    crewT: L4('The base is growing!', 'القاعدة تكبر!'), crewP: L4('Two more astronauts joined. More crew means more water, oxygen and food every sol.', 'انضمّ رائدا فضاء آخران. طاقم أكبر يعني ماءً وأكسجيناً وغذاءً أكثر كل يوم.'),
+    shopT: L4('Mars Shop', 'متجر المريخ'), tUp: L4('Base upgrades', 'تطوير القاعدة'), tRv: L4('Rover', 'المركبة'), tLook: L4('Looks', 'الأشكال'), tEarth: L4('Order from Earth', 'اطلب من الأرض'),
+    shopNote: L4('Credits can’t buy air or water. Those you make, fix and recycle!', 'النقاط لا تشتري الهواء أو الماء. هذه تصنعها وتصلحها وتعيد تدويرها!'),
+    own: L4('Yours!', 'لك!'), wear: L4('Wear', 'البس'), close: L4('Close', 'إغلاق'),
+    earthNote: L4((d) => `Earth is ${d} light-minutes away today. Orders come on the next supply lander, not right away.`, (d) => `الأرض تبعد اليوم ${d} دقيقة ضوئية. الطلبات تصل مع مركبة الإمداد التالية، لا فوراً.`),
+    eta: L4((n) => `arrives in ${n} sol(s)`, (n) => `يصل بعد ${n} يوم`), ordered: L4((n) => `Order sent! It lands in ${n} sol(s).`, (n) => `أُرسل الطلب! يهبط بعد ${n} يوم.`),
+    needComm: L4('Orders go by radio: walk to the radio station to order.', 'الطلبات تُرسل بالراديو: امشِ إلى محطة الاتصال لتطلب.'),
+    commOff: L4('The radio station has no power. Switch it on.', 'لا كهرباء في محطة الاتصال. شغّلها.'),
+    report: L4('Send today’s report', 'أرسل تقرير اليوم'), reportD: L4('+3 credits', '+3 نقاط'),
+    sentR: L4((m) => `Report sent! Earth gets it in ${m} minutes.`, (m) => `أُرسل التقرير! يصل إلى الأرض بعد ${m} دقيقة.`),
+    misT: L4('Missions', 'المهام'), misP: L4('No fighting on Mars: the adventure is exploring, rescuing and solving problems.', 'لا قتال على المريخ: المغامرة في الاستكشاف والإنقاذ وحل المشكلات.'),
+    locked: L4((n) => `From sol ${n}`, (n) => `من اليوم ${n}`),
+    evWaterT: L4('Water system failure!', 'عطل في نظام الماء!'), evWaterP: L4('A pipe is leaking and the water meter is dropping. Find the wrench sign and fix it with a spare part.', 'أنبوب يسرّب والماء ينقص. ابحث عن علامة مفتاح الربط وأصلحه بقطعة غيار.'),
+    evPlantT: L4('Greenhouse problem!', 'مشكلة في الدفيئة!'), evPlantP: L4('Some plants look sick. Go and check them: what do they need?', 'بعض النباتات تبدو مريضة. اذهب وافحصها: ماذا تحتاج؟'),
+    welcome: L4('Welcome back! Your base waited for you.', 'أهلاً بعودتك! قاعدتك كانت بانتظارك.'),
+  };
+  Object.assign(T4, { eyebrow: T5.eyebrow, obj: T5.obj });
+  Object.assign(TXT, { l4_obj: T5.obj, l4_build: T5.objBuild, l4_drive: T5.objDrive });
   // the debrief: each choice, right or wrong, with the real reason
   const D4 = {
     night: [L4('The battery lasted every night.', 'صمدت البطارية كل ليلة.'), L4((n) => `The battery ran out ${n} time(s): every machine stopped.`, (n) => `فرغت البطارية ${n} مرة: توقفت كل الآلات.`), L4('Real: at night solar panels make nothing. NASA is building small nuclear power for Moon and Mars bases.', 'حقيقة: في الليل لا تصنع الألواح شيئاً. تطوّر ناسا طاقة نووية صغيرة لقواعد القمر والمريخ.')],
@@ -5102,13 +5205,16 @@ const MARS = (() => {
     run: [L4('You saved energy by walking.', 'وفّرت طاقتك بالمشي.'), L4('You ran a lot: more energy, more food.', 'ركضت كثيراً: طاقة أكثر وطعام أكثر.'), L4('Real: moving in a spacesuit is hard work.', 'حقيقة: الحركة ببدلة الفضاء عمل شاق.')],
     dose: [L4((d) => `Total dose ${d}: safe.`, (d) => `الجرعة الكلية ${d}: آمنة.`), L4((d) => `Total dose ${d}: too much.`, (d) => `الجرعة الكلية ${d}: كثيرة جداً.`), L4('Real: NASA’s Curiosity rover measures Mars radiation every day.', 'حقيقة: تقيس مركبة كيوريوسيتي إشعاع المريخ كل يوم.')],
   };
-  const DAY = 55, NIGHT = 35, SOL = DAY + NIGHT, NSOL = 3, BASE_USE = 0.03, CREW = 2;
+  const DAY = 55, NIGHT = 35, SOL = DAY + NIGHT, NSOL = 3, BASE_USE = 0.03; let CREW = 2;
   const MACH = {
     oxygen: { ic: 'oxygen', pw: 0.10, n: L4('Oxygen maker', 'صانع الأكسجين') },
     ice: { ic: 'ice', pw: 0.10, n: L4('Ice melter', 'مُذيب الجليد') },
     recycler: { ic: 'recycle', pw: 0.05, n: L4('Water recycler', 'مُعيد تدوير الماء') },
     greenhouse: { ic: 'greenhouse', pw: 0.05, n: L4('Greenhouse', 'الدفيئة') },
     heater: { ic: 'heater', pw: 0.08, n: L4('Heater (night)', 'المدفأة (ليلاً)') },
+    lab: { ic: 'lab', pw: 0.08, n: L4('Science lab', 'المختبر العلمي') },
+    comm: { ic: 'antenna', pw: 0.04, n: L4('Radio station', 'محطة الاتصال') },
+    garage: { ic: 'rover', pw: 0.12, n: L4('Rover charger', 'شاحن المركبة') },
   };
   const SITES = {
     ice: { x: 38, z: -24, ic: 'ice', f: L4('Real: NASA orbiters spotted new craters with bright ice just under the ground.', 'حقيقة: رصدت مركبات ناسا فوهات جديدة فيها جليد لامع تحت الأرض.') },
@@ -5119,10 +5225,11 @@ const MARS = (() => {
   const RECIPES = [
     { type: 'recycler', cost: { soil: 2, ice: 1 }, d: L4('Water from pee + sweat', 'ماء من البول والعرق') },
     { type: 'wall', cost: { soil: 2 }, d: L4('Cheap. Cracks in a marsquake.', 'رخيص. يتشقّق في الزلزال.') },
+    { type: 'part', cost: { soil: 2 }, n: L4('Spare part', 'قطعة غيار'), d: L4('Fixes leaks and filters.', 'تُصلح التسريب والفلاتر.') },
     { type: 'shield', cost: { soil: 4 }, n: L4('Strong wall', 'جدار قوي'), d: L4('Thick. Survives quakes.', 'سميك. يصمد في الزلازل.') },
   ];
   const PR = { i: -3, j: 3 }, BAG_MAX = 4, DOOR = { x: 0, z: 2.4 };
-  const BASE4 = [['solar', -1, -2], ['solar', 0, -2], ['oxygen', -2, 0], ['ice', 3, -3], ['greenhouse', 2, -1], ['battery', -3, 1]];
+  const BASE4 = [['solar', -2, -2], ['solar', -1, -2], ['solar', 0, -2], ['solar', 1, -2], ['battery', -3, 1], ['battery', -3, 2], ['battery', -4, 1], ['oxygen', -2, 0], ['recycler', 2, 0], ['ice', 3, -3], ['greenhouse', 3, -1], ['greenhouse', -3, -1], ['lab', 3, 2], ['shield', -1, -1], ['shield', 0, -1], ['shield', 1, -1], ['shield', -1, 1], ['shield', 1, 1], ['wall', 2, 1]];
   const W4 = new T.Group(); W4.visible = false; W.add(W4);
   for (let n = 0; n < 7; n++) { const a = n * 0.9, x = SITES.soil.x + Math.cos(a) * 7, z = SITES.soil.z + Math.sin(a) * 7; const d = mesh(new T.SphereGeometry(3 + Math.random() * 2, 16, 10), mat(0xc9683a, { roughness: 1 }), x, h(x, z) - 1.3, z, W4, false); d.scale.set(1.6, 0.5, 1); d.rotation.y = a; d.receiveShadow = true; }
   { const c = new T.Group(); c.position.set(SITES.sample.x, h(SITES.sample.x, SITES.sample.z) - 0.5, SITES.sample.z - 7); W4.add(c); const cols = [0xb8643a, 0xd9a070, 0x9a4a28, 0xe0b080, 0xa85a30]; for (let i = 0; i < 5; i++) mesh(new T.BoxGeometry(18 - i * 1.2, 1.3, 5 - i * 0.3), mat(cols[i], { roughness: 1 }), 0, 0.65 + i * 1.3, -i * 0.25, c); }
@@ -5199,13 +5306,13 @@ const MARS = (() => {
   const clamp10 = (v) => Math.max(0, Math.min(10, v));
   const bagTotal = () => S.bag.ice + S.bag.soil + S.bag.sample;
   const working = (t) => S.placed.filter((p) => p.type === t && p.q > 0 && !p.broken).length;
-  const machines = (k) => (k === 'heater' ? 1 : working(k));
-  const goodWalls = () => S.placed.filter((p) => (p.type === 'shield' || p.type === 'wall') && p.q > 0 && !p.broken).length;
-  const batCap = () => 4 + 4 * working('battery');
+  const machines = (k) => (k === 'heater' || k === 'comm' || k === 'garage' ? 1 : working(k));
+  const goodWalls = () => S.placed.reduce((a, p) => a + ((p.type === 'shield' || p.type === 'wall') && p.q > 0 && !p.broken ? (p.crack ? 0.5 : p.type === 'wall' ? 0.6 : 1) : 0), 0);
+  const batCap = () => 4 + (S.up && S.up.bigbat ? 7 : 5) * working('battery');
   function newMission() {
     const kinds = ['dust', 'storm', 'quake'].sort(() => Math.random() - 0.5);
     return { t: 0, sol: 1, night: false, started: false, bat: 6, water: 7, air: 7, food: 7, used: 2, dose: 0, energy: 8, run: true,
-      sw: { oxygen: true, ice: true, recycler: true, greenhouse: true, heater: true }, zero: {}, warned: {},
+      sw: { oxygen: true, ice: true, recycler: true, greenhouse: true, heater: true, lab: true, comm: true, garage: true }, zero: {}, warned: {},
       events: kinds.map((k, i) => ({ kind: k, at: i * SOL + 20 + Math.random() * 20, done: false })),
       dustT: 0, stormIn: 0, stormOn: 0, stormDose: 0, stormSeen: false, stormI: Math.floor(Math.random() * STORMS.length), delay: 4 + Math.floor(Math.random() * 19),
       quakeT: 0, quakeSeen: false, broken: 0, wallsAtQuake: 0, dustSeen: false, cleaned: 0, dirtyLeft: 0,
@@ -5213,15 +5320,14 @@ const MARS = (() => {
   }
   function sim(dt) {
     const m = S.m; m.t += dt;
-    if (m.t >= NSOL * SOL) return win();
     const sol = Math.floor(m.t / SOL) + 1, st = m.t % SOL, night = st >= DAY;
-    if (sol !== m.sol) { m.sol = sol; }
+    if (sol !== m.sol) { m.sol = sol; return endOfDay(); }
     if (night !== m.night) { m.night = night; if (night) { chip('night', T4.night, 4200); SFX.alarm(); pulse(); } else { if (m.coldT > 8) m.coldNights++; m.coldT = 0; chip('sun', T4.dawn, 2600); SFX.discover(); } buildLinks(); }
     for (const e of m.events) if (!e.done && m.t >= e.at) { e.done = true; fire(e.kind); return; }
     // power: panels charge by day, machines use it all the time
     const sunAmt = night ? 0 : Math.min(1, st / 5, (DAY - st) / 5);
-    m.gen = S.placed.filter((p) => p.type === 'solar').reduce((a, p) => a + 0.16 * p.q * (p.dirty ? 0.45 : 1), 0) * sunAmt * (m.dustT > 0 ? 0.3 : 1);
-    m.use = BASE_USE; for (const k in MACH) if (m.sw[k] && machines(k) && (k !== 'heater' || night)) m.use += MACH[k].pw * machines(k);
+    m.gen = (S.placed.filter((p) => p.type === 'solar').reduce((a, p) => a + 0.16 * p.q * (p.dirty ? (S.up && S.up.coat ? 0.75 : 0.45) : 1), 0) + (S.mis && S.mis.repair ? 0.14 : 0)) * sunAmt * (m.dustT > 0 ? 0.3 : 1);
+    m.use = BASE_USE; for (const k in MACH) if (m.sw[k] && machines(k) && (k !== 'heater' || night) && (k !== 'garage' || S.rvCharging)) m.use += MACH[k].pw * machines(k);
     m.bat = Math.min(batCap(), m.bat + (m.gen - m.use) * dt);
     const run = m.bat > 0 || m.gen >= m.use;
     if (m.bat <= 0) { m.bat = 0; if (!m.blackout) { m.blackout = true; m.blackouts++; chip('battery', T4.dark, 3500); SFX.alarm(); } } else if (m.bat > 0.6) m.blackout = false;
@@ -5231,33 +5337,44 @@ const MARS = (() => {
     if (night && !on('heater')) { dF *= 2; m.coldT += dt; }
     m.used = Math.min(10, m.used + 0.02 * CREW * dt);
     if (m.used >= 10 && !m.tankSaid) { m.tankSaid = true; chip('tank', T4.tankFull, 3500); }
-    if (on('oxygen')) dA += 0.14 * machines('oxygen');
+    if (on('oxygen')) dA += 0.14 * machines('oxygen') * (faultN('filter') ? 0.3 : 1);
     if (on('ice')) dW += 0.06 * machines('ice');
-    if (on('recycler') && m.used > 0) { const r = Math.min(m.used, 0.05 * machines('recycler') * dt); m.used -= r; dW += r / dt; }
-    if (on('greenhouse')) { const g = machines('greenhouse'); dF += (night ? 0.02 : 0.07) * g; dA += (night ? 0 : 0.02) * g; dW -= 0.02 * g; }
+    dW -= 0.05 * faultN('leak');
+    if (on('recycler') && m.used > 0) { const r = Math.min(m.used, 0.05 * (S.up && S.up.rec98 ? 1.6 : 1) * (faultN('leak', 'recycler') ? 0 : 1) * machines('recycler') * dt); m.used -= r; dW += r / dt; }
+    if (on('greenhouse')) { const g = Math.max(0, machines('greenhouse') - faultN('wilt')); dF += (night ? 0.01 : 0.03) * g; dA += (night ? 0 : 0.02) * g; dW -= 0.02 * g; }
     m.water = clamp10(m.water + dW * dt); m.air = clamp10(m.air + dA * dt); m.food = clamp10(m.food + dF * dt);
     for (const k of ['water', 'air', 'food']) {
       if (m[k] < 2.5 && !m.warned[k]) { m.warned[k] = true; chip(k === 'water' ? 'ice' : k === 'air' ? 'oxygen' : 'greenhouse', T4.low[k], 3000); SFX.alarm(); } else if (m[k] > 4) m.warned[k] = false;
-      if (m[k] <= 0) { m.zero[k] = (m.zero[k] || 0) + dt; if (m.zero[k] > 8) return fail(k); } else m.zero[k] = 0;
+      if (m[k] <= 0) { m.zero[k] = (m.zero[k] || 0) + dt; } else m.zero[k] = 0;
     }
     // radiation dose: the base and its soil walls protect you
     const R = Math.hypot(P.pos.x, P.pos.z), inHab = Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2, inBase = R < 14, wf = Math.max(0.15, 1 - 0.3 * goodWalls());
     let rate = inBase ? 0.03 * wf : 0.22;
     if (m.stormOn > 0) rate = inHab ? 0.25 * wf : inBase ? 1.2 * wf + 0.2 : 2.6;
     m.dose += rate * dt; if (m.stormOn > 0) m.stormDose += rate * dt;
-    if (m.dose >= 100) return fail('rad');
+    m.dose = Math.min(m.dose, 100);
     if (m.stormIn > 0) { m.stormIn -= dt; if (m.stormIn <= 0) { m.stormOn = 15; vig.hidden = false; SFX.alarm(); } }
     else if (m.stormOn > 0) { m.stormOn -= dt; if (m.stormOn <= 0) { vig.hidden = true; const d = Math.round(m.stormDose); if (d < 6) { chip('hide', T4.stormOk, 3000); SFX.success(); } else { chip('rad', L4(T4.stormBad.en(d), T4.stormBad.ar(d)), 3500); } m.stormDoseR = d; } }
     if (m.dustT > 0) { m.dustT -= dt; if (m.dustT <= 0) { S.placed.forEach((p) => { if (p.type === 'solar') dirty(p, true); }); chip('dust', T4.dusty, 4500); } }
     // your own energy: walking uses a little, running a lot
     const sp = P.speed; m.energy = Math.max(0, Math.min(10, m.energy - (sp > 4.6 ? 0.14 : sp > 0.6 ? 0.025 : -0.01) * dt));
     if (sp > 4.6) m.runT += dt;
+    if (S.lvl === 4) {
+      let dS = 0; for (const k of ['water', 'air', 'food']) if (m[k] <= 0) dS -= 0.1;
+      if (night && !on('heater')) dS -= 0.025; if (m.stormOn > 0 && m.stormChoice === 'work') dS -= 0.12; if (m.dose > 60) dS -= 0.02;
+      if (!dS && m.water > 3 && m.air > 3 && m.food > 3) dS = 0.015;
+      m.safety = clamp10((m.safety == null ? 8 : m.safety) + dS * dt); if (S.today) S.today.minRes = Math.min(S.today.minRes, m.water, m.air, m.food);
+      if (m.safety < 3 && !m.warned.safety) { m.warned.safety = true; chip('safety', T5.lowSafe, 3500); SFX.alarm(); } else if (m.safety > 5) m.warned.safety = false;
+      growCrops(dt, night, on);
+      if (m.safety <= 0) return emergency();
+    }
     if (m.energy <= 0) { P.vel.x *= 0.85; P.vel.z *= 0.85; if (!m.tiredSaid) { m.tiredSaid = true; chip('energy', T4.tired, 3500); } } else if (m.energy > 3) m.tiredSaid = false;
   }
-  function dirty(p, v) { p.dirty = v; const u = p.obj.userData; if (u.panel) u.panel.material.color.set(v ? 0xb07a52 : 0xffffff); }
+  function dirty(p, v) { p.dirty = v; if (S.lvl === 4) markFault(p); const u = p.obj.userData; if (u.panel) u.panel.material.color.set(v ? 0xb07a52 : 0xffffff); }
   function pulse() { const s = $('meters').querySelector('.m4sw'); if (s) { s.classList.remove('pulse'); void s.offsetWidth; s.classList.add('pulse'); } }
   function fire(kind) {
     const m = S.m;
+    if (kind === 'water' || kind === 'greenhouse') return fire5(kind);
     if (kind === 'storm') {
       m.stormSeen = true; const ev = STORMS[m.stormI % STORMS.length]; SFX.alarm();
       panel(`<div class="eyebrow">${ico('msg', 18)} ${tr3(T4.msgT)}</div><h2>${ico('storm', 34)} ${tr3(T4.stormW)}</h2><p class="evt">${tr3(T4.sent, m.delay)}</p><div class="fact"><span class="ic">${ico('rad', 26)}</span><span><b>${ev.date} · ${ev.cls}</b><br>${tr3(ev.t)}<br><small>${ev.src}</small></span></div><div class="evbig"><button class="opt evopt" id="sHide">${ico('hide', 50, 'eic')}<span class="et">${tr3(T4.hideB)}</span></button><button class="opt evopt" id="sWork">${ico('rover', 50, 'eic')}<span class="et">${tr3(T4.workB)}</span></button></div>`, (el) => {
@@ -5271,7 +5388,7 @@ const MARS = (() => {
       m.quakeSeen = true; m.quakeT = 3; SFX.land(); SFX.alarm();
       const walls = S.placed.filter((p) => p.type === 'wall' || p.type === 'shield'); m.wallsAtQuake = walls.length;
       let n = 0; walls.forEach((p) => { if (p.type === 'wall' && !p.broken) { p.broken = true; n++; p.obj.rotation.z = 0.25; p.obj.position.y = -0.15; burst(p.obj.position.clone().add(new T.Vector3(0, 0.6, 0)), 0xc98a5a, 18, 1.6, 1); } });
-      m.broken = n; regrade(); lamps();
+      m.broken = n; { const sh = S.placed.filter((p) => p.type === 'shield' && !p.crack); if (sh.length) sh[Math.floor(Math.random() * sh.length)].crack = true; } regrade(); lamps(); S.placed.forEach(markFault);
       setTimeout(() => { if (S && S.m === m) chip('quake', n ? L4(T4.quakeBad.en(n), T4.quakeBad.ar(n)) : walls.length ? T4.quakeOk : T4.quakeF, 4000); }, 600);
     }
   }
@@ -5282,85 +5399,105 @@ const MARS = (() => {
       m.lang = LANG;
       const row = (id, ic, lab, c, cls = '') => `<div class="meter ${cls}" data-id="${id}" style="--c:${c}" title="${lab}"><span class="ic">${ico(ic, 18)}</span><div class="bar"><div class="fill"></div></div><span class="n"></span></div>`;
       box.innerHTML = `<div class="m4top"><span class="m4ic"></span><b class="m4sol"></b><div class="clk" style="background:linear-gradient(90deg,#ffd27a 0 ${DAY / SOL * 100}%,#3a3060 ${DAY / SOL * 100}%)"><i></i></div></div><div class="m4warn" hidden></div>`
-        + `<div class="m4lab">${tr3(T4.power)}</div>` + row('bat', 'power', tr3(T4.power), '#ffc22e')
-        + `<div class="m4lab">${tr3(T4.life)}</div>` + row('water', 'ice', tr3(T4.water), '#3a9cf0', 'sub') + row('air', 'oxygen', tr3(T4.air), '#8fd0ff', 'sub') + row('food', 'greenhouse', tr3(T4.food), '#5fbf2a', 'sub')
-        + `<div class="m4lab">${tr3(T4.dose)}</div>` + row('dose', 'rad', tr3(T4.dose), '#ec5a50')
-        + `<div class="m4lab">${tr3(T4.you)}</div>` + row('energy', 'energy', tr3(T4.you), '#b07aff', 'sub')
+        + row('water', 'ice', tr3(T5.water), '#3a9cf0') + row('air', 'oxygen', tr3(T5.oxy), '#8fd0ff') + row('bat', 'power', tr3(T5.power), '#ffc22e')
+        + row('food', 'greenhouse', tr3(T5.food), '#5fbf2a') + row('shield', 'shield', tr3(T5.shield), '#ec8a3c') + row('safety', 'safety', tr3(T5.safety), '#ec5a50')
+        + row('energy', 'energy', tr3(T5.you), '#b07aff', 'sub') + row('rv', 'rover', tr3(T5.rvBat), '#9ccc3c', 'sub')
         + `<div class="m4sw">${Object.keys(MACH).map((k) => `<button class="sw" data-k="${k}" title="${tr3(MACH[k].n)}">${ico(MACH[k].ic, 20)}<b></b></button>`).join('')}</div>`
-        + `<div class="sci"><span>${ico('pack', 16)} ${tr3(T4.bag)}</span><span class="bag" data-b="bag"></span></div><div class="sci"><span>${ico('printer', 16)} ${tr3(T4.store)}</span><span class="bag" data-b="store"></span></div><button class="btn small ghost loopbtn" id="loopBtn">${ico('loop', 16)} ${tr3(T4.loopBtn)}</button>`;
+        + `<div class="m4mc"><span title="${tr3(T5.mc)}">${ico('coin', 18)} <b class="mcv"></b></span><span title="${tr3(T5.parts)}">${ico('part', 18)} <b class="ptv"></b></span><span class="bag" data-b="bag"></span></div>`
+        + `<div class="m4btns"><button class="btn small ghost" id="b4mis">${ico('compass', 16)} ${tr3(T5.missions)}</button><button class="btn small ghost" id="b4shop">${ico('cart', 16)} ${tr3(T5.shop)}</button><button class="btn small ghost" id="b4build">${ico('hammer', 16)} ${tr3(T5.build)}</button><button class="btn small ghost" id="b4loop">${ico('loop', 16)} ${tr3(T5.loop)}</button></div>`;
       box.querySelectorAll('.sw').forEach((b) => (b.onclick = () => { if (!G.control || S.over) return; const k = b.dataset.k; m.sw[k] = !m.sw[k]; SFX.pick(); renderMeters4(); buildLinks(); }));
-      box.querySelector('#loopBtn').onclick = () => { if (G.control) loopCard(() => { closePanel(); giveControl(); }); };
+      box.querySelector('#b4loop').onclick = () => { if (G.control) loopCard(() => { closePanel(); giveControl(); }); };
+      box.querySelector('#b4build').onclick = () => { if (!G.control || S.drive) return; S.build = !S.build; if (!S.build) { S.hold = null; setGhost(null); } SFX.pick(); renderInv(); renderMeters4(); };
+      box.querySelector('#b4shop').onclick = () => { if (G.control) shopPanel(); };
+      box.querySelector('#b4mis').onclick = () => { if (G.control) misPanel(); };
     }
-    const st = m.t % SOL, set = (id, v, max, txt) => { const r = box.querySelector(`[data-id="${id}"]`), p = Math.max(0, Math.min(1, v / max)); r.querySelector('.fill').style.width = p * 100 + '%'; r.querySelector('.n').textContent = txt; r.classList.toggle('low', id === 'dose' ? p > 0.7 : p < 0.25); };
-    box.querySelector('.m4ic').innerHTML = ico(m.night ? 'night' : 'sun', 20); box.querySelector('.m4sol').textContent = `${tr3(T4.sol)} ${Math.min(m.sol, NSOL)}/${NSOL}`; box.querySelector('.clk i').style.left = `calc(${st / SOL * 100}% - 2px)`;
-    const cap = batCap(); set('bat', m.bat, cap, `${m.gen > m.use + 0.005 ? '▲' : m.use > m.gen + 0.005 ? '▼' : ''}${Math.round(m.bat)}`);
-    set('water', m.water, 10, Math.round(m.water)); set('air', m.air, 10, Math.round(m.air)); set('food', m.food, 10, Math.round(m.food)); set('dose', m.dose, 100, Math.round(m.dose)); set('energy', m.energy, 10, Math.round(m.energy));
+    const st = m.t % SOL, set = (id, v, max, txt) => { const r = box.querySelector(`[data-id="${id}"]`), p = Math.max(0, Math.min(1, v / max)); r.querySelector('.fill').style.width = p * 100 + '%'; r.querySelector('.n').textContent = txt; r.classList.toggle('low', p < 0.3); };
+    box.querySelector('.m4ic').innerHTML = ico(m.night ? 'night' : 'sun', 20); box.querySelector('.m4sol').textContent = `${tr3(T4.sol)} ${m.sol}`; box.querySelector('.clk i').style.left = `calc(${st / SOL * 100}% - 2px)`;
+    const cap = batCap();
+    set('water', m.water, 10, Math.round(m.water)); set('air', m.air, 10, Math.round(m.air));
+    set('bat', m.bat, cap, `${m.gen > m.use + 0.005 ? '▲' : m.use > m.gen + 0.005 ? '▼' : ''}${Math.round(m.bat)}`);
+    set('food', m.food, 10, Math.round(m.food)); set('shield', shieldLvl(), 10, Math.round(shieldLvl())); set('safety', m.safety, 10, Math.round(m.safety));
+    set('energy', m.energy, 10, Math.round(m.energy)); set('rv', S.rv.bat, rvCap(), Math.round(S.rv.bat / rvCap() * 100) + '%');
     const w = box.querySelector('.m4warn'); w.hidden = !(m.stormIn > 0 || m.stormOn > 0); if (!w.hidden) w.innerHTML = `${ico('rad', 16)} ${m.stormOn > 0 ? tr3(T4.stormNow, Math.ceil(m.stormOn)) : tr3(T4.stormIn, Math.ceil(m.stormIn))}`;
-    box.querySelectorAll('.sw').forEach((b) => { const k = b.dataset.k, has = machines(k) > 0; b.hidden = !has; b.classList.toggle('off', !m.sw[k]); b.querySelector('b').textContent = tr3(m.sw[k] ? T4.on : T4.off); b.title = `${tr3(MACH[k].n)} · ${tr3(T4.power)} −${Math.round(MACH[k].pw * 100)}`; });
-    const items = (o) => ['ice', 'soil', 'sample'].map((k) => `<span class="bagi">${ico(k, 18)}${o[k]}</span>`).join('');
-    box.querySelector('[data-b="bag"]').innerHTML = items(S.bag); box.querySelector('[data-b="store"]').innerHTML = items(S.store);
+    box.querySelectorAll('.sw').forEach((b) => { const k = b.dataset.k, has = machines(k) > 0; b.hidden = !has; b.classList.toggle('off', !m.sw[k]); b.querySelector('b').textContent = tr3(m.sw[k] ? T4.on : T4.off); });
+    box.querySelector('.mcv').textContent = G.credits; box.querySelector('.ptv').textContent = S.parts;
+    box.querySelector('[data-b="bag"]').innerHTML = ['ice', 'soil', 'sample'].map((k) => `<span class="bagi">${ico(k, 18)}${S.bag[k] + S.store[k]}</span>`).join('');
+    const bb = box.querySelector('#b4build'); bb.classList.toggle('on', !!S.build); bb.classList.toggle('ghost', !S.build);
     let ch = false; S.placed.forEach((p) => { if (MACH[p.type]) { const o = m.sw[p.type] && m.run; if (p.on !== o) { p.on = o; ch = true; } } }); if (ch) { lamps(); buildLinks(); }
-    if (G.control && !S.over) setObjective('l4_obj');
+    if (G.control && !S.over) setObjective(S.drive ? 'l4_drive' : S.build || S.hold ? 'l4_build' : 'l4_obj');
   }
   // ---------- actions: collect, eat, clean, print ----------
   function collect(n) { n.taken = true; n.m.visible = false; S.bag[n.kind]++; SFX.pick(); burst(new T.Vector3(n.x, h(n.x, n.z) + 0.5, n.z), n.kind === 'ice' ? 0xbfe8ff : n.kind === 'soil' ? 0xc8602e : 0xd9a070, 14, 1.2, 1); renderMeters(); }
   function openPod() { S.podTaken = true; S.inv.solar += 2; S.inv.battery += 1; podLid.position.set(1.4, 0.2, 0.6); podLid.rotation.z = 1.2; SFX.success(); chip('solar', T4.podGot, 2600); renderInv(); renderMeters(); }
   function eat() { const m = S.m; if (m.food < 1) { SFX.nope(); return; } m.food -= 1; if (m.energy >= 7) { m.overeat++; m.energy = Math.min(10, m.energy + 1); chip('nope', T4.wasted, 2600); SFX.nope(); } else { m.energy = Math.min(10, m.energy + 5); chip('eat', T4.ate, 2000); SFX.success(); } renderMeters(); }
-  function cleanPanel(p) { const m = S.m; m.energy = Math.max(0, m.energy - 0.5); m.cleaned++; dirty(p, false); burst(p.obj.position.clone().add(new T.Vector3(0, 1.1, 0)), 0xfff2c4, 16, 1.4, 1); SFX.sparkle(); chip('clean', T4.cleaned, 1800); renderMeters(); }
+  function cleanPanel(p) { const m = S.m; m.energy = Math.max(0, m.energy - 0.5); m.cleaned++; dirty(p, false); burst(p.obj.position.clone().add(new T.Vector3(0, 1.1, 0)), 0xfff2c4, 16, 1.4, 1); SFX.sparkle(); chip('clean', T4.cleaned, 1800); if (S.lvl === 4) { earn(1); markFault(p); lamps(); } renderMeters(); }
   const hasCost = (c) => Object.entries(c).every(([k, v]) => S.store[k] >= v);
   function openPrinter() { let un = 0; for (const k in S.bag) { S.store[k] += S.bag[k]; un += S.bag[k]; S.bag[k] = 0; } if (un) SFX.success(); printerPanel(); }
   function printerPanel() {
     const nm = (r) => tr3(r.n || PCS[r.type].n);
     panel(`<div class="eyebrow">${tr3(T4.eyebrow)}</div><h2>${ico('printer', 32)} ${tr3(T4.printT)}</h2><p>${tr3(T4.printP)}</p><div class="storeRow">${['ice', 'soil', 'sample'].map((k) => `<span class="bagi big">${ico(k, 30)}${S.store[k]}</span>`).join('')}</div><div class="recipes">${RECIPES.map((r, i) => `<button class="opt evopt recipe" data-i="${i}" ${hasCost(r.cost) ? '' : 'disabled'}>${ico(r.type, 46, 'eic')}<span class="et">${nm(r)}</span><small>${tr3(r.d)}</small><span class="tags">${Object.entries(r.cost).map(([k, v]) => `<i>${ico(k, 16)} ×${v}</i>`).join('')}</span></button>`).join('')}<button class="opt evopt recipe" id="melt" ${S.store.ice ? '' : 'disabled'}>${ico('ice', 46, 'eic')}<span class="et">${tr3(T4.melt)}</span><small>${tr3(T4.meltD)}</small><span class="tags"><i>${ico('ice', 16)} ×1</i></span></button></div><div class="actions"><span></span><button class="btn green" id="pclose">${ico('check', 18)} ${tr3(T4.close)}</button></div>`, (el) => {
-      el.querySelectorAll('.recipe[data-i]').forEach((b) => (b.onclick = () => { const r = RECIPES[+b.dataset.i]; if (!hasCost(r.cost)) return; for (const [k, v] of Object.entries(r.cost)) S.store[k] -= v; S.inv[r.type]++; SFX.snap(); burst(printer.position.clone().add(new T.Vector3(0, 1.6, 0)), 0xffe2b8, 22, 1.5, 1); printerPanel(); }));
+      el.querySelectorAll('.recipe[data-i]').forEach((b) => (b.onclick = () => { const r = RECIPES[+b.dataset.i]; if (!hasCost(r.cost)) return; for (const [k, v] of Object.entries(r.cost)) S.store[k] -= v; if (r.type === 'part') S.parts++; else S.inv[r.type]++; SFX.snap(); burst(printer.position.clone().add(new T.Vector3(0, 1.6, 0)), 0xffe2b8, 22, 1.5, 1); printerPanel(); }));
       el.querySelector('#melt').onclick = () => { if (!S.store.ice) return; S.store.ice--; S.m.water = clamp10(S.m.water + 2); SFX.success(); printerPanel(); };
       el.querySelector('#pclose').onclick = () => { closePanel(); renderInv(); renderMeters(); giveControl(); };
     });
   }
   function action4() {
     if (S.over) return null;
+    if (S.drive) return driveAction();
+    if (S.build) return 'placed';
     let best = null, bd = 2.2; for (const n of nodes) { if (n.taken) continue; const d = Math.hypot(P.pos.x - n.x, P.pos.z - n.z); if (d < bd) { bd = d; best = n; } }
     if (best) { const at = best.m.position; if (bagTotal() >= BAG_MAX) return { at, r: 2.2, text: `<span class="why r">${ico('pack', 18)} ${tr3(T4.full)}</span>`, fn: () => SFX.nope() }; return { at, r: 2.2, text: `${ico(best.kind, 20)} ${tr3(T4.pick)}`, fn: () => collect(best) }; }
-    if (!S.podTaken && Math.hypot(P.pos.x - SITES.pod.x, P.pos.z - SITES.pod.z) < 3) return { at: podG.position, r: 3, text: `${ico('pod', 20)} ${tr3(T4.pod)}`, fn: openPod };
-    if (Math.hypot(P.pos.x - PR.i * TILE, P.pos.z - PR.j * TILE) < 3) return { at: printer.position, r: 3, text: `${ico('printer', 20)} ${tr3(T4.useP)}`, fn: openPrinter };
+    const pd = S.pods.find((q) => near(q, 3)); if (pd) return { at: pd.g.position, r: 3, text: `${ico('pod', 20)} ${tr3(T5.pod)}`, fn: () => openPod5(pd) };
+    if (!S.podTaken && near(SITES.pod, 3)) return { at: podG.position, r: 3, text: `${ico('pod', 20)} ${tr3(T4.pod)}`, fn: openPod };
+    if (near({ x: PR.i * TILE, z: PR.j * TILE }, 3)) return { at: printer.position, r: 3, text: `${ico('printer', 20)} ${tr3(T4.useP)}`, fn: openPrinter };
+    if (near(COMM, 3.4)) return { at: commG.position, r: 3.4, text: `${ico('antenna', 20)} ${tr3(T5.comm)}`, fn: commPanel };
+    if (near(S.rv, 3)) return { at: RV4.position, r: 3, text: `${ico('rover', 20)} ${tr3(T5.garage)} <span class="why ${S.rv.bat > 2 ? 'g' : 'y'}">${ico('battery', 16)} ${Math.round(S.rv.bat / rvCap() * 100)}%</span>`, fn: enterRover4 };
+    const ra = relayAction(); if (ra) return ra;
+    let fb = null, fd = 2.6; for (const p of problems()) { const d = Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z); if (d < fd) { fd = d; fb = p; } }
+    if (fb) return fixAction(fb);
+    for (const p of S.placed) {
+      if (Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z) > 2.6) continue;
+      if (p.type === 'greenhouse') return (p.crop || 0) >= 1 ? { at: p.obj.position, r: 2.6, text: `${ico('greenhouse', 20)} ${tr3(T5.harvest)} <span class="why g">${tr3(T5.harvestD)}</span>`, fn: () => harvest(p) } : { at: p.obj.position, r: 2.6, text: `${ico('greenhouse', 20)} ${tr3(T5.growing, Math.round((p.crop || 0) * 100))}`, fn: () => SFX.nope() };
+      if (p.type === 'lab' && S.store.sample + S.bag.sample > 0) return { at: p.obj.position, r: 2.6, text: `${ico('sample', 20)} ${tr3(T5.lab)} ×${S.store.sample + S.bag.sample}`, fn: () => study(p) };
+    }
     if (Math.hypot(P.pos.x - DOOR.x, P.pos.z - DOOR.z) < 1.8) return { at: new T.Vector3(DOOR.x, 0, DOOR.z), r: 1.8, text: `${ico('eat', 20)} ${tr3(T4.eat)} <span class="why ${S.m.energy >= 7 ? 'y' : 'g'}">${tr3(T4.eatD)}</span>`, fn: eat };
     if (Math.hypot(P.pos.x - tank.position.x, P.pos.z - tank.position.z) < 1.8) return { at: tank.position, r: 1.8, text: `${ico('tank', 20)} ${tr3(T4.tank)}`, fn: () => chip('tank', T4.tank, 3500) };
-    const dp = S.placed.find((p) => p.dirty && Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z) < 2.4);
-    if (dp) return { at: dp.obj.position, r: 2.4, text: `${ico('clean', 20)} ${tr3(T4.clean)} <span class="why y">${tr3(T4.cleanD)}</span>`, fn: () => cleanPanel(dp) };
-    return 'placed';
-  }
-  function target4() {
-    if (S.hold || S.over) return null; const m = S.m;
-    const go = (k) => ({ x: SITES[k].x, z: SITES[k].z }), toPr = { x: PR.i * TILE + 1.5, z: PR.j * TILE + 1.5 }, door = { x: DOOR.x, z: DOOR.z + 0.6 };
-    if (m.stormIn > 0 || m.stormOn > 0) return Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2 ? null : door;
-    if (m.energy < 2.5) return door;
-    if (bagTotal() >= BAG_MAX) return toPr;
-    const dp = S.placed.find((p) => p.dirty); if (dp) return { x: dp.obj.position.x, z: dp.obj.position.z };
-    if (!S.podTaken) return go('pod');
-    const hasRec = working('recycler') || S.inv.recycler;
-    if (!hasRec && S.store.soil + S.bag.soil < 2 && nodes.some((n) => n.kind === 'soil' && !n.taken)) return go('soil');
-    if (!hasRec && S.store.ice + S.bag.ice < 1 && nodes.some((n) => n.kind === 'ice' && !n.taken)) return go('ice');
-    if (!hasRec && hasCost(RECIPES[0].cost)) return toPr;
-    if (S.store.sample + S.bag.sample < 3 && nodes.some((n) => n.kind === 'sample' && !n.taken)) return go('sample');
-    if (bagTotal() > 0) return toPr;
     return null;
   }
-  function checklist4() {
-    const m = S.m;
-    return [1, 2, 3].map((n) => ({ ic: ico(n < 3 ? 'sun' : 'trophy', 18), t: tr3(T4.ck_sol, n), done: m.t >= n * SOL })).concat([
-      { ic: ico('recycle', 18), t: tr3(T4.ck_rec), done: working('recycler') > 0 },
-      { ic: ico('sample', 18), t: `${tr3(T4.ck_smp)} ${Math.min(S.store.sample, 3)}/3`, done: S.store.sample >= 3 },
-      { ic: ico('rad', 18), t: `${tr3(T4.ck_dose)} (${Math.round(m.dose)})`, done: m.dose < 50 && m.t >= NSOL * SOL },
-    ]);
+  function target4() {
+    if (S.hold || S.over || S.build) return null; const m = S.m;
+    const door = { x: DOOR.x, z: DOOR.z + 0.6 }, at = (p) => ({ x: p.obj.position.x, z: p.obj.position.z });
+    if (m.stormIn > 0 || m.stormOn > 0) return Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2 ? null : door;
+    if (S.drive) { if (S.mis.rescue === 1) return { x: 0, z: 5 }; if (S.rv.bat < 1.5) return { x: GAR.x, z: GAR.z }; return null; }
+    if (m.energy < 2.5) return door;
+    let best = null, bd = 1e9; for (const p of problems()) { const d = Math.hypot(P.pos.x - p.obj.position.x, P.pos.z - p.obj.position.z); if (d < bd) { bd = d; best = p; } }
+    if (best) return at(best);
+    const ripe = S.placed.find((p) => p.type === 'greenhouse' && (p.crop || 0) >= 1 && !p.fault); if (ripe) return at(ripe);
+    if (S.pods.length) return { x: S.pods[0].x, z: S.pods[0].z };
+    if (!S.today.report && m.sw.comm) return { x: COMM.x, z: COMM.z + 2.2 };
+    if (bagTotal() >= BAG_MAX) return { x: PR.i * TILE + 1.5, z: PR.j * TILE + 1.5 };
+    return null;
   }
-  function mapDots4() { return [{ x: 0, z: -400, img: ICONS.img('sun') }, { x: 0, z: 0, img: ICONS.img('hab') }, { x: PR.i * TILE, z: PR.j * TILE, img: ICONS.img('printer') }, ...['ice', 'soil', 'sample'].filter((k) => nodes.some((n) => n.kind === k && !n.taken)).map((k) => ({ x: SITES[k].x, z: SITES[k].z, img: ICONS.img(k) })), ...(S.podTaken ? [] : [{ x: SITES.pod.x, z: SITES.pod.z, img: ICONS.img('pod') }]), ...S.placed.map((p) => ({ x: p.obj.position.x, z: p.obj.position.z, img: ICONS.img(p.type) }))]; }
+  function checklist4() { if (!S.tasks) return []; return S.tasks.map((k) => ({ ic: ico(TKI[k], 18), t: tr3(T5['tk_' + k]), done: tkDone(k) })); }
+  function mapDots4() {
+    const d = [{ x: 0, z: -400, img: ICONS.img('sun') }, { x: 0, z: 0, img: ICONS.img('hab') }, { x: COMM.x, z: COMM.z, img: ICONS.img('antenna') }, { x: GAR.x, z: GAR.z, img: ICONS.img('rover') }, { x: PR.i * TILE, z: PR.j * TILE, img: ICONS.img('printer') }];
+    problems().forEach((p) => d.push({ x: p.obj.position.x, z: p.obj.position.z, img: ICONS.img('fix') }));
+    S.pods.forEach((p) => d.push({ x: p.x, z: p.z, img: ICONS.img('pod') }));
+    FLAGS.forEach((k) => { if (!S.mis.flags[k]) d.push({ x: FAR[k].x, z: FAR[k].z, img: ICONS.img('flag') }); });
+    if (S.m.sol >= 2 && S.mis.rescue === 0) d.push({ x: FAR.rescue.x, z: FAR.rescue.z, img: ICONS.img('sos') });
+    if (S.m.sol >= 2 && !S.mis.repair) d.push({ x: FAR.relay.x, z: FAR.relay.z, img: ICONS.img('fix') });
+    if (!S.drive) d.push({ x: S.rv.x, z: S.rv.z, img: ICONS.img('rover') });
+    return d;
+  }
   function update4(dt, time) {
     flows(dt); walkCrew(dt);
     for (const n of nodes) if (!n.taken) n.m.userData.ic.position.y = 1.4 + Math.sin(time * 2 + n.x) * 0.1;
     const m = S.m; if (!m) return;
     const s = Math.max(0.03, m.used / 10) * 1.25; tankFill.scale.y = s; tankFill.position.y = 0.06 + s / 2;
-    const running = m.started && !S.over && G.control && barVisible();
+    const running = m.started && !S.over && G.control && freeView();
     if (running) sim(dt);
+    if (!S || S.lvl !== 4) return;
+    tick5(dt, time, running);
     if (S.over) return;
     const st = m.t % SOL, day = st < DAY ? Math.min(1, st / 5 + 0.15, (DAY - st) / 6 + 0.1) : Math.max(0, Math.min(1, (st - SOL + 4) / 4));
     dayLight(Math.max(0, Math.min(1, day)), st / SOL, { dust: m.dustT > 0 });
@@ -5388,25 +5525,440 @@ const MARS = (() => {
     const rows = [['sun', T4.b_sol], ['power', T4.b_pow], ['oxygen', T4.b_life], ['rad', T4.b_rad], ['energy', T4.b_en], ['heater', T4.b_sw]];
     panel(`<div class="eyebrow">${tr3(T4.eyebrow)}</div><h2>${ico('compass', 32)} ${tr3(T4.briefT)}</h2><div class="facts">${rows.map(([ic, t]) => `<div class="fact"><span class="ic">${ico(ic, 26)}</span><span>${tr3(t)}</span></div>`).join('')}</div><div class="actions"><span></span><button class="btn green" id="bgo">${ico('sun', 20)} ${tr3(T4.go)}</button></div>`, (el) => { el.querySelector('#bgo').onclick = after; });
   }
-  function clear4() { crew.forEach((c) => W4.remove(c)); crew = []; extras.forEach((e) => W4.remove(e)); extras = []; dots.forEach((d) => { d.t = 1; d.m.visible = false; }); links = []; vig.hidden = true; }
-  function start4() {
+  // ============================== LEVEL 4: Life on Mars. The base is already built: keep it running, fix it, grow it ==============================
+  const COMM = { x: -18, z: 3 }, GAR = { x: 18, z: 4 }, DROP = { x: -13, z: 15 };
+  const FAR = { rescue: { x: 64, z: 46 }, relay: { x: -66, z: -40 }, cave: { x: -26, z: 70 }, dunes: { x: 80, z: -12 }, rim: { x: 26, z: -72 } };
+  const FLAGS = ['cave', 'dunes', 'rim'];
+  const F5 = {
+    chapea: L4('Real: in NASA’s CHAPEA test, 4 volunteers lived 378 days in a 3D-printed pretend Mars home, growing vegetables and fixing broken gear.', 'حقيقة: في تجربة CHAPEA التابعة لناسا عاش 4 متطوعين 378 يوماً في بيت مريخي تجريبي مطبوع، يزرعون الخضار ويصلحون المعدات المعطّلة.'),
+    water: L4('Real: each astronaut needs about 4 liters of water a day. The space station recycles 98% of its water.', 'حقيقة: يحتاج كل رائد فضاء نحو 4 لترات ماء يومياً. محطة الفضاء تعيد تدوير 98% من مائها.'),
+    air: L4('Real: one person breathes about 0.84 kg of oxygen a day.', 'حقيقة: يتنفّس الشخص الواحد نحو 0.84 كغ من الأكسجين يومياً.'),
+    filter: L4('Real: on the space station, the filters that take out the CO₂ we breathe out get clogged, so astronauts clean or swap them.', 'حقيقة: في محطة الفضاء تنسدّ الفلاتر التي تزيل ثاني أكسيد الكربون الذي نزفره، فينظّفها الروّاد أو يبدّلونها.'),
+    leak: L4('Real: astronauts on the space station hunt for tiny leaks with special detectors and patch them.', 'حقيقة: يبحث روّاد محطة الفضاء عن التسريبات الصغيرة بأجهزة خاصة ويسدّونها.'),
+    plants: L4('Real: in 2016, zinnia flowers on the space station got sick from too much water. Astronaut Scott Kelly dried them out and saved them!', 'حقيقة: في 2016 مرضت أزهار الزينيا في محطة الفضاء من كثرة الماء، فجفّفها رائد الفضاء سكوت كيلي وأنقذها!'),
+    plants2: L4('Real: astronauts grew and ate lettuce on the space station in NASA’s Veggie garden.', 'حقيقة: زرع الروّاد الخسّ وأكلوه في محطة الفضاء في حديقة Veggie التابعة لناسا.'),
+    cargo: L4('Real: cargo from Earth takes about 7 months, and the best launch windows come only every 26 months. Plan ahead!', 'حقيقة: الشحنة من الأرض تحتاج نحو 7 أشهر، وأفضل نوافذ الإطلاق تأتي كل 26 شهراً فقط. خطّط مسبقاً!'),
+    lab: L4('Real: Perseverance seals rock cores in tubes so scientists can one day study them on Earth.', 'حقيقة: تحفظ بيرسيفيرانس عينات الصخور في أنابيب مغلقة ليدرسها العلماء يوماً ما على الأرض.'),
+    dust: L4('Real: wind gusts and dust devils cleaned the dusty panels of NASA’s Spirit rover and brought its power back to over 90%.', 'حقيقة: نظّفت هبّات الرياح والدوّامات الغبارية ألواح مركبة سبيريت المغبرّة وأعادت كهرباءها لأكثر من 90%.'),
+    cave: L4('Real: orbiters have spotted cave openings on Mars. The rock above a cave could shield a base from radiation.', 'حقيقة: رصدت المركبات المدارية فتحات كهوف على المريخ. الصخر فوق الكهف قد يحمي القاعدة من الإشعاع.'),
+    dunes: L4('Real: Mars dunes move! NASA’s HiRISE camera watched them creep along over a few years.', 'حقيقة: كثبان المريخ تتحرك! رصدتها كاميرا HiRISE التابعة لناسا تزحف على مدى بضع سنوات.'),
+    rim: L4('Real: Curiosity has been climbing Mount Sharp for over 10 years, reading the rock layers like pages of a history book.', 'حقيقة: تتسلّق كيوريوسيتي جبل شارب منذ أكثر من 10 سنوات، وتقرأ طبقات الصخر كصفحات كتاب تاريخ.'),
+    relay: L4('Real: there is no repair shop 225 million km from Earth. On Mars, the crew must fix things themselves.', 'حقيقة: لا يوجد محل تصليح على بُعد 225 مليون كم من الأرض. على المريخ يصلح الطاقم الأشياء بنفسه.'),
+    rescue: L4('Real: astronauts do spacewalks in pairs, so they can always help each other.', 'حقيقة: يخرج روّاد الفضاء في أزواج، ليساعد كل منهم الآخر دائماً.'),
+  };
+  const MIS = [
+    { k: 'science', ic: 'sample', mc: 24, n: L4('Science: study 3 rock samples', 'علم: ادرس 3 عينات صخرية'), d: L4('Collect samples from the cliffs and study them in the lab.', 'اجمع العينات من المنحدرات وادرسها في المختبر.') },
+    { k: 'explore', ic: 'flag', mc: 30, n: L4('Explore 3 new places', 'استكشف 3 أماكن جديدة'), d: L4('Drive the rover to the 3 orange flags.', 'قُد المركبة إلى الأعلام البرتقالية الثلاثة.') },
+    { k: 'repair', ic: 'fix', mc: 25, from: 2, n: L4('Repair the far power station', 'أصلح محطة الطاقة البعيدة'), d: L4('Take a spare part to the broken solar station. Then it sends power to the base.', 'خذ قطعة غيار إلى المحطة الشمسية المعطّلة، فترسل الكهرباء إلى القاعدة.') },
+    { k: 'rescue', ic: 'sos', mc: 40, from: 2, n: L4('Rescue a stuck astronaut', 'أنقذ رائد فضاء عالقاً'), d: L4('A geologist’s buggy broke down. Drive out and bring them home.', 'تعطّلت مركبة عالِمة جيولوجيا. اذهب بالمركبة وأعِدها إلى القاعدة.') },
+  ];
+  const UPS = [
+    { k: 'coat', ic: 'solar', p: 30, n: L4('Dust-proof panel coating', 'طلاء يصدّ الغبار'), d: L4('Dusty panels keep more power.', 'الألواح المغبرّة تحتفظ بكهرباء أكثر.') },
+    { k: 'rec98', ic: 'recycle', p: 35, n: L4('Better recycler (98%)', 'مُعيد تدوير أفضل (98%)'), d: L4('Cleans used water faster, like the space station.', 'ينظّف الماء المستعمل أسرع، مثل محطة الفضاء.') },
+    { k: 'led', ic: 'greenhouse', p: 30, n: L4('LED grow lights', 'أضواء نمو LED'), d: L4('Crops grow faster.', 'المحاصيل تنمو أسرع.') },
+    { k: 'bigbat', ic: 'battery', p: 30, n: L4('Bigger battery packs', 'بطاريات أكبر'), d: L4('Each battery stores more for the night.', 'كل بطارية تخزّن أكثر لليل.') },
+    { k: 'rvBat', ic: 'battery', p: 20, n: L4('Rover long battery', 'بطارية طويلة للمركبة'), d: L4('Drive farther before charging.', 'قُد أبعد قبل الشحن.') },
+    { k: 'rvFast', ic: 'rover', p: 20, n: L4('Rover strong motors', 'محرّكات قوية للمركبة'), d: L4('Drive faster.', 'قُد أسرع.') },
+  ];
+  const LOOKS = [
+    { k: 'blue', c: 0x8fc4ff, p: 12, n: L4('Sky blue suit', 'بدلة زرقاء') },
+    { k: 'mint', c: 0x9fe3c4, p: 12, n: L4('Mint suit', 'بدلة نعناعية') },
+    { k: 'lilac', c: 0xc9b2f2, p: 15, n: L4('Lilac suit', 'بدلة ليلكية') },
+    { k: 'gold', boot: 0xffc22e, p: 10, n: L4('Gold boots', 'حذاء ذهبي') },
+  ];
+  const ORDERS = [
+    { k: 'parts', ic: 'part', p: 12, eta: 1, n: L4('2 spare parts', 'قطعتا غيار'), give: (s) => { s.parts += 2; } },
+    { k: 'seeds', ic: 'greenhouse', p: 10, eta: 1, n: L4('Seeds + plant food', 'بذور وغذاء نبات'), give: (s) => { s.seedBoost = 3; } },
+    { k: 'rations', ic: 'eat', p: 15, eta: 2, n: L4('Emergency food packs', 'وجبات طوارئ'), give: (s) => { s.m.food = clamp10(s.m.food + 4); } },
+    { k: 'solar', ic: 'solar', p: 25, eta: 2, n: PCS.solar.n, give: (s) => { s.inv.solar++; } },
+    { k: 'battery', ic: 'battery', p: 25, eta: 2, n: PCS.battery.n, give: (s) => { s.inv.battery++; } },
+    { k: 'greenhouse', ic: 'greenhouse', p: 35, eta: 2, n: PCS.greenhouse.n, give: (s) => { s.inv.greenhouse++; } },
+  ];
+  const TKI = { fix: 'fix', harvest: 'greenhouse', report: 'antenna', keep: 'safety', study: 'sample' };
+  const RES = [['water', 'ice', 'water'], ['air', 'oxygen', 'oxy'], ['bat', 'power', 'power'], ['food', 'greenhouse', 'food'], ['shield', 'shield', 'shield'], ['safety', 'safety', 'safety']];
+  const earn = (n) => { if (!n) return; SHOP.add(n); if (S && S.today) S.today.mc += n; };
+  const faultN = (f, type) => S.placed.filter((p) => p.fault === f && (!type || p.type === type)).length;
+  const problems = () => S.placed.filter((p) => p.fault || p.dirty || p.broken || p.crack);
+  const near = (o, r) => Math.hypot(P.pos.x - o.x, P.pos.z - o.z) < r;
+  const shieldLvl = () => clamp10(goodWalls() * 1.8);
+  const rvCap = () => (S.up.rvBat ? 16 : 10);
+  const sprite = (ic, s) => { const sp = new T.Sprite(new T.SpriteMaterial({ map: ICONS.tex(ic), transparent: true, depthWrite: false })); sp.scale.setScalar(s); return sp; };
+  const LL = (o, ...a) => ({ en: o.en(...a), ar: o.ar(...a) });
+
+  // ---------- the radio station, the rover garage and the rover ----------
+  const commG = new T.Group(); commG.position.set(COMM.x, 0, COMM.z); W4.add(commG);
+  { const wM = mat(0xf2efe8, { roughness: 0.5 }), nM = mat(0x2f4170), oM = mat(0xec8a3c);
+    mesh(new T.BoxGeometry(2.2, 1.4, 1.8), wM, 0, 0.7, 0, commG); mesh(new T.BoxGeometry(2.3, 0.15, 1.9), nM, 0, 1.45, 0, commG);
+    mesh(new T.BoxGeometry(0.7, 1.0, 0.08), nM, -0.5, 0.55, 0.92, commG);
+    mesh(new T.CylinderGeometry(0.1, 0.14, 3.2, 8), nM, 0.6, 3, -0.3, commG);
+    const dish = mesh(new T.SphereGeometry(1.1, 22, 10, 0, Math.PI * 2, 0, Math.PI / 3.2), mat(0xf2efe8, { side: T.DoubleSide, roughness: 0.4 }), 0.6, 4.5, -0.3, commG); dish.rotation.x = -0.8; commG.userData.dish = dish;
+    commG.userData.blink = mesh(new T.SphereGeometry(0.14, 10, 8), new T.MeshBasicMaterial({ color: 0xff4a3a }), 0.6, 4.7, -0.3, commG, false);
+    mesh(new T.BoxGeometry(2.24, 0.12, 0.06), oM, 0, 1.1, 0.92, commG);
+    const ic = sprite('antenna', 0.9); ic.position.set(-0.6, 2.4, 0.9); commG.add(ic);
+    commG.traverse((o) => { if (o.isMesh) o.castShadow = true; }); }
+  const garG = new T.Group(); garG.position.set(GAR.x, 0, GAR.z); W4.add(garG);
+  { const oM = mat(0xec8a3c), nM = mat(0x2f4170);
+    mesh(new T.BoxGeometry(5, 0.12, 6.4), mat(0x8a909a, { roughness: 0.8 }), 0, 0.06, 0, garG, false).receiveShadow = true;
+    const roof = mesh(new T.CylinderGeometry(2.8, 2.8, 6, 24, 1, true, -Math.PI / 2, Math.PI), mat(0xf2efe8, { side: T.DoubleSide, roughness: 0.5 }), 0, 0.3, 0, garG); roof.rotation.x = -Math.PI / 2;
+    [-3, 3].forEach((z) => { const r = mesh(new T.TorusGeometry(2.8, 0.1, 8, 24, Math.PI), oM, 0, 0.3, z, garG); r.rotation.y = 0; });
+    mesh(new T.BoxGeometry(0.6, 1.1, 0.4), nM, 2.0, 0.6, -2.6, garG); garG.userData.plug = mesh(new T.SphereGeometry(0.1, 10, 8), new T.MeshBasicMaterial({ color: 0x9ccc3c }), 2.0, 1.25, -2.4, garG, false);
+    const ic = sprite('rover', 1.0); ic.position.set(0, 3.7, 3.1); garG.add(ic);
+    garG.traverse((o) => { if (o.isMesh) o.castShadow = true; }); }
+  const GAR_SOL = [[-2.7, -2.6], [2.7, -2.6], [-2.7, 2.6], [2.7, 2.6], [-2.7, 0], [2.7, 0]].map(([x, z]) => ({ x: GAR.x + x, z: GAR.z + z, r: 0.45 }));
+  const RV4 = new T.Group(); RV4.rotation.order = 'YXZ'; W4.add(RV4); const rvWheels = [];
+  { const whiteM = mat(0xf4f1ea, { roughness: 0.5 }), orM = mat(0xec8a3c), steelM = mat(0xb8c0cc, { metalness: 0.6, roughness: 0.4 }), nvM = mat(0x1f3a68), panelM = new T.MeshStandardMaterial({ map: solarTex, roughness: 0.3, metalness: 0.3 });
+    mesh(new T.BoxGeometry(1.3, 0.45, 1.9), whiteM, 0, 0.85, 0, RV4); mesh(new T.BoxGeometry(1.34, 0.1, 1.94), orM, 0, 0.62, 0, RV4);
+    mesh(new T.BoxGeometry(1.7, 0.06, 1.0), panelM, 0, 1.13, -0.45, RV4);
+    mesh(new T.CylinderGeometry(0.05, 0.05, 0.9, 8), steelM, 0, 1.55, 0.7, RV4);
+    mesh(new T.BoxGeometry(0.5, 0.26, 0.28), whiteM, 0, 2.05, 0.72, RV4);
+    [-0.12, 0.12].forEach((x) => { mesh(new T.CylinderGeometry(0.07, 0.07, 0.06, 14), nvM, x, 2.05, 0.87, RV4, false).rotation.x = Math.PI / 2; mesh(new T.SphereGeometry(0.035, 8, 6), new T.MeshBasicMaterial({ color: 0x6fe0ff }), x, 2.05, 0.9, RV4, false); });
+    mesh(new T.BoxGeometry(0.9, 0.3, 0.6), nvM, 0, 1.2, 0.3, RV4);
+    [-0.75, 0.75].forEach((x) => [-0.7, 0, 0.7].forEach((z) => { const pv = new T.Group(); pv.position.set(x, 0.32, z); RV4.add(pv); const w = mesh(new T.CylinderGeometry(0.32, 0.32, 0.24, 16), mat(0x3a3f4a, { roughness: 0.9 }), 0, 0, 0, pv); w.rotation.z = Math.PI / 2; mesh(new T.CylinderGeometry(0.14, 0.14, 0.26, 10), steelM, 0, 0, 0, pv).rotation.z = Math.PI / 2; rvWheels.push(pv); }));
+    RV4.traverse((o) => { if (o.isMesh) o.castShadow = true; }); }
+  const rvSolid = { x: GAR.x, z: GAR.z, r: 1.2 };
+  // the stuck astronaut and their broken buggy
+  const resG = new T.Group(); resG.position.set(FAR.rescue.x, h(FAR.rescue.x, FAR.rescue.z), FAR.rescue.z); W4.add(resG);
+  const stuck = makeCrew(); stuck.userData.vis = mesh(new T.BoxGeometry(0.42, 0.06, 0.02), mat(0x5fb8ff), 0, 0.86, 0.25, stuck);
+  { const b = mesh(new T.BoxGeometry(1.2, 0.4, 1.7), mat(0xf4f1ea), 0, 0.45, 0, resG); b.rotation.z = 0.25; mesh(new T.CylinderGeometry(0.3, 0.3, 0.2, 14), mat(0x3a3f4a), -1.1, 0.25, 0.9, resG).rotation.x = 1.3; }
+  const beacon = mesh(new T.SphereGeometry(0.2, 10, 8), new T.MeshBasicMaterial({ color: 0xff4a3a }), 0, 1.0, 0, resG, false);
+  const resIc = sprite('sos', 1.4); resIc.position.set(0.8, 3.4, 0); resG.add(resIc);
+  // the far solar power station
+  const relG = new T.Group(); relG.position.set(FAR.relay.x, h(FAR.relay.x, FAR.relay.z), FAR.relay.z); W4.add(relG);
+  for (let i = 0; i < 3; i++) { const p = makeBuilding('solar'); p.position.set(-3.2 + i * 3.2, 0, -2); if (p.userData.arrow) p.userData.arrow.visible = false; p.traverse((o) => { if (o.isSprite) o.visible = false; }); relG.add(p); }
+  mesh(new T.BoxGeometry(1.4, 1.2, 1.2), mat(0xf2efe8), 0, 0.6, 1.2, relG);
+  const relLamp = mesh(new T.SphereGeometry(0.2, 10, 8), new T.MeshBasicMaterial({ color: 0xec5a50 }), 0, 1.45, 1.2, relG, false);
+  const relIc = sprite('fix', 1.3); relIc.position.set(0, 3.3, 1.2); relG.add(relIc);
+  // flags at places to explore (plus a cave mouth)
+  const flagG = {};
+  FLAGS.forEach((k) => { const f = FAR[k], g = new T.Group(); g.position.set(f.x, h(f.x, f.z), f.z); W4.add(g);
+    mesh(new T.CylinderGeometry(0.06, 0.06, 3.2, 6), mat(0xdde3ea), 0, 1.6, 0, g);
+    const cl = mesh(new T.PlaneGeometry(1.3, 0.8), mat(0xec8a3c, { side: T.DoubleSide }), 0.66, 2.8, 0, g, false);
+    const ring = mesh(new T.TorusGeometry(4, 0.14, 8, 40), new T.MeshBasicMaterial({ color: 0xffc22e, transparent: true, opacity: 0.75 }), 0, 0.25, 0, g, false); ring.rotation.x = Math.PI / 2;
+    const ic = sprite('flag', 1.2); ic.position.y = 4.3; g.add(ic); g.userData = { cl, ring, ic }; flagG[k] = g; });
+  { const f = FAR.cave, y = h(f.x, f.z - 9); const hill = mesh(new T.SphereGeometry(7, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat(0x8f3d20, { roughness: 1 }), f.x, y - 1.2, f.z - 10, W4); hill.scale.y = 0.8;
+    const hole = mesh(new T.CircleGeometry(2.4, 20, 0, Math.PI), new T.MeshBasicMaterial({ color: 0x120806 }), f.x, y - 1.1, f.z - 3.35, W4, false); hole.rotation.x = -0.15; }
+
+  // ---------- small helpers ----------
+  function markFault(p) { const bad = !!(p.fault || p.dirty || p.broken || p.crack); if (bad && !p.fm) { p.fm = sprite('fix', 0.9); p.fm.position.y = 2.9; p.obj.add(p.fm); } if (p.fm) p.fm.visible = bad; }
+  function setFault(p, f) { p.fault = f; markFault(p); lamps(); buildLinks(); }
+  function put(type, i, j, rot = 0) {
+    const obj = makeBuilding(type); obj.position.set(i * TILE, 0, j * TILE); obj.rotation.y = rot; obj.traverse((o) => { if (o.isMesh && o !== obj.userData.arrow) o.castShadow = true; }); W.add(obj);
+    const p = { type, i, j, rot, obj, on: true, q: 1, crop: 0.5, solid: { x: i * TILE, z: j * TILE, r: 1.0 } }; S.placed.push(p); solids.push(p.solid); return p;
+  }
+  function useSoil(n) { const a = Math.min(S.bag.soil, n); S.bag.soil -= a; S.store.soil -= n - a; }
+  function applyLook() {
+    if (!S || !S.look) return; const u = girl.userData, s = LOOKS.find((l) => l.k === S.look.suit), b = LOOKS.find((l) => l.k === S.look.boot);
+    u.navyM.color.set(s ? s.c : 0xeef1f6); u.bootM.color.set(b ? b.boot : 0xec8a3c);
+  }
+  function resVals() { const m = S.m; return { water: m.water, air: m.air, bat: m.bat / batCap() * 10, food: m.food, shield: shieldLvl(), safety: m.safety }; }
+  function snapshot() { const m = S.m; return { v: resVals(), raw: { bat: m.bat, water: m.water, air: m.air, food: m.food, used: m.used, energy: m.energy, safety: m.safety, dose: m.dose, t: m.t } }; }
+  function tkDone(k) {
+    const d = S.today;
+    if (k === 'fix') return problems().length === 0;
+    if (k === 'harvest') return d.harvest > 0;
+    if (k === 'report') return d.report;
+    if (k === 'keep') return d.minRes > 3;
+    if (k === 'study') return d.study > 0;
+    return false;
+  }
+  function tiles(now, before) {
+    return `<div class="rep">${RES.map(([k, ic, n]) => { const v = now[k], cls = v < 3 ? 'low' : v >= 6 ? 'good' : ''; let ch;
+      if (before) { const d = v - before[k]; ch = Math.abs(d) < 0.5 ? `<small>${tr3(T5.same)}</small>` : `<small class="${d > 0 ? 'up' : 'dn'}">${d > 0 ? '▲' : '▼'} ${tr3(d > 0 ? T5.better : T5.worse)}</small>`; }
+      else ch = `<small>${tr3(v < 3 ? T5.low : v >= 6 ? T5.good : T5.okay)}</small>`;
+      return `<div class="rt ${cls}">${ico(ic, 30)}<small>${tr3(T5[n])}</small><b>${Math.round(v)}</b>${ch}</div>`; }).join('')}</div>`;
+  }
+  // ---------- the daily cycle: morning report, inspect, decide, a surprise event, end of day ----------
+  function makeDeck5() { return ['dust', ...['water', 'greenhouse', 'storm', 'quake'].sort(() => Math.random() - 0.5)]; }
+  function rollFaults(sol) {
+    const dust2 = () => S.placed.filter((p) => p.type === 'solar' && !p.dirty).slice(0, 2).forEach((p) => dirty(p, true));
+    if (sol === 1) { dust2(); return; }
+    const n = sol >= 4 ? 2 : 1;
+    for (let i = 0; i < n; i++) {
+      const f = ['dust', 'filter', 'crack'][Math.floor(Math.random() * 3)];
+      if (f === 'dust') dust2();
+      else if (f === 'filter') { const o = S.placed.find((p) => p.type === 'oxygen' && !p.fault); if (o) setFault(o, 'filter'); else dust2(); }
+      else { const w = S.placed.find((p) => p.type === 'shield' && !p.crack); if (w) { w.crack = true; markFault(w); } }
+    }
+    lamps();
+  }
+  function dropPod(o) {
+    const g = new T.Group(), x = DROP.x + S.pods.length * 3.2, z = DROP.z; g.position.set(x, 0, z); W4.add(g);
+    mesh(new T.BoxGeometry(1.5, 1.2, 1.5), mat(0xe8e4dc), 0, 0.6, 0, g); mesh(new T.BoxGeometry(1.6, 0.22, 1.6), mat(0xec8a3c), 0, 1.3, 0, g);
+    const od = ORDERS.find((q) => q.k === o.k), ic = sprite(od ? od.ic : 'pod', 0.8); ic.position.y = 2.2; g.add(ic); g.userData.ic = ic;
+    const solid = { x, z, r: 1.1 }; solids.push(solid); S.pods.push({ g, k: o.k, x, z, solid });
+  }
+  function openPod5(pd) {
+    const od = ORDERS.find((q) => q.k === pd.k); if (od) od.give(S);
+    W4.remove(pd.g); solids.splice(solids.indexOf(pd.solid), 1); S.pods.splice(S.pods.indexOf(pd), 1);
+    SFX.success(); burst(new T.Vector3(pd.x, 1, pd.z), 0xffd27a, 24, 2, 1);
+    chip(od ? od.ic : 'pod', ['solar', 'battery', 'greenhouse'].includes(pd.k) ? T5.placeIt : od ? od.n : T5.pod, 3200); renderInv(); renderMeters(); save5();
+  }
+  function morning(resume) {
+    const m = S.m; G.control = false; P.vel.set(0, 0, 0); P.speed = 0;
+    m.t = (m.sol - 1) * SOL; m.night = false; m.zero = {}; m.dustT = 0;
+    nodes.forEach((n) => { n.taken = false; n.m.visible = true; });
+    if (!resume) { rollFaults(m.sol); if (S.seedBoost) S.seedBoost--; }
+    const due = S.orders.filter((o) => o.at <= m.sol); S.orders = S.orders.filter((o) => o.at > m.sol); due.forEach(dropPod);
+    if (!resume || !S.tasks.length) S.tasks = ['fix', 'harvest', 'report', m.sol % 2 ? 'keep' : 'study'];
+    S.today = { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 };
+    m.events = [{ kind: S.deck[(m.sol - 1) % S.deck.length], at: (m.sol - 1) * SOL + 18 + Math.random() * 22, done: false }];
+    m.stormIn = 0; m.stormOn = 0; vig.hidden = true;
+    S.am = snapshot(); save5(); regrade(); lamps(); buildLinks();
+    const pr = problems().length, facts = [F5.chapea, F5.water, F5.air, F5.plants2, F5.cargo, F5.lab, F5.dust], f = facts[(m.sol - 1) % facts.length];
+    SFX.discover();
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('report', 32)} ${tr3(T5.morningT, m.sol)}</h2><p>${tr3(T5.morningP)}</p>${tiles(resVals())}`
+      + `<div class="tasks4"><div>${ico('suit', 22)} ${tr3(T5.crew, CREW)}</div><div class="${pr ? 'bad' : 'ok'}">${ico(pr ? 'fix' : 'check', 22)} ${pr ? tr3(T5.scan, pr) : tr3(T5.scan0)}</div>${due.length ? `<div class="ok">${ico('pod', 22)} ${tr3(T5.arrive)}</div>` : ''}${m.sol === 2 ? `<div class="bad">${ico('sos', 22)} ${tr3(T5.sosMsg)}</div>` : ''}</div>`
+      + `<div class="eyebrow">${tr3(T5.tasksT)}</div><div class="tasks4">${S.tasks.map((k) => `<div>${ico(TKI[k], 22)} ${tr3(T5['tk_' + k])}<span class="mc">${ico('coin', 16)} 5</span></div>`).join('')}</div>`
+      + `<div class="fact"><span class="ic">${ico('book', 26)}</span><span>${tr3(f)}</span></div><div class="actions"><span></span><button class="btn green" id="mgo">${ico('sun', 20)} ${tr3(T5.startDay)}</button></div>`,
+    (el) => { el.querySelector('#mgo').onclick = () => { closePanel(); renderInv(); renderMeters(); giveControl(); }; });
+  }
+  function endOfDay() {
+    const m = S.m, n = m.sol - 1; G.control = false; P.vel.set(0, 0, 0); P.speed = 0; vig.hidden = true;
+    if (S.drive) exitRover4(true);
+    const done = S.tasks.filter(tkDone).length, healthy = ['water', 'air', 'food'].every((k) => m[k] >= 5) ? 5 : 0;
+    earn(done * 5 + healthy);
+    const safe = m.safety >= 6 && ['water', 'air', 'food'].every((k) => m[k] >= 3);
+    if (safe) SFX.fanfare(); else SFX.alarm();
+    const tips = ['water', 'air', 'food'].filter((k) => m[k] < 3 && T4.tip[k]).map((k) => `<div class="fact"><span class="ic">${ico('tip', 26)}</span><span>${tr3(T4.tip[k])}</span></div>`).join('');
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('night', 32)} ${tr3(T5.endT, n)}</h2><p>${tr3(T5.endP)}</p>${tiles(resVals(), S.am.v)}`
+      + `<div class="tasks4">${S.tasks.map((k) => { const ok = tkDone(k); return `<div class="${ok ? 'ok' : 'bad'}">${ico(ok ? 'check' : 'nope', 20)} ${tr3(T5['tk_' + k])}<span class="mc">${ok ? '+5' : ''}</span></div>`; }).join('')}${healthy ? `<div class="ok">${ico('check', 20)} ${tr3(T5.healthy)}<span class="mc">+5</span></div>` : ''}</div>`
+      + `<p class="evt"><b>${ico('coin', 22)} ${tr3(T5.earned, S.today.mc)}</b></p><p class="evt"><span class="why ${safe ? 'g' : 'y'}">${ico(safe ? 'check' : 'tip', 18)} ${tr3(safe ? T5.safeY : T5.safeN)}</span></p>${tips}`
+      + `<div class="actions"><span></span><button class="btn green" id="ego">${ico('sun', 20)} ${tr3(T5.nextDay)}</button></div>`,
+    (el) => { el.querySelector('#ego').onclick = async () => { closePanel(); if (n >= NSOL && !S.crew4) await newCrew(); morning(); }; });
+  }
+  function emergency() {
+    const m = S.m; G.control = false; SFX.nope(); vig.hidden = true; m.stormOn = 0; m.stormIn = 0; if (S.drive) exitRover4(true);
+    const why = ['water', 'air', 'food'].filter((k) => m[k] <= 0);
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('msg', 32)} ${tr3(T5.emT)}</h2><p class="evt">${tr3(T5.emP)}</p>${why.map((k) => `<div class="fact"><span class="ic">${ico(k === 'water' ? 'ice' : k === 'air' ? 'oxygen' : 'greenhouse', 26)}</span><span><b>${tr3(T4.why[k])}</b><br>${T4.tip[k] ? tr3(T4.tip[k]) : ''}</span></div>`).join('')}<div class="actions"><span></span><button class="btn green" id="emgo">${ico('loop', 20)} ${tr3(T5.emB)}</button></div>`,
+    (el) => { el.querySelector('#emgo').onclick = () => {
+      const a = S.am.raw; Object.assign(m, { bat: a.bat, water: Math.max(a.water, 4), air: Math.max(a.air, 4), food: Math.max(a.food, 4), used: a.used, energy: a.energy, safety: Math.max(a.safety, 6), t: a.t, dustT: 0, night: false, zero: {} });
+      m.events.forEach((e) => (e.done = false)); S.today = { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 };
+      P.pos.set(0, 0, 4.5); P.vel.set(0, 0, 0); followCamera(0, true); closePanel(); renderMeters(); giveControl(); }; });
+  }
+  async function newCrew() {
+    S.crew4 = true; CREW = 4; G.control = false;
+    const c2 = makeCapsule(); W4.add(c2); extras.push(c2); const at = { x: -9, z: 14 }; SFX.whoosh(1); let landed = false; dayLight(1, 0, {});
+    await cine(6, (tt) => {
+      const k = Math.min(1, tt / 4.5), e = k * k * (3 - 2 * k); c2.userData.chute.visible = k < 0.85; c2.position.set(at.x, 30 * (1 - e), at.z);
+      if (k >= 1 && !landed) { landed = true; SFX.land(); burst(new T.Vector3(at.x, 0.4, at.z), 0xd9875a, 30, 6, 1); }
+      camera.position.set(at.x + 12, 6, at.z + 14); camera.lookAt(at.x, Math.max(2, c2.position.y * 0.6), at.z);
+    });
+    for (let i = 0; i < 2; i++) { const cm = makeCrew(); cm.position.set(at.x + 1.6 + i, 0, at.z + 1); W4.add(cm); crew.push(cm); cm.userData.tgt = new T.Vector3(i - 0.5, 0, 2.2); }
+    chip('suit', T4.landed, 3200); SFX.fanfare();
+    await cine(4, (tt) => { camera.position.set(-4 + tt * 0.6, 8, 18); camera.lookAt(-2, 1, 4); });
+    followCamera(0, true);
+    await new Promise((res) => panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('suit', 32)} ${tr3(T5.crewT)}</h2><p class="evt">${tr3(T5.crewP)}</p><div class="actions"><span></span><button class="btn green" id="cgo">${ico('check', 18)} ${tr3(T4.ok)}</button></div>`, (el) => { el.querySelector('#cgo').onclick = res; }));
+    confetti(); earn(20);
+  }
+  // ---------- surprise events of Level 4 ----------
+  function fire5(kind) {
+    SFX.alarm(); const ok = (el) => { el.querySelector('#eok').onclick = () => { closePanel(); giveControl(); }; };
+    if (kind === 'water') {
+      const t = S.placed.find((p) => p.type === 'recycler' && !p.fault) || S.placed.find((p) => p.type === 'ice' && !p.fault); if (!t) return;
+      setFault(t, 'leak');
+      panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('leak', 34)} ${tr3(T5.evWaterT)}</h2><p class="evt">${tr3(T5.evWaterP)}</p><div class="fact"><span class="ic">${ico('ice', 26)}</span><span>${tr3(F5.leak)}</span></div><div class="actions"><span></span><button class="btn green" id="eok">${ico('fix', 18)} ${tr3(T4.ok)}</button></div>`, ok);
+    } else {
+      const g = S.placed.find((p) => p.type === 'greenhouse' && !p.fault); if (!g) return;
+      g.sym = Math.random() < 0.5 ? 'dry' : 'wet'; setFault(g, 'wilt');
+      panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('greenhouse', 34)} ${tr3(T5.evPlantT)}</h2><p class="evt">${tr3(T5.evPlantP)}</p><div class="actions"><span></span><button class="btn green" id="eok">${ico('check', 18)} ${tr3(T4.ok)}</button></div>`, ok);
+    }
+  }
+  function plantsPanel(p) {
+    const wet = p.sym === 'wet';
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('greenhouse', 34)} ${tr3(T5.wiltN)}</h2><p class="evt">${tr3(wet ? T5.symWet : T5.symDry)}</p><p>${tr3(T5.whatNeed)}</p><div class="evbig"><button class="opt evopt" id="pw">${ico('ice', 50, 'eic')}<span class="et">${tr3(T5.giveW)}</span><span class="tags"><i>${ico('ice', 16)} −1</i></span></button><button class="opt evopt" id="pf">${ico('cloud', 50, 'eic')}<span class="et">${tr3(T5.fan)}</span><span class="tags"><i>${ico('power', 16)} −1</i></span></button></div>`, (el) => {
+      const good = () => { p.fault = null; markFault(p); lamps(); buildLinks(); earn(5); SFX.success(); closePanel(); giveControl(); chip('greenhouse', wet ? F5.plants : T5.plantsOk, 4800); };
+      const bad = (t) => { SFX.nope(); closePanel(); giveControl(); chip('tip', t, 4200); };
+      el.querySelector('#pw').onclick = () => { S.m.water = clamp10(S.m.water - 1); if (wet) bad(T5.wrongW); else good(); };
+      el.querySelector('#pf').onclick = () => { S.m.bat = Math.max(0, S.m.bat - 1); if (wet) good(); else bad(T5.wrongF); };
+    });
+  }
+  // ---------- maintenance actions ----------
+  function fixDone(p, fact) { p.fault = null; markFault(p); regrade(); lamps(); buildLinks(); earn(5); SFX.success(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.2, 0)), 0x9ccc3c, 22, 2, 1); chip('fix', fact || T5.fixed, fact ? 4200 : 1800); renderMeters(); }
+  function fixAction(p) {
+    const at = p.obj.position, r = 2.6;
+    if (p.dirty) return { at, r, text: `${ico('clean', 20)} ${tr3(T4.clean)} <span class="why y">${tr3(T4.cleanD)}</span>`, fn: () => cleanPanel(p) };
+    if (p.fault === 'wilt') return { at, r, text: `${ico('greenhouse', 20)} ${tr3(T5.check)} <span class="why r">${tr3(T5.wiltN)}</span>`, fn: () => plantsPanel(p) };
+    if (p.fault) {
+      const nm = p.fault === 'leak' ? T5.leakN : T5.filterN;
+      if (S.parts > 0) return { at, r, text: `${ico('fix', 20)} ${tr3(T5.fixPart)} <span class="why r">${tr3(nm)}</span> <span class="why y">${ico('part', 16)} ${tr3(T5.usePart)}</span>`, fn: () => { S.parts--; fixDone(p, p.fault === 'leak' ? F5.leak : F5.filter); } };
+      return { at, r, text: `<span class="why r">${ico('part', 18)} ${tr3(nm)}: ${tr3(T5.noPart)}</span>`, fn: () => SFX.nope() };
+    }
+    const nm = p.broken ? T5.brokenN : T5.crackN;
+    if (S.store.soil + S.bag.soil >= 2) return { at, r, text: `${ico('soil', 20)} ${tr3(T5.patch)} <span class="why r">${tr3(nm)}</span> <span class="why y">${tr3(T5.patchD)}</span>`, fn: () => { useSoil(2); if (p.broken) { p.broken = false; p.obj.rotation.z = 0; p.obj.position.y = 0; } p.crack = false; fixDone(p); } };
+    return { at, r, text: `<span class="why r">${ico('soil', 18)} ${tr3(nm)}: ${tr3(T5.noSoil)}</span>`, fn: () => SFX.nope() };
+  }
+  function harvest(p) {
+    p.crop = 0; S.m.food = clamp10(S.m.food + 2); S.today.harvest++; earn(3); SFX.success();
+    burst(p.obj.position.clone().add(new T.Vector3(0, 1, 0)), 0x5fbf2a, 24, 2, 1); chip('eat', S.harvested ? T5.harvested : F5.plants2, S.harvested ? 2000 : 4200); S.harvested = true; renderMeters();
+  }
+  function study(p) {
+    if (!(S.m.sw.lab && S.m.run)) { chip('lab', T5.labOff, 3000); SFX.nope(); return; }
+    S.store.sample += S.bag.sample; S.bag.sample = 0; const n = S.store.sample; S.store.sample = 0;
+    S.mis.studied += n; S.today.study += n; earn(8 * n); SFX.discover(); burst(p.obj.position.clone().add(new T.Vector3(0, 1.4, 0)), 0xb07aff, 26, 2, 1);
+    chip('sample', LL(T5.studied, n, 8 * n), 3000); setTimeout(() => S && S.m && chip('lab', F5.lab, 4200), 3100); renderMeters();
+  }
+  function relayAction() {
+    if (S.mis.repair || S.m.sol < 2 || !near(FAR.relay, 7)) return null;
+    if (S.parts > 0) return { at: relG.position, r: 7, text: `${ico('fix', 20)} ${tr3(T5.relayFix)} <span class="why y">${ico('part', 16)} ${tr3(T5.usePart)}</span>`, fn: () => { S.parts--; S.mis.repair = true; relLamp.material.color.set(0x9ccc3c); relIc.visible = false; earn(25); SFX.fanfare(); burst(relG.position.clone().add(new T.Vector3(0, 1.5, 1)), 0x9ccc3c, 30, 3, 1.2); chip('solar', T5.relayDone, 3000); setTimeout(() => S && chip('fix', F5.relay, 4200), 3100); save5(); } };
+    return { at: relG.position, r: 7, text: `<span class="why r">${ico('part', 18)} ${tr3(T5.noPart)}</span>`, fn: () => SFX.nope() };
+  }
+  // ---------- the rover ----------
+  function enterRover4() { S.drive = true; S.build = false; S.hold = null; setGhost(null); girl.visible = false; const i = solids.indexOf(rvSolid); if (i >= 0) solids.splice(i, 1); SFX.open(); setObjective('l4_drive'); renderInv(); renderMeters(); if (!S.drove) { S.drove = true; chip('rover', T5.objDrive, 4000); } }
+  function exitRover4(quiet) {
+    const r = S.rv; S.drive = false; r.v = 0; rvSolid.x = r.x; rvSolid.z = r.z; if (!solids.includes(rvSolid)) solids.push(rvSolid);
+    P.pos.set(r.x + Math.cos(r.h) * 1.9, 0, r.z - Math.sin(r.h) * 1.9); P.yaw = r.h; girl.visible = true; girl.position.copy(P.pos);
+    camYaw = r.h + Math.PI; followCamera(0, true); if (!quiet) SFX.pick(); setObjective('l4_obj'); renderMeters();
+  }
+  function pickRescue() { S.mis.rescue = 1; RV4.add(stuck); stuck.position.set(0, 0.95, -0.55); stuck.rotation.set(0, 0, 0); resIc.visible = false; SFX.success(); chip('sos', T5.resGot, 3500); }
+  function driveAction() {
+    if (S.mis.rescue === 0 && S.m.sol >= 2 && near(FAR.rescue, 6)) return { at: resG.position, r: 6, text: `${ico('sos', 20)} ${tr3(T5.aboard)}`, fn: pickRescue };
+    const ra = relayAction(); if (ra) return ra;
+    return { at: RV4.position, r: 99, text: `${ico('up', 18)} ${tr3(T5.out)}`, fn: () => exitRover4() };
+  }
+  function updateRover4(dt) {
+    const r = S.rv; let th = 0, st = 0;
+    if (G.control) { if (keys.KeyW || keys.ArrowUp) th += 1; if (keys.KeyS || keys.ArrowDown) th -= 1; if (keys.KeyA || keys.ArrowLeft) st += 1; if (keys.KeyD || keys.ArrowRight) st -= 1; th -= stick.y; st -= stick.x; }
+    th = Math.max(-1, Math.min(1, th)); st = Math.max(-1, Math.min(1, st));
+    const maxV = r.bat > 0 ? (S.up.rvFast ? 13 : 9) * (keys.ShiftLeft || keys.ShiftRight || sprint ? 1.25 : 1) : 2;
+    r.v += (th * (th < 0 ? 3.5 : maxV) - r.v) * Math.min(1, dt * (th ? 1.8 : 2.6));
+    r.h += st * dt * 1.7 * (r.v < -0.2 ? -1 : 1) * Math.min(1, Math.abs(r.v) / 2.5 + 0.3);
+    if (G.control) { r.bat = Math.max(0, r.bat - Math.abs(r.v) * dt * 0.011); if (r.bat <= 0 && !r.empty) { r.empty = true; chip('battery', T5.rvEmpty, 4000); SFX.alarm(); } else if (r.bat > 1) r.empty = false; }
+    let nx = r.x + Math.sin(r.h) * r.v * dt, nz = r.z + Math.cos(r.h) * r.v * dt;
+    for (const s of solids) { if (s.w) continue; const dx = nx - s.x, dz = nz - s.z, d = Math.hypot(dx, dz), mm = (s.r || 1) + 1.0; if (d < mm && d > 1e-4) { nx = s.x + (dx / d) * mm; nz = s.z + (dz / d) * mm; r.v *= 0.7; } }
+    const R = Math.hypot(nx, nz); if (R > 110) { nx *= 110 / R; nz *= 110 / R; }
+    r.x = nx; r.z = nz;
+    const y = h(r.x, r.z), fx = Math.sin(r.h), fz = Math.cos(r.h);
+    RV4.position.set(r.x, y, r.z); RV4.rotation.y = r.h;
+    RV4.rotation.x = -Math.atan2(h(r.x + fx, r.z + fz) - h(r.x - fx, r.z - fz), 2);
+    RV4.rotation.z = Math.atan2(h(r.x + fz, r.z - fx) - h(r.x - fz, r.z + fx), 2) * 0.6;
+    rvWheels.forEach((w) => (w.rotation.x += (r.v * dt) / 0.32));
+    P.pos.set(r.x, y, r.z); P.yaw = r.h; P.vel.set(0, 0, 0); P.speed = 0;
+    camYaw = r.h + Math.PI;
+    const want = new T.Vector3(r.x - fx * 7, y + 3.4, r.z - fz * 7); want.y = Math.max(want.y, h(want.x, want.z) + 1.4);
+    camera.position.lerp(want, Math.min(1, dt * 4)); camera.lookAt(r.x + fx * 3, y + 1.1, r.z + fz * 3);
+    if (Math.abs(r.v) > 2 && Math.random() < dt * 12) burst(new T.Vector3(r.x - fx * 1.1, y + 0.2, r.z - fz * 1.1), 0xd9b38c, 1, 0.8, 0.4);
+  }
+  // ---------- every frame: crops, markers, flags, rescue, charging ----------
+  function tick5(dt, time, running) {
+    const m = S.m;
+    for (const p of S.placed) {
+      if (p.fm && p.fm.visible) p.fm.position.y = 2.9 + Math.sin(time * 3 + p.i) * 0.15;
+      if (p.type === 'greenhouse' && p.obj.userData.plants) { const s = p.fault === 'wilt' ? 0.55 : 0.45 + (p.crop || 0) * 0.75; p.obj.userData.plants.forEach((pl) => pl.scale.setScalar(s)); }
+    }
+    commG.userData.blink.visible = Math.sin(time * 4) > 0 && m.sw.comm && m.run; commG.userData.dish.rotation.z = Math.sin(time * 0.3) * 0.25;
+    beacon.visible = S.mis.rescue === 0 && m.sol >= 2 && Math.sin(time * 6) > 0; resIc.visible = S.mis.rescue === 0 && m.sol >= 2; resIc.position.y = 3.4 + Math.sin(time * 2) * 0.2;
+    relIc.visible = !S.mis.repair && m.sol >= 2;
+    for (const k of FLAGS) { const u = flagG[k].userData; u.ring.visible = !S.mis.flags[k]; u.ring.scale.setScalar(1 + Math.sin(time * 3) * 0.05); u.cl.rotation.y = Math.sin(time * 2 + k.length) * 0.3;
+      if (running && !S.mis.flags[k] && near(FAR[k], 5)) { S.mis.flags[k] = true; u.cl.material = mat(0x9ccc3c, { side: T.DoubleSide }); earn(10); SFX.discover(); burst(new T.Vector3(FAR[k].x, h(FAR[k].x, FAR[k].z) + 2, FAR[k].z), 0xffc22e, 30, 3, 1.2); chip('flag', F5[k], 5000); } }
+    for (const pd of S.pods) pd.g.userData.ic.position.y = 2.2 + Math.sin(time * 2 + pd.x) * 0.15;
+    if (running && S.mis.rescue === 1 && Math.hypot(S.rv.x, S.rv.z - 3) < 7) {
+      S.mis.rescue = 2; RV4.remove(stuck); stuck.position.set(S.rv.x + 1.5, 0, S.rv.z); W4.add(stuck); crew.push(stuck); stuck.userData.tgt = new T.Vector3(0, 0, 2.2); stuck.userData.wait = 0;
+      m.safety = clamp10(m.safety + 1); earn(40); SFX.fanfare(); confetti(); chip('sos', T5.resDone, 3500); setTimeout(() => S && chip('suit', F5.rescue, 4200), 3600); save5();
+    }
+    S.rvCharging = !S.drive && Math.hypot(S.rv.x - GAR.x, S.rv.z - GAR.z) < 4 && m.sw.garage && m.run && S.rv.bat < rvCap();
+    if (S.rvCharging && running) S.rv.bat = Math.min(rvCap(), S.rv.bat + 0.6 * dt);
+    garG.userData.plug.material.color.set(S.rvCharging ? (Math.sin(time * 6) > 0 ? 0xffc22e : 0x9ccc3c) : 0x9ccc3c);
+  }
+  function growCrops(dt, night, on) {
+    if (night || !on('greenhouse')) return;
+    for (const p of S.placed) if (p.type === 'greenhouse' && p.q > 0 && !p.fault) p.crop = Math.min(1, (p.crop || 0) + dt / (S.up.led ? 26 : 38) * (S.seedBoost ? 1.4 : 1));
+  }
+  // ---------- shop (Mars Credits), radio orders and the missions board ----------
+  let shopTab = 'up';
+  function shopPanel(tab) {
+    if (tab) shopTab = tab; const m = S.m, live = m.sw.comm && m.run, atComm = near(COMM, 4) && live;
+    const card = (ic, n, d, price, state, id) => `<div class="shop-i ${state === 'own' ? 'own' : ''}"><span class="si">${ico(ic, 44)}</span><b>${tr3(n)}</b>${d ? `<small>${tr3(d)}</small>` : ''}<button class="btn ${state === 'own' || state === 'wear' ? 'ghost' : 'green'}" data-id="${id}" ${state === 'buy' || state === 'wear' ? '' : 'disabled'}>${state === 'own' ? tr3(T5.own) : state === 'wear' ? tr3(T5.wear) : `<span class="coin"></span> ${price}`}</button></div>`;
+    const can = (p) => G.credits >= p; let top = '', body;
+    if (shopTab === 'up' || shopTab === 'rv') body = UPS.filter((u) => (shopTab === 'rv') === u.k.startsWith('rv')).map((u) => card(u.ic, u.n, u.d, u.p, S.up[u.k] ? 'own' : can(u.p) ? 'buy' : 'no', 'u:' + u.k)).join('');
+    else if (shopTab === 'look') body = LOOKS.map((l) => { const own = G.gear['mars_' + l.k], worn = S.look.suit === l.k || S.look.boot === l.k; return card(l.boot ? 'boots' : 'suit', l.n, null, l.p, worn ? 'own' : own ? 'wear' : can(l.p) ? 'buy' : 'no', 'l:' + l.k); }).join('');
+    else {
+      top = `<p class="evt">${tr3(T5.earthNote, m.delay)}</p>${atComm ? '' : `<p class="evt"><span class="why y">${ico('antenna', 18)} ${tr3(live ? T5.needComm : T5.commOff)}</span></p>`}`
+        + (atComm && !S.today.report ? `<div class="actions" style="justify-content:center"><button class="btn green" id="srep">${ico('report', 18)} ${tr3(T5.report)} · ${tr3(T5.reportD)}</button></div>` : '')
+        + (S.orders.length ? `<div class="tasks4">${S.orders.map((o) => { const od = ORDERS.find((q) => q.k === o.k); return `<div>${ico(od.ic, 22)} ${tr3(od.n)}<span class="mc">${tr3(T5.eta, Math.max(1, o.at - m.sol))}</span></div>`; }).join('')}</div>` : '');
+      body = ORDERS.map((o) => card(o.ic, o.n, LL(T5.eta, o.eta), o.p, atComm && S.orders.length < 3 && can(o.p) ? 'buy' : 'no', 'o:' + o.k)).join('');
+    }
+    panel(`<div class="eyebrow">${ico('coin', 16)} ${tr3(T5.mc)}: ${G.credits}</div><h2>${ico('cart', 30)} ${tr3(T5.shopT)}</h2><div class="stabs">${[['up', T5.tUp], ['rv', T5.tRv], ['look', T5.tLook], ['earth', T5.tEarth]].map(([k, n]) => `<button class="btn small ${shopTab === k ? 'on' : 'ghost'}" data-t="${k}">${tr3(n)}</button>`).join('')}</div>${top}<div class="shop">${body}</div><p class="shop-note">${tr3(shopTab === 'earth' ? F5.cargo : T5.shopNote)}</p><div class="actions"><span></span><button class="btn" id="sclose">${tr3(T5.close)}</button></div>`, (el) => {
+      el.querySelectorAll('[data-t]').forEach((b) => (b.onclick = () => shopPanel(b.dataset.t)));
+      el.querySelectorAll('[data-id]').forEach((b) => (b.onclick = () => buy5(b.dataset.id)));
+      const rp = el.querySelector('#srep'); if (rp) rp.onclick = () => { S.today.report = true; earn(3); SFX.success(); chip('antenna', LL(T5.sentR, m.delay), 3500); shopPanel(); };
+      el.querySelector('#sclose').onclick = () => { closePanel(); renderInv(); renderMeters(); giveControl(); };
+    });
+    return true;
+  }
+  function buy5(id) {
+    const [t, k] = id.split(':');
+    if (t === 'u') { const u = UPS.find((x) => x.k === k); if (!u || S.up[k] || G.credits < u.p) return; G.credits -= u.p; S.up[k] = true; if (k === 'rvBat') S.rv.bat = rvCap(); }
+    else if (t === 'l') { const l = LOOKS.find((x) => x.k === k), key = 'mars_' + k; if (!l) return; if (!G.gear[key]) { if (G.credits < l.p) return; G.credits -= l.p; G.gear[key] = true; } if (l.boot) S.look.boot = k; else S.look.suit = k; applyLook(); }
+    else { const o = ORDERS.find((x) => x.k === k); if (!o || G.credits < o.p || S.orders.length >= 3) return; G.credits -= o.p; S.orders.push({ k, at: S.m.sol + o.eta }); chip('antenna', LL(T5.ordered, o.eta), 2600); }
+    SFX.stamp(); SHOP.hud(); save5(); shopPanel();
+  }
+  function commPanel() { const m = S.m; if (!(m.sw.comm && m.run)) { chip('antenna', T5.commOff, 3000); SFX.nope(); return; } shopPanel('earth'); }
+  function misPanel() {
+    const m = S.m, st = { science: [Math.min(S.mis.studied, 3), 3], explore: [FLAGS.filter((k) => S.mis.flags[k]).length, 3], repair: [S.mis.repair ? 1 : 0, 1], rescue: [S.mis.rescue >= 2 ? 1 : 0, 1] };
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 30)} ${tr3(T5.misT)}</h2><p>${tr3(T5.misP)}</p><div class="mis">${MIS.map((q) => { const [a, b] = st[q.k], lock = q.from && m.sol < q.from, ok = a >= b; return `<div class="mi ${ok ? 'ok' : lock ? 'lock' : ''}">${ico(q.ic, 40)}<span><b>${tr3(q.n)}</b><small>${tr3(q.d)}</small></span><span class="mc">${ok ? ico('check', 22) : lock ? tr3(T5.locked, q.from) : `${a}/${b} · ${ico('coin', 16)} ${q.mc}`}</span></div>`; }).join('')}</div><div class="actions"><span></span><button class="btn green" id="mclose">${tr3(T5.close)}</button></div>`,
+    (el) => { el.querySelector('#mclose').onclick = () => { closePanel(); giveControl(); }; });
+  }
+  // ---------- saving: the world waits for you (nothing breaks while you are away) ----------
+  const SKEY = 'ja_mars_base';
+  function save5() {
+    if (!S || S.lvl !== 4) return;
+    try { const m = S.m; localStorage.setItem(SKEY, JSON.stringify({ v: 1, credits: G.credits, gear: Object.keys(G.gear).filter((k) => k.startsWith('mars_')),
+      m: { sol: m.sol, bat: m.bat, water: m.water, air: m.air, food: m.food, used: m.used, dose: m.dose, energy: m.energy, safety: m.safety, sw: m.sw },
+      placed: S.placed.map((p) => [p.type, p.i, p.j, p.rot, { broken: !!p.broken, crack: !!p.crack, fault: p.fault || null, sym: p.sym, crop: p.crop || 0, dirty: !!p.dirty }]),
+      inv: S.inv, store: S.store, parts: S.parts, up: S.up, look: S.look, orders: S.orders.concat(S.pods.map((p) => ({ k: p.k, at: 0 }))), mis: S.mis,
+      rv: { x: S.rv.x, z: S.rv.z, h: S.rv.h, bat: S.rv.bat }, crew4: S.crew4, podTaken: S.podTaken, tasks: S.tasks, deck: S.deck, seedBoost: S.seedBoost || 0 })); } catch (e) {}
+  }
+  function load5() { try { const s = JSON.parse(localStorage.getItem(SKEY) || 'null'); return s && s.v === 1 && Array.isArray(s.placed) ? s : null; } catch (e) { return null; } }
+  function brief5(after) {
+    const rows = [['report', T5.b_day], ['safety', T5.b_res], ['fix', T5.b_fix], ['rover', T5.b_rv], ['coin', T5.b_mc]];
+    panel(`<div class="eyebrow">${tr3(T5.eyebrow)}</div><h2>${ico('compass', 32)} ${tr3(T4.briefT)}</h2><div class="facts">${rows.map(([ic, t]) => `<div class="fact"><span class="ic">${ico(ic, 26)}</span><span>${tr3(t)}</span></div>`).join('')}</div><div class="actions"><span></span><button class="btn green" id="bgo">${ico('report', 20)} ${tr3(T5.go)}</button></div>`, (el) => { el.querySelector('#bgo').onclick = after; });
+  }
+  function clear5() {
+    if (S && S.pods) { S.pods.forEach((p) => W4.remove(p.g)); S.pods = []; }
+    if (S && S.drive) { S.drive = false; girl.visible = true; }
+    if (stuck.parent) stuck.parent.remove(stuck);
+  }
+  function clear4() { clear5(); crew.forEach((c) => W4.remove(c)); crew = []; extras.forEach((e) => W4.remove(e)); extras = []; dots.forEach((d) => { d.t = 1; d.m.visible = false; }); links = []; vig.hidden = true; }
+  function start4(opts = {}) {
     if (S) S.placed.forEach((p) => W.remove(p.obj));
     clear4();
-    S = fresh(); S.lvl = 4; for (const k in S.inv) S.inv[k] = 0; S.bag = { ice: 0, soil: 0, sample: 0 }; S.store = { ice: 0, soil: 0, sample: 0 }; S.podTaken = false; S.seenSite = {}; S.m = newMission();
+    const sv = opts.cont ? load5() : null;
+    S = fresh(); S.lvl = 4; for (const k in S.inv) S.inv[k] = 0; S.bag = { ice: 0, soil: 0, sample: 0 }; S.store = { ice: 0, soil: 2, sample: 0 }; S.podTaken = false; S.seenSite = {}; S.m = newMission();
+    Object.assign(S, { parts: 2, up: {}, look: { suit: null, boot: null }, orders: [], pods: [], mis: { flags: {}, studied: 0, repair: false, rescue: 0 }, build: false, drive: false, rv: { x: GAR.x, z: GAR.z, h: Math.PI, v: 0, bat: 10 }, crew4: false, deck: makeDeck5(), tasks: [], today: { mc: 0, harvest: 0, report: false, study: 0, minRes: 10 } });
+    const m = S.m; m.safety = 8; m.events = []; m.sol = 1; m.t = 0; CREW = 2;
+    if (sv) {
+      G.credits = sv.credits || 0; (sv.gear || []).forEach((k) => (G.gear[k] = true));
+      Object.assign(m, sv.m, { sw: Object.assign(m.sw, sv.m.sw) }); m.t = (m.sol - 1) * SOL;
+      Object.assign(S, { store: sv.store || S.store, parts: sv.parts || 0, up: sv.up || {}, look: sv.look || S.look, orders: sv.orders || [], mis: Object.assign(S.mis, sv.mis), crew4: !!sv.crew4, podTaken: !!sv.podTaken, tasks: sv.tasks || [], deck: sv.deck || S.deck, seedBoost: sv.seedBoost || 0 });
+      Object.assign(S.inv, sv.inv || {}); S.rv = Object.assign({ v: 0 }, sv.rv); if (S.crew4) CREW = 4;
+    }
     G.scene = 'mars'; setEnv('mars'); W4.visible = true; stage.classList.add('lv1'); closeChat(); hideChip();
-    solids.length = 0; rockSolids.forEach((r) => solids.push(r)); solids.push({ x: PR.i * TILE, z: PR.j * TILE, r: 1.1 }, { x: SITES.pod.x, z: SITES.pod.z, r: 1.3 }, { x: tank.position.x, z: tank.position.z, r: 0.5 });
-    nodes.forEach((n) => { n.taken = false; n.m.visible = true; }); podLid.position.set(0, 1.5, 0); podLid.rotation.set(0, 0, 0);
-    for (const [type, i, j] of BASE4) { const obj = makeBuilding(type); obj.position.set(i * TILE, 0, j * TILE); obj.traverse((o) => { if (o.isMesh && o !== obj.userData.arrow) o.castShadow = true; }); W.add(obj); const p = { type, i, j, rot: 0, obj, on: true, q: 1, solid: { x: i * TILE, z: j * TILE, r: 1.0 } }; S.placed.push(p); solids.push(p.solid); }
-    regrade(); lamps(); buildLinks();
-    for (let i = 0; i < 2; i++) { const c = makeCrew(); c.position.set(-1 + i * 2, 0, 2.2); W4.add(c); crew.push(c); }
+    solids.length = 0; rockSolids.forEach((r) => solids.push(r));
+    solids.push({ x: PR.i * TILE, z: PR.j * TILE, r: 1.1 }, { x: SITES.pod.x, z: SITES.pod.z, r: 1.3 }, { x: tank.position.x, z: tank.position.z, r: 0.5 }, { x: COMM.x, z: COMM.z, r: 1.6 }, ...GAR_SOL, { x: FAR.relay.x, z: FAR.relay.z + 1.2, r: 1 });
+    nodes.forEach((n) => { n.taken = false; n.m.visible = true; });
+    if (S.podTaken) { podLid.position.set(1.4, 0.2, 0.6); podLid.rotation.z = 1.2; } else { podLid.position.set(0, 1.5, 0); podLid.rotation.set(0, 0, 0); }
+    for (const [type, i, j, rot, x] of (sv ? sv.placed : BASE4)) {
+      const p = put(type, i, j, rot || 0);
+      if (x) { if (x.broken) { p.broken = true; p.obj.rotation.z = 0.25; p.obj.position.y = -0.15; } p.crack = !!x.crack; p.fault = x.fault || null; p.sym = x.sym; p.crop = x.crop || 0; if (x.dirty) dirty(p, true); }
+    }
+    regrade(); S.placed.forEach(markFault); lamps(); buildLinks();
+    for (let i = 0; i < CREW; i++) { const c = makeCrew(); c.position.set(-1 + (i % 2) * 2, 0, 2.2 + Math.floor(i / 2)); W4.add(c); crew.push(c); }
+    if (S.mis.rescue < 2) { resG.add(stuck); stuck.position.set(1.6, 0, 0); stuck.rotation.set(0, -0.6, 0); if (S.mis.rescue === 1) S.mis.rescue = 0; }
+    else { W4.add(stuck); stuck.position.set(1.5, 0, 3); crew.push(stuck); }
+    relLamp.material.color.set(S.mis.repair ? 0x9ccc3c : 0xec5a50);
+    FLAGS.forEach((k) => (flagG[k].userData.cl.material = mat(S.mis.flags[k] ? 0x9ccc3c : 0xec8a3c, { side: T.DoubleSide })));
+    RV4.position.set(S.rv.x, h(S.rv.x, S.rv.z), S.rv.z); RV4.rotation.set(0, S.rv.h, 0); rvSolid.x = S.rv.x; rvSolid.z = S.rv.z; solids.push(rvSolid);
     capsule.position.set(landAt.x, 0, landAt.z); capsule.visible = true;
-    suitUp(true); girl.visible = true; girl.scale.setScalar(1); setExpr(girl, 'happy');
+    suitUp(true); applyLook(); girl.visible = true; girl.scale.setScalar(1); setExpr(girl, 'happy');
     nuri.visible = true; G.nuriJoined = true; G.nuriMet = true; setExpr(nuri, 'happy');
     P.pos.set(3, 0, 9); P.vel.set(0, 0, 0); P.yaw = Math.PI + 0.3; camYaw = 0.3; camPitch = 0.45; camDist = 8; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
     $('helpBtn').hidden = false; $('passBtn').hidden = true; setGhost(null); dayLight(1, 0, {});
-    renderInv(); renderMeters(); setObjective(null); $('inv').hidden = true; keysEl.hidden = true;
-    showDialog([{ who: 'nuri', expr: 'wow', en: T4.hi1.en, ar: T4.hi1.ar }, { who: 'nuri', expr: 'happy', en: T4.hi2.en, ar: T4.hi2.ar }, { who: 'nuri', expr: 'happy', en: T4.hi3.en, ar: T4.hi3.ar }],
-      () => brief(() => { closePanel(); S.m.started = true; setObjective('l4_obj'); renderInv(); renderMeters(); giveControl(); pulse(); }));
+    renderInv(); renderMeters(); setObjective(null); $('inv').hidden = true; keysEl.hidden = true; SHOP.hud();
+    try { localStorage.setItem('ja_progress', 'level4'); } catch (e) {}
+    const begin = (resume) => { closePanel(); m.started = true; morning(resume); };
+    if (sv) { chip('hab', T5.welcome, 2600); begin(true); return; }
+    showDialog([{ who: 'nuri', expr: 'wow', en: T5.hi1.en, ar: T5.hi1.ar }, { who: 'nuri', expr: 'happy', en: T5.hi2.en, ar: T5.hi2.ar }, { who: 'nuri', expr: 'happy', en: T5.hi3.en, ar: T5.hi3.ar }],
+      () => brief5(() => { if (G.credits < 20) SHOP.add(20 - G.credits); begin(false); }));
   }
   function endMission() { const m = S.m; S.over = true; S.hold = null; setGhost(null); S.phase = 'end'; vig.hidden = true; m.stormOn = 0; m.stormIn = 0; renderInv(); solBtn.hidden = true; setObjective(null); hideChip(); }
   function fail(k) {
@@ -5450,12 +6002,8 @@ const MARS = (() => {
     });
   }
   function callCrew() {}
-  function devSkip4() {
-    const m = S.m; S.store.sample = 3; S.store.soil = 0; nodes.forEach((n) => { n.taken = true; n.m.visible = false; }); S.podTaken = true;
-    for (const [type, i, j] of [['recycler', 2, 0], ['shield', 1, -1], ['solar', 1, -2], ['solar', -2, -2]]) { if (!judge(type, i, j, 0).ok) continue; const obj = makeBuilding(type); obj.position.set(i * TILE, 0, j * TILE); W.add(obj); const p = { type, i, j, rot: 0, obj, on: true, q: 1, solid: { x: i * TILE, z: j * TILE, r: 1.0 } }; S.placed.push(p); solids.push(p.solid); }
-    regrade(); lamps(); buildLinks(); m.cleaned = 1; m.events.forEach((e) => (e.done = true)); m.t = NSOL * SOL - 1; renderInv(); renderMeters();
-  }
-  return { start, start4, prepare, update, action, target, checklist, mapDots, devSkip, hide, relang, h, capsule, landAt, startSol };
+  function devSkip4() { const m = S.m; if (!m || !m.started || G.cine) return; S.placed.forEach((p) => { if (p.type === 'greenhouse') p.crop = 1; }); m.t = m.sol * SOL - 0.5; }
+  return { roverMode: () => G.scene === 'mars' && !!S && !!S.drive, updateRover: (dt) => updateRover4(dt), shop: () => !!S && S.lvl === 4 && shopPanel(), start, start4, prepare, update, action, target, checklist, mapDots, devSkip, hide, relang, h, capsule, landAt, startSol };
 })();
 
 // ============================== Guide: glowing arrows on the ground, mini map and mission checklist ==============================
@@ -5533,7 +6081,7 @@ function loop() {
   const dt = Math.min(0.05, clock.getDelta()), time = clock.elapsedTime;
   if (G.cine) { G.cine.t += dt; G.cine.update(G.cine.t, dt); if (G.cine && G.cine.t >= G.cine.dur) endCine(); }
   else if (G.scene === 'title') { titleT += dt; camera.position.set(2.7 + Math.sin(titleT * 0.25) * 0.4, 2.2, 3.3); camera.lookAt(-0.6, 0.8, -1.4); }
-  else if (!G.dialog && !LAUNCH.active()) { if (L1.roverMode()) L1.updateRover(dt); else { updatePlayer(dt); if (ACAD.camLock()) ACAD.cam(dt); else followCamera(dt); } }
+  else if (!G.dialog && !LAUNCH.active()) { if (L1.roverMode()) L1.updateRover(dt); else if (MARS.roverMode()) MARS.updateRover(dt); else { updatePlayer(dt); if (ACAD.camLock()) ACAD.cam(dt); else followCamera(dt); } }
   if (G.scene === 'academy') ACAD.update(dt, time);
   if (G.scene === 'level2') L2.update(dt, time);
   if (G.scene === 'mars') MARS.update(dt, time);

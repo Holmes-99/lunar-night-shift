@@ -67,3 +67,20 @@ Changes made on top of Razan's version:
 - **Secret stickers:** walk to the flamingos, the radio dishes or the vicuñas to find bonus discoveries.
 
 Open `index.html` in a browser (it loads Three.js from cdnjs). On the Netlify site it is at `/junior-astronaut/`.
+
+## Level 4: Life on Mars (the base is already built)
+
+When the capsule lands on Mars, Level 4 starts. The first crew already built the base, so the goal is to **keep it running**: maintain it, fix it, grow it.
+
+- **The base:** habitat, life support (oxygen maker, ice melter, water recycler), power station (solar panels and batteries), 2 greenhouses, radiation shield walls, a science lab, a radio station to talk to Mission Control, a rover garage, and the 3D printer.
+- **6 meters:** water, oxygen, power, food, shielding and crew safety, plus your own energy and the rover battery.
+- **Every sol:** morning report (with Nuri's scan for problems), inspect the base (problems show a wrench sign), decide (switch machines on or off, fix, clean, harvest, recycle), one surprise event (dust storm, water system failure, greenhouse problem, solar storm radiation alert, marsquake), and an end-of-day card showing what got better or worse.
+- **Fixing:** clean dusty panels, fix leaks and clogged air filters with spare parts (3D-print them from Mars soil or order them from Earth), repair cracked walls with soil, and work out what sick plants need (dry soil needs water, soggy soil needs the fan).
+- **Rover missions (no fighting):** explore 3 new places, study rock samples in the lab, repair a far solar station, and rescue a stuck astronaut.
+- **Mars Credits:** the coins from Levels 1 to 3 carry over. Earn more from daily jobs, fixes, harvests, science, exploring and rescues. Spend them on base upgrades, rover upgrades and new suit colors. Credits can't buy air or water.
+- **Orders from Earth** go through the radio station and take 1 to 2 sols to land, so you plan ahead.
+- **Build mode:** the base is done, but you can still move, add or remove pieces.
+- After sol 3, two more astronauts land, so the base needs more of everything.
+- If crew safety hits zero, the crew goes to the shelter (nobody is hurt) and you replay that sol. Nothing changes while you are away from the game; the base waits for you.
+
+Real facts used: NASA CHAPEA (4 volunteers, 378 days in a 3D-printed pretend Mars home), about 0.84 kg of oxygen and about 4 liters of water per person per day, the space station recycling 98% of its water, dust devils cleaning Spirit's panels, the zinnias Scott Kelly saved on the space station, Earth-Mars radio delay of 3 to 22 minutes, and launch windows every 26 months.
