@@ -264,12 +264,168 @@ body {
 }
 @media (prefers-reduced-motion: reduce) { .invite, .dialog, .chat, .marker .pin { animation: none; } }
 
+/* ---------- Fun layer: stars, confetti, reactions ---------- */
+.winbox { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.stars { display: flex; justify-content: center; gap: 10px; font-size: 46px; line-height: 1; }
+.stars span { color: #e2dccd; transform: scale(0); animation: starIn .45s cubic-bezier(.3,1.8,.5,1) forwards; }
+.stars span.on { color: #ffc22e; text-shadow: 0 3px 0 #c98a00; }
+@keyframes starIn { to { transform: scale(1); } }
+.fact1 { background: #fff8e2; border-radius: 12px; padding: 8px 12px; font-weight: 700; color: #6a4a0a; font-size: 14.5px; text-align: center; }
+.cf { position: absolute; top: -14px; width: 10px; height: 14px; border-radius: 2px; z-index: 60; pointer-events: none; animation: cfall 1.7s ease-in forwards; }
+@keyframes cfall { to { top: 105%; transform: translateX(40px) rotate(720deg); opacity: .6; } }
+.tip1 { font-weight: 800 !important; color: var(--navy) !important; font-size: 17px !important; text-align: center; }
+.robot-box.awake svg { animation: dance .45s ease-in-out 4; }
+.robot-box.spark { animation: shk .3s 3; }
+@keyframes dance { 25% { transform: translateY(-10px) rotate(-6deg); } 75% { transform: translateY(-10px) rotate(6deg); } }
+.flask .cube.newc { animation: popIn .3s cubic-bezier(.3,1.8,.5,1); }
+@keyframes popIn { from { transform: scale(0) translateY(-30px); } to { transform: none; } }
+.bottles.win .btl.ok { animation: hop .5s ease 2; }
+@keyframes hop { 50% { transform: translateY(-10px); } }
+.feel { font-size: 58px; text-align: center; line-height: 1; transition: transform .2s; }
+.feel.bump { animation: bump .3s; } @keyframes bump { 50% { transform: scale(1.3); } }
+.dummy.win { animation: dance .45s ease-in-out 3; }
+/* ---------- Hands-on rooms ---------- */
+.stoast { position: absolute; left: 50%; top: 42%; z-index: 30; pointer-events: none; animation: stIn 1.9s ease forwards; }
+.stoast .stamp { width: 150px; height: 150px; border: 6px double var(--c); background: #fff; color: var(--navy); transform: rotate(-8deg); }
+.stoast .stamp .ic { opacity: 1; filter: none; font-size: 54px; }
+.stoast .stamp b { font-size: 15px; }
+@keyframes stIn { 0% { transform: translate(-50%, -50%) scale(2.6); opacity: 0; } 18% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+.stamp .ic.sn { font-family: var(--f-display); font-weight: 800; color: var(--c); }
+.face2 { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto; position: relative; transition: background .3s; }
+.face2.ok { background: #9ccc3c; } .face2.hot { background: #ec5a50; } .face2.cold { background: #5a9be0; }
+.face2 i { position: absolute; top: 22px; width: 9px; height: 11px; border-radius: 50%; background: #1b1530; } .face2 i:first-child { left: 18px; } .face2 i:nth-child(2) { right: 18px; }
+.face2 b { position: absolute; left: 20px; right: 20px; top: 40px; height: 10px; border: 4px solid #1b1530; border-top: 0; border-radius: 0 0 20px 20px; }
+.face2.hot b, .face2.cold b { border: 0; border-top: 4px solid #1b1530; height: 0; top: 44px; border-radius: 0; }
+/* ---------- Level 1 stations ---------- */
+.air-wrap { display: grid; grid-template-columns: 1fr 90px 1fr; gap: 12px; align-items: center; }
+.robot-box { background: #0f1838; border-radius: 14px; padding: 8px; } .robot { width: 100%; max-height: 170px; }
+.flask { display: flex; flex-direction: column-reverse; gap: 4px; padding: 8px; border: 4px solid #9aa6bd; border-top-width: 0; border-radius: 0 0 22px 22px; background: rgba(143,208,239,.15); }
+.cube { all: unset; box-sizing: border-box; cursor: pointer; height: 34px; border-radius: 8px; display: grid; place-items: center; font-weight: 800; color: #fff; font-size: 15px; }
+.cube.o2 { background: #3a8fd8; } .cube.n2 { background: #7a8296; } .cube.emptyc { border: 2px dashed #c9d0de; cursor: default; }
+.cube.big { height: 70px; font-size: 22px; flex-direction: column; display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 0 rgba(0,0,0,.2); }
+.cube.big small { font-size: 12px; font-weight: 700; }
+.cube-src { display: flex; flex-direction: column; gap: 10px; }
+.cube:focus-visible { outline: 3px solid var(--sky); }
+.bottles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.btl { background: #fff; border: 3px solid #efe1c4; border-radius: 14px; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.btl svg { width: 46px; height: 80px; } .btl b { color: var(--navy); font-size: 14.5px; }
+.btl .bs { display: flex; flex-direction: column; gap: 5px; width: 100%; } .btl .sb { text-align: center; }
+.btl.ok { border-color: var(--lime-dk); } .btl.no { border-color: var(--red); } .btl .why { color: #9a2a20; font-weight: 700; font-size: 12.5px; }
+.sky-day, .sky-night { border-radius: 14px; padding: 10px 14px; font-weight: 800; }
+.sky-day { background: #fff1d6; color: #8a4a0a; } .sky-night { background: #1f2a5c; color: #dfe8ff; }
+.thermo { position: relative; height: 70px; margin: 18px 6px 4px; }
+.thermo::before { content: ""; position: absolute; left: 0; right: 0; top: 26px; height: 18px; border-radius: 10px; background: linear-gradient(90deg, #5a9be0, #8fd0ef 40%, #ffd27a 60%, #ec5a50); }
+.tz { position: absolute; top: 20px; height: 30px; border: 4px solid #6a9a1f; border-radius: 8px; background: rgba(156,204,60,.35); }
+.tarrow { position: absolute; top: 0; transform: translateX(-50%); transition: left .35s; display: flex; flex-direction: column; align-items: center; }
+.tarrow span { background: var(--navy); color: #fff; font-weight: 800; font-size: 13px; padding: 1px 7px; border-radius: 8px; margin-top: -18px; }
+.tarrow::after { content: "▼"; color: var(--navy); font-size: 16px; line-height: 1; }
+.tl { position: absolute; left: 0; right: 0; top: 50px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted); }
+.inds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ind { background: #eaf6d2; border: 3px solid var(--lime-dk); border-radius: 14px; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ind span { font-size: 28px; } .ind b { color: var(--navy); } .ind i { font-style: normal; color: #3c6a10; font-weight: 800; }
+@media (max-width: 640px) { .air-wrap { grid-template-columns: 1fr 80px; } .robot-box { grid-column: 1 / -1; } .bottles { grid-template-columns: 1fr; } }
+/* ---------- Level 2: Training Academy ---------- */
+.nline { display: flex; gap: 10px; align-items: center; background: #eef8dc; border-radius: 14px; padding: 8px 12px; font-weight: 700; color: #34480f; font-size: 15px; }
+.nline .nface { flex: none; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #c6ec6f, #8cc232); position: relative; }
+.nline .nface::before, .nline .nface::after { content: ""; position: absolute; top: 9px; width: 7px; height: 10px; border-radius: 50%; background: #1b1530; }
+.nline .nface::before { left: 7px; } .nline .nface::after { right: 7px; }
+.mini-note { font-size: 13.5px !important; color: var(--muted) !important; font-weight: 600; }
+.l2-success { display: flex; flex-direction: column; gap: 12px; }
+.orr-wrap { display: flex; justify-content: center; }
+.orr-wrap canvas { border-radius: 14px; max-width: 100%; cursor: pointer; touch-action: none; }
+.orr-info { background: #0f1838; color: #e8eefc; border-radius: 12px; padding: 9px 13px; font-size: 14.5px; font-weight: 600; min-height: 2.6em; }
+.suit-wrap { display: grid; grid-template-columns: 220px 1fr; gap: 14px; align-items: start; }
+.dummy { position: relative; width: 220px; height: 300px; background: radial-gradient(circle at 50% 40%, #1d2a5c, #0b1330); border-radius: 16px; }
+.dsvg { position: absolute; left: 10px; top: 0; width: 200px; height: 300px; }
+.dslot { position: absolute; border: 3px dashed rgba(255,210,122,.85); border-radius: 12px; cursor: pointer; transition: transform .15s; }
+.dslot.filled { border-color: transparent; }
+.dslot.shake { animation: shk .35s; }
+@keyframes shk { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.s-helmet { left: 72px; top: 8px; width: 76px; height: 76px; border-radius: 50%; }
+.s-gloves { left: 26px; top: 142px; width: 168px; height: 44px; }
+.s-boots { left: 66px; top: 236px; width: 88px; height: 56px; }
+.s-life { left: 150px; top: 72px; width: 62px; height: 70px; }
+.worn { position: absolute; pointer-events: none; }
+.worn svg { width: 100%; height: 100%; }
+.w-helmet { left: 66px; top: 4px; width: 88px; height: 88px; } .w-gloves { left: 39px; top: 130px; width: 160px; height: 64px; } .w-gloves svg { width: 100%; }
+.w-boots { left: 62px; top: 226px; width: 96px; height: 70px; } .w-life { left: 148px; top: 70px; width: 66px; height: 76px; }
+.tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.part { all: unset; box-sizing: border-box; cursor: grab; background: #fff; border: 3px solid #e8dfcd; border-radius: 14px; padding: 8px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; touch-action: none; }
+.part .pic svg { width: 46px; height: 46px; }
+.part b { color: var(--navy); font-size: 14px; } .part small { color: var(--muted); font-size: 12px; font-weight: 600; line-height: 1.3; }
+.part.sel { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(236,138,60,.3); }
+.part.used { opacity: .35; cursor: default; }
+.part:focus-visible { outline: 3px solid var(--sky); }
+.ghost:not(.btn) { position: fixed; z-index: 50; pointer-events: none; transform: translate(-50%, -50%); }
+.gpart svg { width: 64px; height: 64px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+.gpart.big { font-size: 44px; }
+.results { display: flex; flex-direction: column; gap: 6px; }
+.rrow { display: grid; grid-template-columns: 120px 1fr; gap: 4px 10px; align-items: center; background: #fff; border: 2px solid #efe1c4; border-radius: 12px; padding: 7px 11px; font-size: 14px; color: var(--ink); }
+.rrow b { color: var(--navy); }
+.rrow .rbar { height: 8px; border-radius: 5px; background: #ece4d4; overflow: hidden; } .rrow .rbar i { display: block; height: 100%; background: var(--lime); }
+.results .rrow { grid-template-columns: 90px 90px 1fr; }
+.rrow.bad { border-color: var(--red); background: #fdecea; } .rrow.bad .rbar i { background: var(--red); }
+.rrow.ok span { color: #3c6a10; font-weight: 700; } .rrow.bad span { color: #9a2a20; font-weight: 700; }
+.cargo-wrap { display: grid; grid-template-columns: 1fr 160px; gap: 12px; align-items: start; }
+.l2items { grid-template-columns: repeat(3, 1fr) !important; }
+.l2items .item small { color: var(--muted); font-weight: 700; font-size: 12px; }
+.bay { position: relative; height: 210px; border-radius: 14px; background: #1a2440; overflow: hidden; border: 4px solid #9aa6bd; }
+.bay-in { position: absolute; inset: 10px; display: flex; flex-wrap: wrap; align-content: flex-end; gap: 4px; font-size: 26px; }
+.bdoor { position: absolute; top: 0; bottom: 0; width: 50%; background: repeating-linear-gradient(135deg, #c9d0de 0 12px, #b9c2d3 12px 24px); transition: transform .6s cubic-bezier(.4,1.4,.5,1); }
+.bdoor.l { left: 0; transform: translateX(-100%); } .bdoor.r { right: 0; transform: translateX(100%); }
+.bdoor.shut { transform: none; }
+.bdoor.jam.l { animation: jamL .6s; } .bdoor.jam.r { animation: jamR .6s; }
+@keyframes jamL { 50% { transform: translateX(-35%); } } @keyframes jamR { 50% { transform: translateX(35%); } }
+.load { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--navy); }
+.lbar { position: relative; flex: 1; height: 14px; background: #ece4d4; border-radius: 8px; overflow: hidden; }
+.lbar i { display: block; height: 100%; background: var(--lime); border-radius: 8px; transition: width .3s; } .lbar i.over { background: var(--red); }
+.load b.over { color: var(--red); }
+.sys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.scard { all: unset; box-sizing: border-box; cursor: pointer; background: #0f1838; color: #e8eefc; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 3px solid transparent; }
+.scard .sic { font-size: 30px; } .scard b { font-size: 14.5px; }
+.scard .lamp { font-size: 18px; color: #9ccc3c; }
+.scard.warn .lamp { color: #ffb02e; animation: blink .7s infinite; }
+.scard.open { border-color: var(--sky); }
+.scard:focus-visible { outline: 3px solid var(--sky); }
+.readings { display: flex; flex-direction: column; gap: 6px; }
+.fix { position: relative; height: 130px; background: #0f1838; border-radius: 14px; display: flex; align-items: center; justify-content: space-around; }
+.bslot { width: 90px; height: 60px; border: 3px dashed #ffd27a; border-radius: 10px; display: grid; place-items: center; color: #ffd27a; font-weight: 800; }
+.batt, .plug { font-size: 46px; cursor: grab; touch-action: none; user-select: none; }
+.cable { position: absolute; left: 10px; top: 5px; width: 300px; height: 120px; pointer-events: none; }
+.sock { position: absolute; right: 30px; top: 40px; width: 50px; height: 50px; border-radius: 50%; background: #2b3a66; color: #6fe0ff; display: grid; place-items: center; font-size: 26px; border: 3px dashed #6fe0ff; }
+.plug { position: absolute; left: 160px; top: 70px; font-size: 34px; }
+.alarm-eb { color: var(--red) !important; }
+.alarm-box { background: #fde3e0; color: #8a1d14; border: 3px solid var(--red); border-radius: 14px; padding: 10px 14px; font-weight: 800; animation: alarmP 1s infinite; }
+@keyframes alarmP { 50% { background: #f9c4bd; } }
+.pwr { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--navy); }
+.pcells { display: flex; gap: 4px; } .pcells i { width: 26px; height: 18px; border-radius: 4px; background: #ece4d4; display: block; } .pcells i.f { background: #ffc22e; box-shadow: 0 0 8px rgba(255,194,46,.7); }
+.sys5 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.s5 { all: unset; box-sizing: border-box; cursor: pointer; background: #fff; border: 3px solid #e8dfcd; border-radius: 14px; padding: 8px 10px; display: grid; grid-template-columns: 34px 1fr auto; grid-template-rows: auto auto; gap: 0 8px; align-items: center; }
+.s5 .ic { grid-row: 1 / 3; font-size: 26px; } .s5 .tx { display: flex; flex-direction: column; } .s5 b { color: var(--navy); font-size: 14.5px; } .s5 small { color: var(--muted); font-size: 12px; font-weight: 600; }
+.s5 .cost { font-size: 12px; font-weight: 800; color: #b07a00; } .s5 .sw { grid-column: 3; font-size: 12px; font-weight: 800; color: #9a9aa2; }
+.s5.on { border-color: #ffc22e; background: #fff8e2; } .s5.on .sw { color: #3c6a10; }
+.s5:focus-visible { outline: 3px solid var(--sky); }
+.passport { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #1f3a68; padding: 14px; border-radius: 16px; }
+.stampslot { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.stampslot small { color: #cfe0ff; font-size: 11.5px; font-weight: 700; line-height: 1.25; }
+.stamp { width: 84px; height: 84px; border-radius: 50%; border: 3px dashed rgba(255,255,255,.3); display: flex; flex-direction: column; align-items: center; justify-content: center; color: transparent; }
+.stamp .ic { font-size: 30px; opacity: .15; filter: grayscale(1); } .stamp b { font-size: 10.5px; line-height: 1.1; padding: 0 6px; }
+.stampslot.got .stamp { border: 4px double var(--c); background: rgba(255,255,255,.95); color: var(--navy); transform: rotate(-8deg); }
+.stampslot.got .stamp .ic { opacity: 1; filter: none; }
+.stampslot.new .stamp { animation: stampIn .6s cubic-bezier(.3,1.6,.5,1); }
+@keyframes stampIn { from { transform: scale(2.4) rotate(-30deg); opacity: 0; } to { transform: scale(1) rotate(-8deg); opacity: 1; } }
+@media (max-width: 640px) {
+  .suit-wrap, .cargo-wrap { grid-template-columns: 1fr; } .dummy { margin: 0 auto; }
+  .passport { grid-template-columns: repeat(3, 1fr); } .sys5 { grid-template-columns: 1fr; } .l2items { grid-template-columns: repeat(2, 1fr) !important; }
+  .bay { height: 120px; }
+}
+
 /* ---------- Kid-friendly updates ---------- */
 .dialog { grid-template-columns: 64px 1fr; }
 .dialog .dbtns { grid-column: 2; display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 4px; }
 .dialog .dbtns .next { margin-top: 0; }
 .dialog .line { font-size: 20px; font-weight: 700; min-height: 1.6em; }
-.tray { position: absolute; top: 74px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; padding: 6px 10px; border-radius: 18px; background: rgba(16,26,51,.55); pointer-events: none; }
+.sttray { position: absolute; top: 74px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; padding: 6px 10px; border-radius: 18px; background: rgba(16,26,51,.55); pointer-events: none; }
 .slot2 { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; background: rgba(255,250,240,.25); border: 3px dashed rgba(255,250,240,.6); color: #fffaf0; font-weight: 800; font-family: var(--f-display); }
 .slot2.bonus { width: 38px; height: 38px; font-size: 20px; border-color: rgba(255,210,122,.7); color: #ffd27a; }
 .slot2.got { background: var(--paper); border: 3px solid var(--lime); box-shadow: 0 3px 0 rgba(0,0,0,.25); }
@@ -294,7 +450,7 @@ body {
 .gallery .g b { font-family: var(--f-display); color: var(--navy); font-size: 16px; display: block; }
 .gallery .g span { font-size: 13.5px; color: var(--ink); font-weight: 600; }
 .gallery .g.off { opacity: .35; filter: grayscale(1); }
-@media (max-width: 640px) { .tray { top: auto; bottom: 150px; } .slot2 { width: 38px; height: 38px; font-size: 21px; } .slot2.bonus { width: 32px; height: 32px; font-size: 16px; } }
+@media (max-width: 640px) { .sttray { top: auto; bottom: 150px; } .slot2 { width: 38px; height: 38px; font-size: 21px; } .slot2.bonus { width: 32px; height: 32px; font-size: 16px; } }
 /* ---------- map, checklist, training stations ---------- */
 .map-hud { position: absolute; top: 66px; right: 12px; width: 150px; display: flex; flex-direction: column; gap: 8px; align-items: stretch; z-index: 3; }
 .map-hud[dir="rtl"] { right: auto; left: 12px; }
@@ -333,8 +489,9 @@ body {
   <div class="topbar">
     <div class="objective card" id="objective" hidden><div class="dot">!</div><div><div class="k" id="objK"></div><div class="t" id="objT"></div></div></div>
     <div class="tools">
+      <button class="icon-btn" id="passBtn" hidden></button>
       <button class="icon-btn" id="sndBtn" aria-label="Sound on or off">🔊</button>
-      <button class="icon-btn" id="voiceBtn" aria-pressed="true" title="Read aloud / القراءة بصوت">🗣️</button>
+      <button class="icon-btn" id="voiceBtn" aria-pressed="false" title="Read aloud / القراءة بصوت">🗣️</button>
       <button class="icon-btn" id="langBtn">عربي</button>
     </div>
   </div>
@@ -355,7 +512,7 @@ body {
   </section>
 
   <section class="card meters" id="meters" hidden></section>
-  <div class="tray" id="tray" hidden></div>
+  <div class="sttray" id="tray" hidden></div>
   <div class="map-hud" id="mapHud" hidden><canvas id="mmap" width="300" height="300" title="Map"></canvas><div class="clist" id="clist"></div></div>
   <section class="card st-hud" id="stHud" hidden></section>
   <div class="sticker-wrap" id="stickerWrap" hidden></div>
@@ -380,7 +537,7 @@ body {
       <div class="field"><label for="nameInput" id="tNameLbl"></label><input id="nameInput" maxlength="16" autocomplete="off"><small id="tNameNote"></small></div>
       <div class="controls-mini" id="tControls"></div>
       <button class="btn" id="startBtn"></button>
-      <button class="btn ghost small" id="skipL1Btn"></button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn ghost small" id="skipL1Btn"></button><button class="btn ghost small" id="skipL2Btn"></button></div>
     </div>
   </div>
 
@@ -424,7 +581,7 @@ const T = THREE;
 const TXT = {
   title: { en: 'Junior <span>Astronaut</span>', ar: 'رائد <span>الفضاء</span> الصغير' },
   sub: { en: 'Prologue · The Invitation', ar: 'المقدمة · الدعوة' },
-  intro: { en: 'A mysterious box has arrived for you. Open it, follow the green light, and meet the friend who will guide your journey to Mars.', ar: 'وصلك صندوق غامض! افتحه، واتبع الضوء الأخضر، وتعرّف على الصديق اللي رح يرافقك برحلتك إلى المريخ.' },
+  intro: { en: 'A mysterious box has arrived for you!', ar: 'وصلك صندوق غامض!' },
   nameLbl: { en: 'What should we call you, explorer?', ar: 'شو اسمك يا مستكشف؟' },
   nameNote: { en: 'A first name or a nickname is perfect.', ar: 'اسمك الأول أو لقبك بيكفي.' },
   start: { en: 'Start the adventure', ar: 'ابدأ المغامرة' },
@@ -471,7 +628,8 @@ const TXT = {
   dnTitle: { en: 'Prologue complete!', ar: 'خلصت المقدمة!' },
   dnText: { en: 'You and Nuri are ready. Next comes Level 1: exploring the Atacama Desert like a Mars scientist.', ar: 'إنت ونوري جاهزين. الجاي هو الليفل الأول: استكشاف صحراء أتاكاما مثل علماء المريخ.' },
   dnKeep: { en: 'Start Level 1', ar: 'ابدأ الليفل الأول' },
-  skipL1: { en: 'Already played the prologue? Jump to Level 1', ar: 'لعبت المقدمة؟ انتقل للّيفل الأول' },
+  skipL1: { en: 'Jump to Level 1', ar: 'انتقل إلى المرحلة الأولى' },
+  skipL2: { en: 'Jump to Level 2', ar: 'انتقل إلى المرحلة الثانية' },
   dnReplay: { en: 'Replay prologue', ar: 'أعد المقدمة' },
   ok: { en: 'Got it! ✓', ar: 'تمام! ✓' },
   skipAll: { en: 'Skip ⏭', ar: 'تخطّي ⏭' },
@@ -605,7 +763,9 @@ const SFX = (() => {
     jump: () => tone(300, 0.18, 'sine', 0.07, 0, 2),
     pick: () => tone(440, 0.05, 'square', 0.035),
     snap: () => { tone(660, 0.08, 'triangle', 0.1); tone(990, 0.14, 'sine', 0.08, 0.06); },
-    nope: () => tone(210, 0.16, 'sine', 0.08, 0, 0.7),
+    nope: () => { G.nopes = (G.nopes || 0) + 1; tone(210, 0.16, 'sine', 0.08, 0, 0.7); },
+    stamp: () => { noise(0.18, 400, 90, 0.35, 0, 0.8, 'lowpass'); tone(110, 0.2, 'sine', 0.25, 0, 0.5); [1046.5, 1318.5, 1568].forEach((f, i) => tone(f, 0.35, 'triangle', 0.09, 0.18 + i * 0.09)); },
+    alarm: () => { for (let i = 0; i < 4; i++) { tone(880, 0.22, 'square', 0.05, i * 0.5); tone(660, 0.22, 'square', 0.05, i * 0.5 + 0.25); } },
     beam: (on) => { if (beamG) beamG.gain.setTargetAtTime(on ? 0.045 : 0, ac.currentTime, 0.15); },
   };
 })();
@@ -643,22 +803,11 @@ const stars = new T.Points(starGeo, starMat); scene.add(stars);
 const moon = new T.Mesh(new T.SphereGeometry(9, 20, 14), new T.MeshBasicMaterial({ color: 0xfff6d8, fog: false })); moon.position.set(-120, 150, -260); scene.add(moon);
 
 // helpers
-// cartoon look: flat toon shading with 3 soft bands (like Roblox and other kid games), plus dark outlines on the characters
-const TOON_G = (() => { const d = new Uint8Array([165, 215, 255]); const tx = new T.DataTexture(d, 3, 1, T.LuminanceFormat); tx.minFilter = tx.magFilter = T.NearestFilter; tx.generateMipmaps = false; tx.needsUpdate = true; return tx; })();
-function toonM(o = {}) { o = Object.assign({}, o); for (const k of ['roughness', 'metalness', 'flatShading', 'envMapIntensity', 'roughnessMap', 'metalnessMap']) delete o[k]; return new T.MeshToonMaterial(Object.assign({ gradientMap: TOON_G }, o)); }
-const mat = (c, o = {}) => toonM(Object.assign({ color: c }, o));
-const OUTLINE = {};
-function outlineMat(w) {
-  if (OUTLINE[w]) return OUTLINE[w];
-  const m = new T.MeshBasicMaterial({ color: 0x241a3a, side: T.BackSide });
-  m.onBeforeCompile = (sh) => { sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\n transformed += normalize(normal) * ${w.toFixed(4)};`); };
-  return (OUTLINE[w] = m);
-}
-function addOutline(root, w = 0.012, minR = 0.035) {
-  const list = [];
-  root.traverse((o) => { if (!o.isMesh || o.userData.outline || o.userData.noOutline || o.material.isMeshBasicMaterial || o.material.transparent) return; if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere(); if (o.geometry.boundingSphere.radius < minR) return; list.push(o); });
-  for (const o of list) { const ol = new T.Mesh(o.geometry, outlineMat(w)); ol.userData.outline = true; ol.castShadow = false; ol.receiveShadow = false; o.add(ol); }
-}
+// Razan's look: soft standard materials (no toon bands, no outlines)
+const STD = T['MeshStandard' + 'Material'];
+function toonM(o = {}) { return new STD(Object.assign({ roughness: 0.6, metalness: 0 }, o)); }
+const mat = (c, o = {}) => new STD(Object.assign({ color: c, roughness: 0.6, metalness: 0 }, o));
+function addOutline() {}
 
 function mesh(geo, m, x = 0, y = 0, z = 0, parent = scene, cast = true) { const o = new T.Mesh(geo, m); o.position.set(x, y, z); o.castShadow = cast; o.receiveShadow = true; parent.add(o); return o; }
 function canvasTex(w, h, draw) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); const tx = new T.CanvasTexture(c); tx.encoding = T.sRGBEncoding; tx.anisotropy = 4; return tx; }
@@ -719,16 +868,23 @@ function makeGirl(o = {}) {
     const a = -0.95 + i * 0.38; const b = add(new T.SphereGeometry(0.1, 12, 8), hair, Math.sin(a) * 0.21, 0.19 - Math.abs(a) * 0.05, Math.cos(a) * 0.2, head);
     b.scale.set(0.95, 0.5, 0.42); b.rotation.set(-0.5, a, -a * 0.6);
   }
-  // long side locks that fall past the ears
-  [-1, 1].forEach((s) => { const l = add(new T.SphereGeometry(0.1, 12, 10), hair, s * 0.235, -0.16, 0.02, head); l.scale.set(0.4, 2.0, 0.65); l.rotation.z = s * 0.1; });
-  // long loose hair down her back, in 3 soft pieces that swing when she moves
-  const tail = new T.Group(); tail.position.set(0, 0.02, -0.17); head.add(tail);
-  add(new T.SphereGeometry(0.2, 18, 14), hair, 0, -0.1, -0.03, tail).scale.set(1.25, 1.0, 0.55);
-  const tail2 = new T.Group(); tail2.position.set(0, -0.24, -0.02); tail.add(tail2);
-  add(new T.SphereGeometry(0.19, 18, 14), hair, 0, -0.09, -0.01, tail2).scale.set(1.2, 1.0, 0.45);
-  const tail3 = new T.Group(); tail3.position.set(0, -0.2, 0); tail2.add(tail3);
-  add(new T.SphereGeometry(0.17, 16, 12), hair, 0, -0.06, 0, tail3).scale.set(1.1, 0.8, 0.4);
-  [-1, 0, 1].forEach((s) => add(new T.SphereGeometry(0.07, 10, 8), hair, s * 0.11, -0.16, 0.01, tail3).scale.set(0.9, 1.4, 0.7));
+  [-1, 1].forEach((s) => { const l = add(new T.SphereGeometry(0.1, 12, 10), hair, s * 0.235, -0.07, 0.04, head); l.scale.set(0.38, 1.25, 0.6); l.rotation.z = s * 0.12; });
+  // a bouncy ponytail
+  const tail = new T.Group(); tail.position.set(0, 0.17, -0.24); head.add(tail);
+  add(new T.TorusGeometry(0.05, 0.022, 8, 16), orange, 0, 0, 0, tail).rotation.x = 0.5;
+  const t1 = add(new T.SphereGeometry(0.12, 14, 12), hair, 0, -0.07, -0.07, tail); t1.scale.set(0.95, 1.1, 0.9);
+  const tail2 = new T.Group(); tail2.position.set(0, -0.15, -0.1); tail.add(tail2);
+  add(new T.SphereGeometry(0.1, 14, 12), hair, 0, -0.05, -0.02, tail2).scale.set(0.9, 1.3, 0.85);
+  add(new T.SphereGeometry(0.06, 12, 10), hair, 0, -0.17, 0.01, tail2).scale.set(0.9, 1.4, 0.9);
+  const tail3 = new T.Group(); tail2.add(tail3);
+  // spacesuit parts (hidden until she uses the fitting room)
+  const helmet = new T.Group(); helmet.visible = false; head.add(helmet);
+  helmet.add(new T.Mesh(new T.SphereGeometry(0.42, 28, 20), toonM({ color: 0xdff3ff, transparent: true, opacity: 0.22, roughness: 0.05, metalness: 0.3, depthWrite: false })));
+  add(new T.TorusGeometry(0.3, 0.05, 10, 28), mat(0xf4f6fb), 0, -0.3, 0, helmet).rotation.x = Math.PI / 2;
+  add(new T.TorusGeometry(0.3, 0.02, 8, 28), orange, 0, -0.26, 0, helmet).rotation.x = Math.PI / 2;
+  add(new T.TorusGeometry(0.35, 0.025, 8, 28, Math.PI), mat(0xffd27a, { metalness: 0.6, roughness: 0.3 }), 0, 0.05, 0, helmet).rotation.z = Math.PI / 2;
+  const lsPack = new T.Group(); lsPack.visible = false; lsPack.position.set(0, 0.26, -0.24); spine.add(lsPack);
+  add(new T.BoxGeometry(0.4, 0.46, 0.18), mat(0xf4f6fb), 0, 0, 0, lsPack); add(new T.BoxGeometry(0.3, 0.06, 0.02), orange, 0, 0.12, -0.1, lsPack); add(new T.BoxGeometry(0.1, 0.08, 0.02), mat(0x6fe0ff, { emissive: 0x6fe0ff, emissiveIntensity: 0.6 }), -0.1, -0.08, -0.1, lsPack);
   // face
   const eyes = new T.Group(); head.add(eyes);
   [-1, 1].forEach((s) => {
@@ -775,9 +931,9 @@ function makeGirl(o = {}) {
   };
   const lL = leg(-1), lR = leg(1);
   root.userData = {
-    body, hips, spine, neck, head, eyes, happyEyes, brows, smile, oMouth, tail, tail2, tail3, tip,
+    body, hips, spine, neck, head, eyes, happyEyes, brows, smile, oMouth, tail, tail2, tail3, tip, helmet, lsPack, pack, navyM: navy, bootM: boot, suitOn: false,
     armL: aL.sh, armR: aR.sh, elbowL: aL.el, elbowR: aR.el, legL: lL.hp, legR: lR.hp, kneeL: lL.kn, kneeR: lR.kn, ankleL: lL.an, ankleR: lR.an,
-    phase: 0, reach: 0, blink: 0, air: 0, squash: 0, wasAir: false, ta: 0.1, tv: 0, look: 0, lookT: 0, lookTimer: 2, m: 0, expr: 'idle',
+    phase: 0, reach: 0, blink: 0, air: 0, squash: 0, wasAir: false, ta: 0.35, tv: 0, look: 0, lookT: 0, lookTimer: 2, m: 0, expr: 'idle',
   };
   return root;
 }
@@ -819,12 +975,10 @@ function animateGirl(g, speed, dt, air, time) {
   u.look += (u.lookT - u.look) * Math.min(1, dt * 3);
   if (!G.cine) { u.head.rotation.y = u.look * (1 - m); u.head.rotation.x = -u.spine.rotation.x * 0.6 + Math.sin(time * 1.3) * 0.02 * (1 - m); }
   u.head.rotation.z = Math.sin(time * 0.9) * 0.03 * (1 - m);
-  // long hair on a soft spring: it flows back when she runs and swings with each step
-  const want = 0.12 + m * 0.25 + run * 0.35 + u.air * 0.5 - Math.abs(c) * 0.08 * m - (u.head.rotation.x || 0) * 0.5;
-  u.tv += (want - u.ta) * dt * 40; u.tv *= Math.pow(0.03, dt); u.ta += u.tv * dt;
-  u.tail.rotation.x = u.ta; u.tail.rotation.z = -s * 0.1 * m + Math.sin(time * 1.1) * 0.03 * (1 - m);
-  u.tail2.rotation.x = u.ta * 0.5 + u.tv * 0.04; u.tail2.rotation.z = -s * 0.08 * m;
-  u.tail3.rotation.x = u.ta * 0.4 + u.tv * 0.06; u.tail3.rotation.z = -Math.sin(u.phase - 0.8) * 0.1 * m;
+  // ponytail on a little spring
+  const want = 0.35 + m * 0.35 + run * 0.3 + u.air * 0.6 - Math.abs(c) * 0.15 * m;
+  u.tv += (want - u.ta) * dt * 60; u.tv *= Math.pow(0.04, dt); u.ta += u.tv * dt;
+  u.tail.rotation.x = u.ta; u.tail.rotation.z = -s * 0.15 * m; u.tail2.rotation.x = (u.ta - 0.35) * 0.8;
   // expressions
   u.brows.forEach((b) => (b.position.y += ((u.expr === 'wow' ? 0.108 : u.expr === 'happy' ? 0.092 : 0.085) - b.position.y) * k));
   u.tip.material.emissiveIntensity = 0.6 + Math.sin(time * 4) * 0.4;
@@ -896,6 +1050,12 @@ function animateNuri(n, time, dt) {
   u.eyes.scale.y = u.blink > 0 ? 0.12 : 1;
 }
 
+// put the spacesuit on or take it off
+function setSuit(g, on) {
+  const u = g.userData; u.suitOn = on; u.helmet.visible = on; u.lsPack.visible = on; u.pack.visible = !on;
+  u.tail.visible = !on; u.navyM.color.set(on ? 0xeef1f6 : 0x2f4170); u.bootM.color.set(on ? 0xec8a3c : 0xffffff);
+}
+
 function makeShip() {
   const root = new T.Group();
   const white = mat(0xf4f1ea, { roughness: 0.35, metalness: 0.15 }), grey = mat(0x9a9aa2, { roughness: 0.4, metalness: 0.4 }), red = mat(0xd8433a, { roughness: 0.4 });
@@ -933,13 +1093,13 @@ const ENV = {};
 {
   const g = new T.Group(); ENV.bedroom = g; scene.add(g);
   const W = 8, D = 8, H = 3.2;
-  const floorTex = canvasTex(512, 512, (c, w, h) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#e8c79a' : '#dfba88'; c.fillRect(0, i * 64, w, 64); c.fillStyle = 'rgba(120,70,20,.12)'; c.fillRect(0, i * 64, w, 2); for (let j = 0; j < 3; j++) c.fillRect(((i * 97 + j * 173) % w), i * 64, 2, 64); } });
+  const floorTex = canvasTex(512, 512, (c, w, h) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#3b4474' : '#333c69'; c.fillRect(0, i * 64, w, 64); c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(0, i * 64, w, 2); for (let j = 0; j < 3; j++) c.fillRect(((i * 97 + j * 173) % w), i * 64, 2, 64); } });
   floorTex.wrapS = floorTex.wrapT = T.RepeatWrapping; floorTex.repeat.set(2, 2);
   const floor = mesh(new T.PlaneGeometry(W, D), mat(0xffffff, { map: floorTex, roughness: 0.8 }), 0, 0, 0, g); floor.rotation.x = -Math.PI / 2; floor.castShadow = false;
   const spaceWall = (v) => canvasTex(1024, 512, (c, w, h) => {
-    const gr = c.createLinearGradient(0, 0, w, h); gr.addColorStop(0, v ? '#d9ccff' : '#bfe3ff'); gr.addColorStop(0.55, v ? '#e8dcff' : '#d4ecff'); gr.addColorStop(1, '#fff0dc'); c.fillStyle = gr; c.fillRect(0, 0, w, h);
-    for (let i = 0; i < 7; i++) { const x = Math.random() * w, y = Math.random() * h, r = 90 + Math.random() * 140, g2 = c.createRadialGradient(x, y, 0, x, y, r); g2.addColorStop(0, i % 2 ? 'rgba(255,170,220,.35)' : 'rgba(255,230,140,.35)'); g2.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g2; c.fillRect(x - r, y - r, r * 2, r * 2); }
-    for (let i = 0; i < 320; i++) { const r = Math.random() < 0.08 ? 2.4 : 1 + Math.random(); c.fillStyle = `rgba(255,${170 + Math.random() * 40 | 0},${60 + Math.random() * 60 | 0},${0.6 + Math.random() * 0.4})`; c.beginPath(); c.arc(Math.random() * w, Math.random() * h, r, 0, 7); c.fill(); }
+    const gr = c.createLinearGradient(0, 0, w, h); gr.addColorStop(0, v ? '#1a1650' : '#131a48'); gr.addColorStop(0.55, v ? '#231a5a' : '#2a1f60'); gr.addColorStop(1, '#122a58'); c.fillStyle = gr; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 7; i++) { const x = Math.random() * w, y = Math.random() * h, r = 90 + Math.random() * 140, g2 = c.createRadialGradient(x, y, 0, x, y, r); g2.addColorStop(0, i % 2 ? 'rgba(170,90,230,.28)' : 'rgba(70,170,230,.22)'); g2.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g2; c.fillRect(x - r, y - r, r * 2, r * 2); }
+    for (let i = 0; i < 320; i++) { const r = Math.random() < 0.08 ? 2.4 : 1 + Math.random(); c.fillStyle = `rgba(255,${240 + Math.random() * 15 | 0},${200 + Math.random() * 55 | 0},${0.5 + Math.random() * 0.5})`; c.beginPath(); c.arc(Math.random() * w, Math.random() * h, r, 0, 7); c.fill(); }
     const planet = (x, y, r, c0, c1) => { const g3 = c.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r); g3.addColorStop(0, c0); g3.addColorStop(1, c1); c.fillStyle = g3; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); };
     if (!v) { c.strokeStyle = '#f3d9a0'; c.lineWidth = 9; c.beginPath(); c.ellipse(860, 150, 92, 22, -0.35, Math.PI * 0.95, Math.PI * 2.05); c.stroke(); planet(860, 150, 54, '#f6d79a', '#c98a45'); c.beginPath(); c.ellipse(860, 150, 92, 22, -0.35, 0.1, Math.PI * 0.9); c.stroke();
       planet(170, 120, 36, '#f4f6fb', '#aab2c6'); c.fillStyle = 'rgba(120,130,150,.5)'; [[160, 110, 8], [182, 130, 6], [168, 138, 4]].forEach(([x, y, r]) => { c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); });
@@ -950,11 +1110,11 @@ const ENV = {};
   const wallM = toonM({ map: spaceWall(0), roughness: 0.95 }), wall2 = toonM({ map: spaceWall(1), roughness: 0.95 });
   const wall = (w, x, z, ry, m) => { const p = mesh(new T.PlaneGeometry(w, H), m, x, H / 2, z, g); p.rotation.y = ry; p.castShadow = false; return p; };
   wall(W, 0, -D / 2, 0, wallM); wall(W, 0, D / 2, Math.PI, wall2); wall(D, -W / 2, 0, Math.PI / 2, wall2); wall(D, W / 2, 0, -Math.PI / 2, wallM);
-  const ceil = mesh(new T.PlaneGeometry(W, D), mat(0xfaf6ff), 0, H, 0, g); ceil.rotation.x = Math.PI / 2;
+  const ceil = mesh(new T.PlaneGeometry(W, D), mat(0x10173a), 0, H, 0, g); ceil.rotation.x = Math.PI / 2;
   // glow-in-the-dark stars on ceiling
-  for (let i = 0; i < 70; i++) { const s = mesh(new T.CircleGeometry(0.06 + Math.random() * 0.05, 5), new T.MeshBasicMaterial({ color: 0xffd27a }), (Math.random() - 0.5) * 7, H - 0.01, (Math.random() - 0.5) * 7, g, false); s.rotation.x = Math.PI / 2; }
+  for (let i = 0; i < 70; i++) { const s = mesh(new T.CircleGeometry(0.06 + Math.random() * 0.05, 5), new T.MeshBasicMaterial({ color: 0xd6ffb0 }), (Math.random() - 0.5) * 7, H - 0.01, (Math.random() - 0.5) * 7, g, false); s.rotation.x = Math.PI / 2; }
   // window with night sky
-  const winTex = canvasTex(256, 192, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#6a8fe8'); gr.addColorStop(0.6, '#ff9ec4'); gr.addColorStop(1, '#ffc46b'); c.fillStyle = gr; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; for (let i = 0; i < 12; i++) c.fillRect(Math.random() * w, Math.random() * h * 0.8, 1.5, 1.5); c.fillStyle = '#fff6d8'; c.beginPath(); c.arc(190, 50, 18, 0, 7); c.fill(); c.fillStyle = '#18213f'; c.fillRect(0, h - 40, w, 40); c.fillStyle = '#ffd27a'; for (let i = 0; i < 9; i++) c.fillRect(10 + i * 28, h - 30 + (i % 3) * 6, 6, 6); });
+  const winTex = canvasTex(256, 192, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#0b1430'); gr.addColorStop(1, '#2b3d72'); c.fillStyle = gr; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; for (let i = 0; i < 60; i++) c.fillRect(Math.random() * w, Math.random() * h * 0.8, 1.5, 1.5); c.fillStyle = '#fff6d8'; c.beginPath(); c.arc(190, 50, 18, 0, 7); c.fill(); c.fillStyle = '#18213f'; c.fillRect(0, h - 40, w, 40); c.fillStyle = '#ffd27a'; for (let i = 0; i < 9; i++) c.fillRect(10 + i * 28, h - 30 + (i % 3) * 6, 6, 6); });
   const winMat = new T.MeshBasicMaterial({ map: winTex });
   const win = mesh(new T.PlaneGeometry(1.8, 1.3), winMat, 0.6, 1.9, -D / 2 + 0.02, g, false); g.userData.win = win;
   const frameM = mat(0xffffff, { roughness: 0.5 });
@@ -1002,8 +1162,8 @@ const ENV = {};
   const ledM = new T.MeshBasicMaterial({ color: 0xb884ff }), led2 = new T.MeshBasicMaterial({ color: 0x6fe0ff });
   mesh(new T.BoxGeometry(W, 0.05, 0.05), ledM, 0, H - 0.1, -D / 2 + 0.04, g, false); mesh(new T.BoxGeometry(0.05, 0.05, D), led2, W / 2 - 0.04, H - 0.1, 0, g, false);
   mesh(new T.BoxGeometry(0.05, 0.05, D), ledM, -W / 2 + 0.04, H - 0.1, 0, g, false); mesh(new T.BoxGeometry(W, 0.05, 0.05), led2, 0, H - 0.1, D / 2 - 0.04, g, false);
-  const glow = new T.PointLight(0xffb070, 0.5, 9, 1.5); glow.position.set(-2.4, 2.6, -2.2); g.add(glow);
-  const glow2 = new T.PointLight(0xffd0a0, 0.4, 8, 1.5); glow2.position.set(2.6, 2.6, 2.4); g.add(glow2);
+  const glow = new T.PointLight(0x9a6cff, 0.9, 9, 1.5); glow.position.set(-2.4, 2.6, -2.2); g.add(glow);
+  const glow2 = new T.PointLight(0x5fd0ff, 0.6, 8, 1.5); glow2.position.set(2.6, 2.6, 2.4); g.add(glow2);
   mesh(new T.CylinderGeometry(0.1, 0.12, 0.06, 14), mat(0x8a6a3a), -1.75, 0.03, -3.3, g); mesh(new T.SphereGeometry(0.22, 18, 14), toonM({ color: 0xfff6dc, emissive: 0xffeab0, emissiveIntensity: 0.9 }), -1.75, 0.27, -3.3, g, false);
   const tele = new T.Group(); tele.position.set(-0.7, 0, -3.35); g.add(tele);
   [0, 2.1, 4.2].forEach((a) => { const l = mesh(new T.CylinderGeometry(0.02, 0.02, 1.1, 6), mat(0x2b2726), Math.cos(a) * 0.2, 0.52, Math.sin(a) * 0.2, tele); l.rotation.set(Math.sin(a) * 0.35, 0, -Math.cos(a) * 0.35); });
@@ -1090,6 +1250,7 @@ function dh(x, z) {
   const hd2 = (x - 4) * (x - 4) + (z + 36) * (z + 36); h += 7.5 * Math.exp(-hd2 / 150);
   const lb = smooth(LAGOON.r + 7, LAGOON.r - 1, Math.hypot(x - LAGOON.x, z - LAGOON.z)); h = h * (1 - lb) - 0.3 * lb; // flat salt lagoon
   const pb = smooth(15, 8, Math.hypot(x - ALMA.x, z - ALMA.z)); h = h * (1 - pb) + 0.4 * pb; // flat plateau for the dishes
+  const ab = smooth(31, 23, Math.hypot(x - 6, z + 68)); h = h * (1 - ab) + 0.6 * ab; // flat ground for the training center
   return h;
 }
 const SALT = [{ x: -10, z: 8, r: 5 }, { x: 14, z: 12, r: 6 }, { x: -18, z: -14, r: 7 }, { x: 22, z: -20, r: 5 }];
@@ -1133,9 +1294,9 @@ function setEnv(name) {
   for (const k in ENV) ENV[k].visible = k === name;
   stars.visible = moon.visible = false; sky.visible = true; lamp.intensity = 0; glowLight.intensity = 0; boxLight.intensity = 0; skyMat.uniforms.sunAmt.value = 0;
   if (name === 'bedroom') {
-    sky.visible = false; scene.background = new T.Color('#ffe9d0'); scene.fog = null;
-    hemi.color.set(0xfff6ea); hemi.groundColor.set(0xd8c8ff); hemi.intensity = 1.0;
-    sun.color.set(0xffe2b0); sun.intensity = 0.75; sun.position.set(0.6, 4, -6); sun.target.position.set(0.6, 0, 0);
+    sky.visible = false; scene.background = new T.Color('#1d2747'); scene.fog = null;
+    hemi.color.set(0xd0ccff); hemi.groundColor.set(0x3a2a5a); hemi.intensity = 0.85;
+    sun.color.set(0xb8ccff); sun.intensity = 0.35; sun.position.set(0.6, 4, -6); sun.target.position.set(0.6, 0, 0);
     Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6 }); sun.shadow.camera.updateProjectionMatrix();
     lamp.position.set(3.2, 1.35, -3.3); lamp.intensity = 1.2; boxLight.intensity = 1.2;
   } else if (name === 'yard') {
@@ -1148,19 +1309,25 @@ function setEnv(name) {
     scene.background = null; scene.fog = new T.Fog('#24356a', 60, 200); stars.visible = true;
     hemi.intensity = 0.6; sun.intensity = 0.6;
   } else if (name === 'desert') {
-    scene.background = null; scene.fog = new T.Fog('#d6ecff', 90, 340);
-    skyMat.uniforms.top.value.set('#2f8ff0'); skyMat.uniforms.bottom.value.set('#bfe6ff'); skyMat.uniforms.sunAmt.value = 1;
-    hemi.color.set(0xfff6e8); hemi.groundColor.set(0xd08a50); hemi.intensity = 0.5;
-    sun.color.set(0xffe6c4); sun.intensity = 0.85; sun.position.set(30, 26, 18); sun.target.position.set(0, 0, 0);
+    scene.background = null; scene.fog = new T.Fog('#f1c79a', 80, 330);
+    skyMat.uniforms.top.value.set('#5d9bd4'); skyMat.uniforms.bottom.value.set('#f5cf9f'); skyMat.uniforms.sunAmt.value = 1;
+    hemi.color.set(0xfff0dc); hemi.groundColor.set(0xa0603a); hemi.intensity = 0.7;
+    sun.color.set(0xffe0b8); sun.intensity = 1.45; sun.position.set(30, 26, 18); sun.target.position.set(0, 0, 0);
     skyMat.uniforms.sunDir.value.set(30, 26, 18).normalize();
     Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22 }); sun.shadow.camera.updateProjectionMatrix();
   } else if (name === 'academy') {
-    sky.visible = false; scene.background = new T.Color('#cfe6ff'); scene.fog = null;
-    hemi.color.set(0xffffff); hemi.groundColor.set(0xb8c8e0); hemi.intensity = 0.95;
-    sun.color.set(0xffffff); sun.intensity = 0.95; sun.position.set(5, 20, 9); sun.target.position.set(0, 0, 0);
+    sky.visible = false; scene.background = new T.Color('#0b1230'); scene.fog = null;
+    hemi.color.set(0xeaf2ff); hemi.groundColor.set(0x2a3460); hemi.intensity = 0.95;
+    sun.color.set(0xffffff); sun.intensity = 0.7; sun.position.set(4, 16, 6); sun.target.position.set(0, 0, 0);
     Object.assign(sun.shadow.camera, { left: -15, right: 15, top: 15, bottom: -15 }); sun.shadow.camera.updateProjectionMatrix();
   }
-  SFX.music(name === 'desert' ? 'morning' : name === 'academy' ? 'march' : null);
+  if (name === 'level2') {
+    sky.visible = false; scene.background = new T.Color('#0b1230'); scene.fog = null;
+    hemi.color.set(0xeaf2ff); hemi.groundColor.set(0x2a3460); hemi.intensity = 0.95;
+    sun.color.set(0xffffff); sun.intensity = 0.7; sun.position.set(4, 16, 6); sun.target.position.set(0, 0, 0);
+    Object.assign(sun.shadow.camera, { left: -28, right: 28, top: 28, bottom: -28 }); sun.shadow.camera.updateProjectionMatrix();
+  }
+  SFX.music(name === 'desert' ? 'morning' : name === 'academy' || name === 'level2' ? 'march' : null);
 }
 
 // ============================== Actors ==============================
@@ -1218,14 +1385,15 @@ function updatePlayer(dt) {
   const fx = -Math.sin(camYaw), fz = -Math.cos(camYaw), rx = -fz, rz = fx;
   const tx = (fx * iz + rx * ix) * maxS, tz = (fz * iz + rz * ix) * maxS, k = Math.min(1, dt * (P.onGround ? 10 : 3));
   P.vel.x += (tx - P.vel.x) * k; P.vel.z += (tz - P.vel.z) * k;
-  P.pos.x += P.vel.x * dt; P.pos.z += P.vel.z * dt;
+  if (G.scene === 'level2') { const nx = P.pos.x + P.vel.x * dt, nz = P.pos.z + P.vel.z * dt; if (L2.walkable(nx, nz)) { P.pos.x = nx; P.pos.z = nz; } else if (L2.walkable(nx, P.pos.z)) P.pos.x = nx; else if (L2.walkable(P.pos.x, nz)) P.pos.z = nz; }
+  else { P.pos.x += P.vel.x * dt; P.pos.z += P.vel.z * dt; }
   const solids = ENV_SOLIDS[G.scene] || [];
   for (const s of solids) {
     if (s.w) { const hx = s.w / 2 + 0.3, hz = s.d / 2 + 0.3, dx = P.pos.x - s.x, dz = P.pos.z - s.z; if (Math.abs(dx) < hx && Math.abs(dz) < hz) { if (hx - Math.abs(dx) < hz - Math.abs(dz)) P.pos.x = s.x + Math.sign(dx) * hx; else P.pos.z = s.z + Math.sign(dz) * hz; } }
     else { const dx = P.pos.x - s.x, dz = P.pos.z - s.z, d = Math.hypot(dx, dz), m = s.r + 0.35; if (d < m && d > 1e-4) { P.pos.x = s.x + dx / d * m; P.pos.z = s.z + dz / d * m; } }
   }
   if (G.scene === 'bedroom') { P.pos.x = Math.max(-3.65, Math.min(3.65, P.pos.x)); P.pos.z = Math.max(-3.65, Math.min(3.65, P.pos.z)); }
-  else { const R = Math.hypot(P.pos.x, P.pos.z), lim = G.scene === 'yard' ? 13 : G.scene === 'level1' ? 80 : G.scene === 'academy' ? 12.6 : 70; if (R > lim) { P.pos.x *= lim / R; P.pos.z *= lim / R; } }
+  else { const R = Math.hypot(P.pos.x, P.pos.z), lim = G.scene === 'yard' ? 13 : G.scene === 'level1' ? 80 : G.scene === 'academy' ? 12.6 : G.scene === 'level2' ? 99 : 70; if (R > lim) { P.pos.x *= lim / R; P.pos.z *= lim / R; } }
   const gy = groundY(P.pos.x, P.pos.z);
   P.vy -= 9.81 * dt; P.pos.y += P.vy * dt;
   if (P.pos.y <= gy) { P.pos.y = gy; P.vy = 0; P.onGround = true; } else if (P.pos.y - gy > 0.05) P.onGround = false;
@@ -1239,6 +1407,7 @@ function followCamera(dt, snap = false) {
   if (G.scene === 'bedroom') { cx = Math.max(-3.8, Math.min(3.8, cx)); cz = Math.max(-3.8, Math.min(3.8, cz)); cy = Math.max(0.5, Math.min(2.9, cy)); }
   else cy = Math.max(cy, groundY(cx, cz) + 0.6);
   if (G.scene === 'academy') { const r = Math.hypot(cx, cz); if (r > 12.8) { cx *= 12.8 / r; cz *= 12.8 / r; } cy = Math.min(cy, 6); }
+  else if (G.scene === 'level2') { for (let i = 0; i < 12 && !L2.walkable(cx, cz, 0.15); i++) { cx = tgt.x + (cx - tgt.x) * 0.82; cz = tgt.z + (cz - tgt.z) * 0.82; } cy = Math.max(0.6, Math.min(cy, Math.hypot(P.pos.x, P.pos.z) > HR_ACADEMY ? 4.0 : 5.6)); }
   const want = new T.Vector3(cx, cy, cz);
   if (snap) camera.position.copy(want); else camera.position.lerp(want, Math.min(1, dt * 7));
   camera.lookAt(tgt);
@@ -1276,6 +1445,7 @@ const ACTIONS = {
   bedroom: () => G.scene === 'bedroom' && !G.boxOpened ? { at: ENV.bedroom.userData.box.root.position, r: 1.3, label: 'act_box', fn: openBox } : null,
   level1: () => (G.scene === 'level1' ? L1.action() : null),
   academy: () => (G.scene === 'academy' ? ACAD.action() : null),
+  level2: () => (G.scene === 'level2' ? L2.action() : null),
   yard: () => G.scene === 'yard' && G.beamReady ? { at: new T.Vector3(ship.position.x, 0, ship.position.z), r: 1.3, label: 'act_beam', fn: beamUp } : null,
 };
 const v3 = new T.Vector3();
@@ -1294,12 +1464,12 @@ function updateActionUI() {
 $('prompt').addEventListener('click', () => nearAction && nearAction.fn());
 
 // voice (tts capability, optional)
-let tts = null, voiceOn = true;
-const biP = (o) => { const other = LANG === 'ar' ? 'en' : 'ar'; const v = (x) => (typeof o[x] === 'function' ? o[x](playerName()) : o[x]); return `<p>${v(LANG)}</p><p class="alt" dir="${other === 'ar' ? 'rtl' : 'ltr'}">${v(other)}</p>`; };
+let tts = null, voiceOn = false;
+const biP = (o) => { const other = LANG === 'ar' ? 'en' : 'ar'; const v = (x) => (typeof o[x] === 'function' ? o[x](playerName()) : o[x]); return `<p>${v(LANG)}</p>`; };
 function speakWeb(text) { try { const ss = window.speechSynthesis; if (!ss) return; ss.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = LANG === 'ar' ? 'ar-SA' : 'en-US'; u.rate = 0.95; u.pitch = 1.1; const vs = ss.getVoices().filter((v) => v.lang && v.lang.toLowerCase().startsWith(LANG === 'ar' ? 'ar' : 'en')); if (vs.length) u.voice = vs.find((v) => /female|zira|samantha|google/i.test(v.name)) || vs[0]; ss.speak(u); } catch (e) {} }
 new MutationObserver(() => { const w = document.getElementById('stickerWrap'); if (!w || w.hidden || !voiceOn) return; const c = w.querySelector('.sticker'); if (!c || c.dataset.spoken) return; c.dataset.spoken = 1; const h = c.querySelector('h3'), p = c.querySelector('p:not(.alt)'); say(((h ? h.textContent + '. ' : '') + (p ? p.textContent : '')).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, ''), 'nuri'); }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
 function say(text, who) { if (!voiceOn) return; text = String(text).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\u2B50]/gu, ''); if (!tts) return speakWeb(text); tts.speak(text.replace(/<[^>]+>/g, ''), { voice: who === 'nuri' ? 'airy' : 'buttery', language: LANG === 'ar' ? 'ar' : 'en' }).catch(() => {}); }
-$('voiceBtn').hidden = false; $('voiceBtn').setAttribute('aria-pressed', 'true');
+$('voiceBtn').hidden = false; $('voiceBtn').setAttribute('aria-pressed', 'false');
 $('voiceBtn').addEventListener('click', () => { voiceOn = !voiceOn; $('voiceBtn').setAttribute('aria-pressed', String(voiceOn)); if (!voiceOn) { tts?.stop?.(); try { speechSynthesis.cancel(); } catch (e) {} } });
 
 // dialogue: short lines that type in, no talking sounds, and a Skip button that skips the whole conversation
@@ -1342,6 +1512,7 @@ function giveControl() { G.control = true; $('keysHint').hidden = coarse; $('sti
 
 // ============================== Story ==============================
 function startBedroom() {
+  $('passBtn').hidden = true;
   $('stHud').hidden = true; $('mapHud').hidden = true;
   $('tray').hidden = true; $('stickerWrap').hidden = true;
   G.scene = 'bedroom'; setEnv('bedroom'); G.boxOpened = false;
@@ -1504,20 +1675,20 @@ let sample = null, aiCtl = null;
 function openChat() {
   const c = $('chat'); c.hidden = false; c.dir = LANG === 'ar' ? 'rtl' : 'ltr'; G.control = false;
   $('chatTitle').innerHTML = t('chatTitle');
-  G.qa = G.scene === 'level1' ? L1.qa() : G.scene === 'academy' ? ACAD.qa() : QA;
+  G.qa = G.scene === 'level1' ? L1.qa() : G.scene === 'academy' ? ACAD.qa() : G.scene === 'level2' ? L2.qa() : QA;
   $('chips').innerHTML = G.qa.map((x, i) => `<button class="chip" data-i="${i}">${t(x.q)}</button>`).join('');
   $('chips').querySelectorAll('.chip').forEach((b) => (b.onclick = () => askPreset(+b.dataset.i)));
   $('askForm').hidden = !sample; $('askInput').placeholder = t('askPh'); $('askSend').textContent = t('send');
   $('askNote').textContent = sample ? t('noteAI') : t('noteNoAI');
   if (!$('chatLog').children.length) addBubble('nuri', LANG === 'ar' ? `أهلاً ${playerName()}! شو بدك تعرف؟` : `Hi ${playerName()}! What would you like to know?`);
 }
-function closeChat() { $('chat').hidden = true; aiCtl?.abort(); if (G.nuriJoined && !G.cine && !G.dialog && $('doneCard').hidden && !L1.panelOpen() && !ACAD.camLock() && $('stickerWrap').hidden) giveControl(); }
+function closeChat() { $('chat').hidden = true; aiCtl?.abort(); if (G.nuriJoined && !G.cine && !G.dialog && $('doneCard').hidden && !L1.panelOpen() && !ACAD.camLock() && !L2.panelOpen() && $('stickerWrap').hidden) giveControl(); }
 $('helpBtn').addEventListener('click', () => ($('chat').hidden ? openChat() : closeChat()));
 $('chatClose').addEventListener('click', closeChat);
 function addBubble(who, text) { const b = document.createElement('div'); b.className = 'bub ' + who; b.textContent = text; $('chatLog').appendChild(b); $('chatLog').scrollTop = 1e6; return b; }
 function askPreset(i) {
   const x = G.qa[i]; addBubble('me', t(x.q));
-  let ans; if (x.hint) { ans = G.scene === 'level1' ? L1.hint() : G.scene === 'academy' ? ACAD.hint() : t(HINTS[Math.min(G.hintLevel, HINTS.length - 1)]); if (G.scene !== 'level1' && G.scene !== 'academy') G.hintLevel++; } else ans = t(x.a);
+  let ans; if (x.hint) { ans = G.scene === 'level1' ? L1.hint() : G.scene === 'academy' ? ACAD.hint() : G.scene === 'level2' ? L2.hint() : t(HINTS[Math.min(G.hintLevel, HINTS.length - 1)]); if (G.scene !== 'level1' && G.scene !== 'academy' && G.scene !== 'level2') G.hintLevel++; } else ans = t(x.a);
   setExpr(nuri, x.hint ? 'idle' : 'happy'); setTimeout(() => setExpr(nuri, 'idle'), 1500);
   addBubble('nuri', ans); say(ans, 'nuri');
 }
@@ -1529,7 +1700,7 @@ Rules for every reply:
 - Never solve challenges, choose answers or complete missions for the child. If they ask for an answer, give a small hint instead, and a more specific hint only if they ask again.
 - Never ask for personal information such as a full name, address, school, age or photos. If the child shares some, kindly say they do not need to.
 - If the child asks about something unsafe or not suitable for children, gently steer back to space and science.
-- Stay in character as Nuri.${G.scene === 'level1' ? '\n' + L1.context() : G.scene === 'academy' ? '\n' + ACAD.context() : ''}`;
+- Stay in character as Nuri.${G.scene === 'level1' ? '\n' + L1.context() : G.scene === 'academy' ? '\n' + ACAD.context() : G.scene === 'level2' ? '\n' + L2.context() : ''}`;
 $('askForm').addEventListener('submit', async (e) => {
   e.preventDefault(); const q = $('askInput').value.trim(); if (!q || !sample) return;
   $('askInput').value = ''; addBubble('me', q); G.chat.push({ role: 'user', content: q }); G.chat = G.chat.slice(-8);
@@ -1556,8 +1727,8 @@ function applyLang() {
   $('tTitle').innerHTML = t('title'); $('tSub').textContent = t('sub'); $('tIntro').textContent = t('intro');
   $('tNameLbl').textContent = t('nameLbl'); $('tNameNote').textContent = t('nameNote'); $('nameInput').placeholder = t('defaultName');
   $('tControls').innerHTML = coarse ? t('controlsTouch') : t('controlsDesk'); $('startBtn').textContent = t('start');
-  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1');
-  L1.relang(); if (G.scene === 'academy') ACAD.relang();
+  $('keysHint').textContent = t('keysHint'); $('helpLbl').textContent = t('help'); $('skipL1Btn').textContent = t('skipL1'); $('skipL2Btn').textContent = t('skipL2');
+  L1.relang(); L2.relang(); if (G.scene === 'academy') ACAD.relang();
   for (const id of ['dialog', 'caption', 'objective', 'prompt', 'skipBtn']) $(id).dir = LANG === 'ar' ? 'rtl' : 'ltr';
   document.querySelector('.topbar').dir = LANG === 'ar' ? 'rtl' : 'ltr';
   if (G.objective) setObjective(G.objective);
@@ -1570,6 +1741,7 @@ function applyLang() {
 document.querySelectorAll('.seg').forEach((b) => b.addEventListener('click', () => { LANG = b.dataset.lang; applyLang(); }));
 $('langBtn').addEventListener('click', () => { LANG = LANG === 'ar' ? 'en' : 'ar'; applyLang(); });
 $('startBtn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; startBedroom(); });
+$('skipL2Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L2.start(); });
 $('skipL1Btn').addEventListener('click', () => { G.name = $('nameInput').value; $('titleScreen').hidden = true; L1.start(); });
 $('nameInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('startBtn').click(); });
 
@@ -2094,6 +2266,650 @@ const L1 = (() => {
   };
 })();
 
+const HR_ACADEMY = 13.2;
+// ============================== Fun helpers ==============================
+function starsFor(n) { return n === 0 ? 3 : n <= 2 ? 2 : 1; }
+function winBox(stars, fact, id, label) { return `<div class="winbox"><div class="stars">${[1, 2, 3].map((i) => `<span class="${i <= stars ? 'on' : ''}" style="animation-delay:${i * 0.15}s">★</span>`).join('')}</div><div class="fact1">${fact}</div><div class="actions"><span></span><button class="btn green" id="${id}">${label}</button></div></div>`; }
+function confetti(ov = $('lvOverlay')) { for (let i = 0; i < 46; i++) { const c = document.createElement('i'); c.className = 'cf'; c.style.left = Math.random() * 100 + '%'; c.style.background = ['#ec8a3c', '#9ccc3c', '#8fd0ef', '#ffd27a', '#d8433a'][i % 5]; c.style.animationDelay = Math.random() * 0.35 + 's'; ov.appendChild(c); setTimeout(() => c.remove(), 2200); } }
+
+
+// ============================== LEVEL 2: Junior Astronaut Training Academy ==============================
+// ============================== LEVEL 2: Junior Astronaut Training Academy ==============================
+const L2 = (() => {
+  const tr = (o, ...a) => { const v = o[LANG]; return typeof v === 'function' ? v(...a) : v; };
+  const raf2 = (f) => requestAnimationFrame(f);
+  const HR = 13.5;
+  const TASKS = [
+    { id: 'dest', ang: 50, col: 0x8fd0ef, ic: '🪐', stamp: { ic: '🧭', en: 'Navigator', ar: 'الملّاح' }, name: { en: 'Find Your Destination', ar: 'حدّد وجهتك' } },
+    { id: 'suit', ang: 100, col: 0xec8a3c, ic: '🧑‍🚀', stamp: { ic: '🧑‍🚀', en: 'Suit Technician', ar: 'فنّي البدلات' }, name: { en: 'Suit Up!', ar: 'ارتدِ بدلتك!' } },
+    { id: 'pack', ang: 150, col: 0x9ccc3c, ic: '📦', stamp: { ic: '📦', en: 'Cargo Master', ar: 'خبير الحمولة' }, name: { en: 'Pack for Survival', ar: 'جهّز مؤن النجاة' } },
+    { id: 'sys', ang: -150, col: 0xffd27a, ic: '🔧', stamp: { ic: '🔧', en: 'Systems Engineer', ar: 'مهندس الأنظمة' }, name: { en: 'Systems Check', ar: 'فحص الأنظمة' } },
+    { id: 'emerg', ang: -100, col: 0xec5a50, ic: '🚨', stamp: { ic: '⚡', en: 'Mission Commander', ar: 'قائد المهمة' }, name: { en: 'Mission Emergency!', ar: 'طوارئ في المهمة!' } },
+  ];
+  const LAUNCH_ANG = -50;
+  const deg = (a) => (a * Math.PI) / 180;
+  const at = (ang, r) => ({ x: Math.sin(deg(ang)) * r, z: Math.cos(deg(ang)) * r });
+  const UI = {
+    eyebrow: { en: 'Level 2 · Junior Astronaut Training Academy', ar: 'المرحلة 2 · أكاديمية تدريب رواد الفضاء الصغار' },
+    task: { en: (n) => `Training room ${n} of 5`, ar: (n) => `غرفة التدريب ${n} من 5` },
+    enter: { en: (n) => `Enter: ${n}`, ar: (n) => `ادخل: ${n}` },
+    locked: { en: 'Finish the training rooms in order. Follow the pin!', ar: 'أنهِ غرف التدريب بالترتيب. اتبع الدبوس!' },
+    sci: { en: 'Science file', ar: 'ملف علمي' }, back: { en: 'Back to the Academy', ar: 'عُد إلى الأكاديمية' }, cont: { en: 'Continue', ar: 'متابعة' }, retry: { en: 'Try again', ar: 'حاول مرة أخرى' },
+    passT: { en: 'Astronaut Passport', ar: 'جواز سفر رائد الفضاء' }, passP: { en: (n) => `${n} of 5 stamps collected`, ar: (n) => `جمعت ${n} من 5 أختام` },
+    newStamp: { en: 'New stamp!', ar: 'ختم جديد!' },
+    launchAct: { en: 'Enter the launch bay', ar: 'ادخل منصة الإطلاق' },
+    doneT: { en: 'LEVEL 2 COMPLETE — JUNIOR ASTRONAUT', ar: 'انتهت المرحلة الثانية — رائد فضاء صغير' },
+    doneP: { en: (n) => `Amazing, ${n}! You earned all five stamps and you are ready for launch.`, ar: (n) => `رائع يا ${n}! جمعت الأختام الخمسة وأصبحت جاهزاً للإطلاق.` },
+    next: { en: 'Next Level: Launch to Mars (coming soon)', ar: 'المرحلة التالية: الإطلاق نحو المريخ (قريباً)' },
+    learned: { en: 'What you learned', ar: 'ماذا تعلّمت' },
+    replay: { en: 'Play Level 2 again', ar: 'العب المرحلة الثانية مرة أخرى' }, restart: { en: 'Play from the beginning', ar: 'العب من البداية' },
+    chipHint: { en: 'Give me a hint', ar: 'أعطني تلميحاً' }, chipWhy: { en: 'Why does this matter?', ar: 'لماذا هذا مهم؟' }, chipWhat: { en: 'What do I do here?', ar: 'ماذا أفعل هنا؟' },
+  };
+  const OBJ = {
+    go: { en: () => `Go to training room ${S.next + 1}: ${tr(TASKS[S.next].name)}`, ar: () => `اذهب إلى غرفة التدريب ${S.next + 1}: ${tr(TASKS[S.next].name)}` },
+    launch: { en: 'All stamps collected! Walk to the launch bay.', ar: 'جمعت كل الأختام! امشِ إلى منصة الإطلاق.' },
+    task: { en: () => tr(TASKS[S.cur].name), ar: () => tr(TASKS[S.cur].name) },
+  };
+  for (const k in OBJ) TXT['l2_' + k] = OBJ[k];
+  const NLINE = {
+    dest: { en: 'Planets are always moving! We need to know where Mars will be when we arrive.', ar: 'الكواكب تتحرك دائماً! علينا أن نعرف أين سيكون المريخ عندما نصل.' },
+    suit: { en: 'A spacesuit is like a tiny spaceship. What keeps the astronaut breathing?', ar: 'بدلة الفضاء مثل سفينة فضاء صغيرة. ما الذي يجعل رائد الفضاء يتنفس؟' },
+    pack: { en: 'We can’t carry everything! What will help our crew survive?', ar: 'لا يمكننا حمل كل شيء! ما الذي سيساعد طاقمنا على البقاء؟' },
+    sys: { en: 'Before launch, every important system needs a check. Can you find what’s wrong?', ar: 'قبل الإطلاق، يجب فحص كل نظام مهم. هل تجد العطل؟' },
+    emerg: { en: 'Uh-oh! We don’t have enough power for everything. What matters most?', ar: 'أوه لا! الطاقة لا تكفي لكل شيء. ما الأهم؟' },
+  };
+  const SCI = {
+    dest: { en: 'Earth moves faster than Mars. We launch about every 26 months and fly a curved path that takes about 7 months.', ar: 'الأرض أسرع من المريخ. ننطلق تقريباً كل 26 شهراً، ونطير في مسار منحنٍ يستغرق نحو 7 أشهر.' },
+    suit: { en: 'A spacesuit gives oxygen, keeps the right pressure, and keeps the astronaut cool.', ar: 'بدلة الفضاء توفر الأكسجين، وتحافظ على الضغط، وتبرّد رائد الفضاء.' },
+    pack: { en: 'A Mars trip could take 2 to 3 years, with no stores on the way. Every kilogram counts.', ar: 'قد تستغرق رحلة المريخ من سنتين إلى ثلاث، ولا متاجر في الطريق. كل كيلوغرام مهم.' },
+    sys: { en: 'Messages to Earth take up to 22 minutes, so the crew must fix problems themselves.', ar: 'تستغرق الرسائل إلى الأرض حتى 22 دقيقة، لذلك على الطاقم إصلاح المشكلات بنفسه.' },
+    emerg: { en: 'When power is low, life support always comes first.', ar: 'عندما تقلّ الطاقة، يأتي دعم الحياة أولاً دائماً.' },
+  };
+  const LEARN = {
+    dest: { en: 'Planets keep moving, so we aim for where Mars will be.', ar: 'الكواكب تتحرك باستمرار، لذلك نقصد المكان الذي سيكون فيه المريخ.' },
+    suit: { en: 'A spacesuit gives pressure, oxygen and cooling, like a tiny spaceship.', ar: 'بدلة الفضاء توفر الضغط والأكسجين والتبريد، مثل سفينة فضاء صغيرة.' },
+    pack: { en: 'Space is limited, so essentials like water, food, medicine and tools come first.', ar: 'المكان محدود، لذلك تأتي الأساسيات أولاً: الماء والطعام والدواء والأدوات.' },
+    sys: { en: 'Power, life support and communication must all be checked before launch.', ar: 'يجب فحص الطاقة ودعم الحياة والاتصال قبل الإطلاق.' },
+    emerg: { en: 'In an emergency, life support comes first.', ar: 'في الطوارئ، دعم الحياة أولاً.' },
+  };
+  const WHAT = {
+    dest: { en: 'Watch the floor. When Mars is in the green zone, press the launch button.', ar: 'راقب الأرضية. عندما يكون المريخ في المنطقة الخضراء، اضغط زر الإطلاق.' },
+    suit: { en: 'Carry the right parts to the dummy, then press the test button.', ar: 'احمل القطع الصحيحة إلى المجسّم، ثم اضغط زر الفحص.' },
+    pack: { en: 'Carry supplies into the pod. Stay at 100 or less, then pull the lever.', ar: 'احمل المؤن إلى الحاوية. لا تتجاوز 100، ثم اسحب الذراع.' },
+    sys: { en: 'Find the red light, fix it, then press the console button.', ar: 'جد الضوء الأحمر وأصلحه، ثم اضغط زر لوحة التحكم.' },
+    emerg: { en: 'Carry power cells to the systems that matter most, then pull the lever.', ar: 'احمل خلايا الطاقة إلى الأنظمة الأهم، ثم اسحب الذراع.' },
+    hub: { en: 'Walk into the glowing room. Finish all five rooms!', ar: 'ادخل الغرفة المضيئة. أنهِ الغرف الخمس!' },
+  };
+  const HINTS = {
+    dest: [{ en: 'Look at the green zone on the floor.', ar: 'انظر إلى المنطقة الخضراء على الأرضية.' }, { en: 'Mars moves slowly. Wait until it is inside the green zone.', ar: 'المريخ يتحرك ببطء. انتظر حتى يدخل المنطقة الخضراء.' }, { en: 'Press launch when the button light turns green.', ar: 'اضغط الإطلاق عندما يصبح ضوء الزر أخضر.' }],
+    suit: [{ en: 'A cap is not a helmet!', ar: 'القبعة ليست خوذة!' }, { en: 'Sneakers cannot keep the air in. Find the space boots.', ar: 'الحذاء الرياضي لا يحبس الهواء. ابحث عن أحذية الفضاء.' }, { en: 'The air pack goes on the back.', ar: 'حقيبة الهواء مكانها على الظهر.' }],
+    pack: [{ en: 'What does the crew need every day?', ar: 'ماذا يحتاج الطاقم كل يوم؟' }, { en: 'Toys are heavy. Do you need them?', ar: 'الألعاب ثقيلة. هل تحتاج إليها؟' }, { en: 'Water, food, medicine and tools first.', ar: 'الماء والطعام والدواء والأدوات أولاً.' }],
+    sys: [{ en: 'Look for the blinking red light.', ar: 'ابحث عن الضوء الأحمر الوامض.' }, { en: 'Something is lying on the floor. Can it fix the problem?', ar: 'هناك شيء على الأرض. هل يمكنه حل المشكلة؟' }, { en: 'Carry it to the empty slot under the red light.', ar: 'احمله إلى المكان الفارغ تحت الضوء الأحمر.' }],
+    emerg: [{ en: 'What does the crew need every minute to stay alive?', ar: 'ماذا يحتاج الطاقم في كل دقيقة ليبقى حياً؟' }, { en: 'Space is very cold. What keeps the cabin warm?', ar: 'الفضاء بارد جداً. ما الذي يُبقي المقصورة دافئة؟' }, { en: 'Who can help you from far away?', ar: 'من يستطيع مساعدتك من بعيد؟' }],
+    hub: [{ en: 'Follow the orange pin to the glowing room.', ar: 'اتبع الدبوس البرتقالي إلى الغرفة المضيئة.' }],
+  };
+  const SECRET = {
+    dest: 'Press the launch button when Mars is inside the green zone on the floor.',
+    suit: 'Correct parts: helmet (not the cap), gloves, space boots (not sneakers) and the air pack on the back. Then press the test button.',
+    pack: 'Essentials: water, food, medical kit, tools (85). Books (5) also fit. Total must be 100 or less. Then pull the lever.',
+    sys: 'Carry the battery to the empty power slot, or the cable plug to the comm socket, then press the console button.',
+    emerg: 'Fill life support (3 cells), heating (2) and radio (1) = 6 cells, then pull the lever.',
+    hub: 'The child walks into the next glowing training room.',
+  };
+
+  let S = {};
+  const fresh = () => ({ next: 0, cur: -1, stamps: {}, hint: {}, panel: null, cleanup: null, launchOpen: false, phase: 'hub' });
+  S = fresh();
+
+  // ---------- The Academy hall ----------
+  const W = new T.Group(); W.visible = false; scene.add(W); ENV.level2 = W;
+  const solids = []; ENV_SOLIDS.level2 = solids;
+  const floorTex = canvasTex(1024, 1024, (c, w) => {
+    c.fillStyle = '#18224a'; c.fillRect(0, 0, w, w);
+    for (let i = 0; i < 64; i++) { const a = (i / 64) * Math.PI * 2; c.strokeStyle = 'rgba(143,208,239,.08)'; c.lineWidth = 2; c.beginPath(); c.moveTo(w / 2, w / 2); c.lineTo(w / 2 + Math.cos(a) * w, w / 2 + Math.sin(a) * w); c.stroke(); }
+    [0.16, 0.3, 0.44].forEach((r, i) => { c.strokeStyle = i === 1 ? 'rgba(236,138,60,.6)' : 'rgba(143,208,239,.45)'; c.lineWidth = i === 1 ? 10 : 6; c.beginPath(); c.arc(w / 2, w / 2, r * w, 0, 7); c.stroke(); });
+    c.strokeStyle = 'rgba(111,224,255,.8)'; c.lineWidth = 8; c.beginPath(); c.arc(w / 2, w / 2, 0.49 * w, 0, 7); c.stroke();
+  });
+  const floor = mesh(new T.CircleGeometry(HR, 72), new T.MeshStandardMaterial({ map: floorTex, roughness: 0.55, metalness: 0.2 }), 0, 0, 0, W, false); floor.rotation.x = -Math.PI / 2;
+  const wallTex = canvasTex(1024, 256, (c, w, h) => {
+    c.fillStyle = '#e9edf5'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 4; i++) { const x = i * 256; c.fillStyle = '#d7dde9'; c.fillRect(x + 6, 10, 244, 60); c.fillRect(x + 6, h - 70, 244, 60); c.fillStyle = '#0b1440'; c.fillRect(x + 40, 90, 176, 80); for (let k = 0; k < 18; k++) { c.fillStyle = `rgba(255,255,255,${0.4 + Math.random() * 0.6})`; c.fillRect(x + 42 + Math.random() * 172, 92 + Math.random() * 76, 2, 2); } c.strokeStyle = '#9aa6bd'; c.lineWidth = 6; c.strokeRect(x + 40, 90, 176, 80); c.fillStyle = '#b9c2d3'; c.fillRect(x, 0, 6, h); }
+    c.fillStyle = '#6fe0ff'; c.fillRect(0, h - 8, w, 4);
+  });
+  wallTex.wrapS = T.RepeatWrapping; wallTex.repeat.set(5, 1);
+  { const gapHalf = Math.asin(2.1 / HR), gaps = [50, 100, 150, -150, -100, -50].map((a) => ((a * Math.PI) / 180 + Math.PI * 2) % (Math.PI * 2)).sort((a, b) => a - b), wallM = new T.MeshStandardMaterial({ map: wallTex, side: T.BackSide, roughness: 0.6 });
+    gaps.forEach((g0, i) => { const g1 = gaps[(i + 1) % gaps.length] + (i === gaps.length - 1 ? Math.PI * 2 : 0), st = g0 + gapHalf, len = g1 - gapHalf - st; const w = new T.Mesh(new T.CylinderGeometry(HR, HR, 7, 24, 1, true, st, len), wallM); w.position.y = 3.5; w.receiveShadow = true; W.add(w); });
+    gaps.forEach((g0) => { const w = new T.Mesh(new T.CylinderGeometry(HR, HR, 7 - 4.6, 6, 1, true, g0 - gapHalf, gapHalf * 2), wallM); w.position.y = 4.6 + (7 - 4.6) / 2; W.add(w); }); }
+  const domeTex = canvasTex(1024, 512, (c, w, h) => { const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#05081c'); g.addColorStop(1, '#17245a'); c.fillStyle = g; c.fillRect(0, 0, w, h); for (let i = 0; i < 500; i++) { c.fillStyle = `rgba(255,255,255,${Math.random()})`; c.beginPath(); c.arc(Math.random() * w, Math.random() * h, Math.random() * 1.6, 0, 7); c.fill(); } });
+  const dome = new T.Mesh(new T.SphereGeometry(HR, 48, 20, 0, Math.PI * 2, 0, Math.PI / 2), new T.MeshBasicMaterial({ map: domeTex, side: T.BackSide })); dome.position.y = 7; dome.scale.y = 0.5; W.add(dome);
+  const ringM = new T.MeshBasicMaterial({ color: 0x6fe0ff });
+  const ring1 = new T.Mesh(new T.TorusGeometry(HR - 0.05, 0.08, 8, 96), ringM); ring1.rotation.x = Math.PI / 2; ring1.position.y = 7; W.add(ring1);
+  // hologram of Mars in the middle
+  mesh(new T.CylinderGeometry(1.8, 2.1, 0.8, 40), mat(0xf4f1ea, { roughness: 0.4, metalness: 0.2 }), 0, 0.4, 0, W);
+  mesh(new T.TorusGeometry(1.75, 0.07, 8, 48), new T.MeshBasicMaterial({ color: 0xec8a3c }), 0, 0.82, 0, W, false).rotation.x = Math.PI / 2;
+  const holo = new T.Group(); holo.position.y = 3.2; W.add(holo);
+  holo.add(new T.Mesh(new T.SphereGeometry(1.2, 32, 20), new T.MeshBasicMaterial({ color: 0xff8a5a, transparent: true, opacity: 0.35, depthWrite: false, blending: T.AdditiveBlending })));
+  holo.add(new T.Mesh(new T.SphereGeometry(1.22, 18, 12), new T.MeshBasicMaterial({ color: 0xffc4a0, wireframe: true, transparent: true, opacity: 0.35 })));
+  const hRing = new T.Mesh(new T.TorusGeometry(1.8, 0.03, 6, 64), new T.MeshBasicMaterial({ color: 0x6fe0ff, transparent: true, opacity: 0.7 })); hRing.rotation.x = 1.2; holo.add(hRing);
+  const beamH = new T.Mesh(new T.CylinderGeometry(1.1, 1.6, 2.4, 32, 1, true), new T.MeshBasicMaterial({ color: 0x6fe0ff, transparent: true, opacity: 0.12, side: T.DoubleSide, depthWrite: false, blending: T.AdditiveBlending })); beamH.position.y = 2; W.add(beamH);
+  solids.push({ x: 0, z: 0, r: 2.2 });
+  const hallLight = new T.PointLight(0x9fdcff, 1.1, 30, 1.2); hallLight.position.set(0, 6, 0); W.add(hallLight);
+  const holoLight = new T.PointLight(0xff9a6a, 1.0, 10, 1.5); holoLight.position.set(0, 3, 0); W.add(holoLight);
+  // doors
+  const signTex = (num, ic, col, done) => canvasTex(256, 160, (c, w, h) => { c.fillStyle = '#0b1440'; c.fillRect(0, 0, w, h); c.strokeStyle = done ? '#9ccc3c' : col; c.lineWidth = 10; c.strokeRect(5, 5, w - 10, h - 10); c.fillStyle = done ? '#9ccc3c' : col; c.beginPath(); c.arc(62, 80, 40, 0, 7); c.fill(); c.fillStyle = '#0b1440'; c.font = '800 50px Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(done ? '✓' : num, 62, 84); c.strokeStyle = done ? '#9ccc3c' : col; c.lineWidth = 8; c.beginPath(); c.arc(178, 80, 36, 0, 7); c.stroke(); c.fillStyle = c.strokeStyle; c.beginPath(); c.arc(178, 80, 14, 0, 7); c.fill(); });
+  function door(ang, col, sign, big) {
+    const p = at(ang, HR - 0.15), g = new T.Group(); g.position.set(p.x, 0, p.z); g.rotation.y = deg(ang) + Math.PI; W.add(g);
+    const wdt = big ? 3.6 : 2.4, hgt = big ? 4.2 : 3.2, frameM = mat(0xc9d0de, { roughness: 0.4, metalness: 0.3 });
+    mesh(new T.BoxGeometry(wdt + 0.6, 0.4, 0.5), frameM, 0, hgt + 0.2, 0, g); mesh(new T.BoxGeometry(0.3, hgt, 0.5), frameM, -wdt / 2 - 0.15, hgt / 2, 0, g); mesh(new T.BoxGeometry(0.3, hgt, 0.5), frameM, wdt / 2 + 0.15, hgt / 2, 0, g);
+    const panelM = new T.MeshStandardMaterial({ color: 0x1a2440, emissive: col, emissiveIntensity: 0.35 });
+    const panel = mesh(new T.BoxGeometry(wdt, hgt, 0.15), panelM, 0, hgt / 2, -0.05, g, false);
+    const signM = new T.MeshBasicMaterial({ map: sign }); const sg = mesh(new T.PlaneGeometry(1.6, 1), signM, 0, hgt + 1.0, 0.27, g, false);
+    const lightP = new T.PointLight(col, 0, 6, 1.6); lightP.position.set(0, 2, 1.2); g.add(lightP);
+    return { g, panel, panelM, signM, lightP, hgt };
+  }
+  const doors = TASKS.map((tk, i) => door(tk.ang, tk.col, signTex(String(i + 1), tk.ic, '#' + tk.col.toString(16).padStart(6, '0'), false), true));
+  doors.forEach((d) => { d.panelM.transparent = true; d.panelM.opacity = 0.4; d.panelM.depthWrite = false; d.panelM.color.set(0x220a0a); d.panelM.emissive.set(0xff3a2a); });
+  const launchSign = canvasTex(256, 160, (c, w, h) => { c.fillStyle = '#0b1440'; c.fillRect(0, 0, w, h); c.strokeStyle = '#ec5a50'; c.lineWidth = 10; c.strokeRect(5, 5, w - 10, h - 10); c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(128, 22); c.lineTo(150, 62); c.lineTo(150, 118); c.lineTo(106, 118); c.lineTo(106, 62); c.closePath(); c.fill(); c.fillStyle = '#ec5a50'; c.beginPath(); c.moveTo(106, 96); c.lineTo(88, 128); c.lineTo(106, 118); c.fill(); c.beginPath(); c.moveTo(150, 96); c.lineTo(168, 128); c.lineTo(150, 118); c.fill(); });
+  const launch = door(LAUNCH_ANG, 0xec5a50, launchSign, true);
+  const entrance = door(0, 0x6fe0ff, canvasTex(256, 160, (c, w, h) => { c.fillStyle = '#0b1440'; c.fillRect(0, 0, w, h); c.drawImage(patchTex.image, w / 2 - 70, 10, 140, 140); }), true);
+  // ---------- Rooms behind each door ----------
+  const RD = 8.5, RW = 8.5, RH = 4.6, DW = 4.2;
+  const ROOM_ANGS = [...TASKS.map((t) => t.ang), LAUNCH_ANG];
+  const local = (x, z, ang) => { const a = deg(ang); return { d: x * Math.sin(a) + z * Math.cos(a), v: x * Math.cos(a) - z * Math.sin(a) }; };
+  const toW = (i, lx, lz) => { const a = deg(ROOM_ANGS[i]), b = at(ROOM_ANGS[i], HR); return { x: b.x + lx * Math.cos(a) + lz * Math.sin(a), z: b.z - lx * Math.sin(a) + lz * Math.cos(a), a }; };
+  const V3 = (i, lx, ly, lz) => { const p = toW(i, lx, lz); return new T.Vector3(p.x, ly, p.z); };
+  const pin = (ang) => { const p = at(ang, HR + (ang === LAUNCH_ANG ? 5.5 : RD * 0.5)); return new T.Vector3(p.x, 0, p.z); };
+  function roomOpen(i) { return i === 5 ? S.launchOpen : i <= S.next || !!S.stamps[i]; }
+  function inRoom(x, z, i) { const { d, v } = local(x, z, ROOM_ANGS[i]); return d > HR + 0.8 && Math.abs(v) < RW / 2; }
+  function walkable(x, z, m = 0.45) {
+    if (Math.hypot(x, z) < HR - 0.6) return true;
+    for (let i = 0; i < ROOM_ANGS.length; i++) {
+      if (!roomOpen(i)) continue;
+      const { d, v } = local(x, z, ROOM_ANGS[i]), dep = i === 5 ? 11 : RD;
+      if (d > HR - 0.9 && d < HR + 0.6 && Math.abs(v) < DW / 2 - m - 0.15) return true;
+      if (d >= HR + 0.4 && d < HR + dep - 0.75 && Math.abs(v) < RW / 2 - 0.75) return true;
+    }
+    return false;
+  }
+  const roomLights = [];
+  function room(ang, theme, col, dep = RD, hgt = RH) {
+    const g = new T.Group(), p = at(ang, HR); g.position.set(p.x, 0, p.z); g.rotation.y = deg(ang); W.add(g);
+    const wm = new T.MeshStandardMaterial({ color: theme.wall, roughness: 0.75, side: T.DoubleSide, map: theme.map || null });
+    const fl = mesh(new T.PlaneGeometry(RW, dep), new T.MeshStandardMaterial({ color: theme.floor, roughness: 0.6, metalness: 0.15 }), 0, 0.012, dep / 2, g, false); fl.rotation.x = -Math.PI / 2;
+    const ce = mesh(new T.PlaneGeometry(RW, dep), new T.MeshStandardMaterial({ color: 0x1a2040, side: T.DoubleSide }), 0, hgt, dep / 2, g, false); ce.rotation.x = Math.PI / 2;
+    mesh(new T.PlaneGeometry(RW, hgt), wm, 0, hgt / 2, dep, g, false).rotation.y = Math.PI;
+    [-1, 1].forEach((s) => { const w = mesh(new T.PlaneGeometry(dep, hgt), wm, s * RW / 2, hgt / 2, dep / 2, g, false); w.rotation.y = -s * Math.PI / 2; });
+    [-1, 1].forEach((s) => mesh(new T.PlaneGeometry((RW - DW) / 2, hgt), wm, s * (DW / 2 + (RW - DW) / 4), hgt / 2, 0.05, g, false));
+    if (hgt > 4.6) mesh(new T.PlaneGeometry(DW, hgt - 4.6), wm, 0, 4.6 + (hgt - 4.6) / 2, 0.05, g, false);
+    const strip = new T.MeshBasicMaterial({ color: col });
+    [-1, 1].forEach((s) => mesh(new T.BoxGeometry(0.06, 0.06, dep), strip, s * (RW / 2 - 0.05), 0.08, dep / 2, g, false));
+    mesh(new T.BoxGeometry(RW, 0.06, 0.06), strip, 0, hgt - 0.08, dep - 0.05, g, false);
+    mesh(new T.BoxGeometry(RW * 0.5, 0.05, dep * 0.5), new T.MeshBasicMaterial({ color: 0xf4f8ff }), 0, hgt - 0.03, dep / 2, g, false);
+    const L = new T.PointLight(col, 1.3, 13, 1.4); L.position.set(0, hgt - 0.8, dep / 2); g.add(L); roomLights.push(L);
+    return g;
+  }
+  // language-aware text panels
+  const RELANG2 = [];
+  const FONT = '"Nunito", "Baloo Bhaijaan 2", "Segoe UI", Tahoma, sans-serif';
+  function textPlane(parent, w, h, draw, x, y, z, ry = 0, basic = true) {
+    const cw = 512, ch = Math.round((512 * h) / w), make = () => canvasTex(cw, ch, (c) => { c.direction = LANG === 'ar' ? 'rtl' : 'ltr'; draw(c, cw, ch); });
+    const m = new T.Mesh(new T.PlaneGeometry(w, h), basic ? new T.MeshBasicMaterial({ map: make(), transparent: true }) : new T.MeshStandardMaterial({ map: make() }));
+    m.position.set(x, y, z); m.rotation.y = ry; parent.add(m);
+    const redraw = () => { m.material.map.dispose(); m.material.map = make(); m.material.needsUpdate = true; };
+    RELANG2.push(redraw); m.userData.redraw = redraw; return m;
+  }
+  const plate = (title, sub, col) => (c, w, h) => {
+    c.fillStyle = '#0b1440'; c.fillRect(0, 0, w, h); c.strokeStyle = col; c.lineWidth = 10; c.strokeRect(5, 5, w - 10, h - 10);
+    c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#ffffff'; c.font = `800 ${Math.round(h * 0.3)}px ${FONT}`; c.fillText(typeof title === 'string' ? title : tr(title), w / 2, sub ? h * 0.38 : h / 2);
+    if (sub) { c.fillStyle = '#cfe0ff'; c.font = `700 ${Math.round(h * 0.17)}px ${FONT}`; c.fillText(typeof sub === 'string' ? sub : tr(sub), w / 2, h * 0.74); }
+  };
+  const tagTex = (txt, col = '#ffc22e') => canvasTex(128, 64, (c) => { c.fillStyle = 'rgba(11,20,64,.85)'; c.beginPath(); c.roundRect ? c.roundRect(4, 4, 120, 56, 16) : c.rect(4, 4, 120, 56); c.fill(); c.fillStyle = col; c.font = '800 38px Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, 64, 34); });
+  const tag = (txt, col) => { const s = new T.Sprite(new T.SpriteMaterial({ map: tagTex(txt, col), depthTest: false })); s.scale.set(0.7, 0.35, 1); return s; };
+  // shared words
+  const A = {
+    launch: { en: 'Launch!', ar: 'انطلق!' }, back: { en: 'Put it back', ar: 'أعده مكانه' }, pick: { en: (n) => `Pick up: ${n}`, ar: (n) => `التقط: ${n}` }, puton: { en: 'Put it on the suit', ar: 'ألبسه للبدلة' },
+    test: { en: 'Test the suit', ar: 'افحص البدلة' }, load: { en: 'Load it', ar: 'حمّله' }, unload: { en: 'Take one out', ar: 'أخرج واحداً' }, close: { en: 'Pull the lever', ar: 'اسحب الذراع' },
+    insert: { en: 'Insert the battery', ar: 'ركّب البطارية' }, plug: { en: 'Plug it in', ar: 'وصّله' }, check: { en: 'Run the check', ar: 'شغّل الفحص' },
+    cell: { en: 'Take a power cell', ar: 'خذ خلية طاقة' }, add: { en: 'Add power', ar: 'أضف طاقة' }, take: { en: 'Remove power', ar: 'انزع الطاقة' }, run: { en: 'Pull the lever', ar: 'اسحب الذراع' },
+    miss: { en: 'Missed! Wait for the green light.', ar: 'أخطأت! انتظر الضوء الأخضر.' }, hit: { en: 'Perfect launch!', ar: 'إطلاق مثالي!' },
+    red: { en: 'Red light! Something is wrong.', ar: 'ضوء أحمر! هناك خطأ.' }, heavy: { en: 'Too heavy!', ar: 'ثقيل جداً!' },
+    missing: { en: (m) => `Missing: ${m}`, ar: (m) => `ينقص: ${m}` }, broken: { en: 'Still broken!', ar: 'ما زال معطلاً!' }, full: { en: 'This one is full.', ar: 'هذا ممتلئ.' },
+    noLife: { en: 'No life support! The crew needs air.', ar: 'لا دعم للحياة! الطاقم يحتاج إلى الهواء.' }, noHeat: { en: 'Too cold! The crew needs heat.', ar: 'بارد جداً! الطاقم يحتاج إلى التدفئة.' }, noComm: { en: 'Mission Control cannot reach you!', ar: 'مركز التحكم لا يستطيع الوصول إليكم!' },
+  };
+  const GOAL = {
+    dest: { en: 'Launch when the light is green', ar: 'انطلق عندما يصبح الضوء أخضر' }, suit: { en: 'Dress the dummy, then test it', ar: 'ألبس المجسّم ثم افحصه' }, pack: { en: 'Fill the pod. Max 100', ar: 'املأ الحاوية. الحد 100' },
+    sys: { en: 'Find the red light and fix it', ar: 'جد الضوء الأحمر وأصلحه' }, emerg: { en: 'Only 6 cells. Power what matters', ar: '6 خلايا فقط. شغّل الأهم' },
+  };
+  const FACT2 = {
+    dest: { en: 'Mars moves, so we launch when it is in the right spot.', ar: 'المريخ يتحرك، لذلك ننطلق عندما يكون في المكان المناسب.' }, suit: { en: 'A spacesuit gives air, pressure and cooling.', ar: 'بدلة الفضاء توفر الهواء والضغط والتبريد.' },
+    pack: { en: 'Space is small: essentials first!', ar: 'المكان صغير: الأساسيات أولاً!' }, sys: { en: 'Every system must work before launch.', ar: 'يجب أن يعمل كل نظام قبل الإطلاق.' }, emerg: { en: 'Life support always comes first.', ar: 'دعم الحياة أولاً دائماً.' },
+  };
+  const backSign = (g, i) => textPlane(g, 4.2, 1.1, plate(TASKS[i].name, GOAL[TASKS[i].id], '#' + TASKS[i].col.toString(16).padStart(6, '0')), 0, 3.75, RD - 0.07, Math.PI);
+  const anim = [];
+  let carry = null;
+  function hold(o) { carry = o; o.userData.held = true; if (o.parent !== W) W.add(o); o.rotation.set(0, 0, 0); girl.userData.reach = 0.35; if (o.userData.label) o.userData.label.visible = false; SFX.pick(); }
+  function release() { const o = carry; carry = null; if (o) o.userData.held = false; girl.userData.reach = 0; return o; }
+  function sendHome(o) { if (o.parent !== W) W.add(o); o.rotation.set(0, 0, 0); const h = o.userData.home; o.position.set(h.x, h.y, h.z); if (o.userData.label) o.userData.label.visible = true; }
+  function item(i, lx, ly, lz, obj, data) { const p = toW(i, lx, lz); obj.position.set(p.x, ly, p.z); obj.userData = Object.assign({ room: i, home: { x: p.x, y: ly, z: p.z } }, data); W.add(obj); obj.traverse((o) => { if (o.isMesh) o.castShadow = true; }); return obj; }
+  function stand(i, lx, lz, h = 0.8, w = 0.9) { const p = toW(i, lx, lz); const s = mesh(new T.BoxGeometry(w, h, w), mat(0xc9d0de, { roughness: 0.5, metalness: 0.2 }), p.x, h / 2, p.z, W); s.rotation.y = p.a; solids.push({ x: p.x, z: p.z, r: w * 0.6 }); return s; }
+  const near = (o, r = 1.6) => Math.hypot(P.pos.x - o.position.x, P.pos.z - o.position.z) < r;
+  const actAt = (v, r, text, fn) => ({ at: v, r, text, fn });
+  function lever(i, lx, lz) {
+    const p = toW(i, lx, lz), g = new T.Group(); g.position.set(p.x, 0, p.z); g.rotation.y = p.a; W.add(g);
+    mesh(new T.BoxGeometry(0.6, 1, 0.5), mat(0x3a4566, { metalness: 0.3 }), 0, 0.5, 0, g);
+    const arm = new T.Group(); arm.position.set(0, 1, 0); g.add(arm); mesh(new T.CylinderGeometry(0.05, 0.05, 0.7, 8), mat(0x9aa6bd), 0, 0.35, 0, arm); mesh(new T.SphereGeometry(0.12, 12, 10), mat(0xd8433a), 0, 0.72, 0, arm);
+    arm.rotation.x = -0.6; solids.push({ x: p.x, z: p.z, r: 0.45 });
+    return { g, arm, pull() { arm.rotation.x = 0.6; setTimeout(() => (arm.rotation.x = -0.6), 700); } };
+  }
+  function button(i, lx, lz, col = 0xd8433a) {
+    const p = toW(i, lx, lz), g = new T.Group(); g.position.set(p.x, 0, p.z); W.add(g);
+    mesh(new T.CylinderGeometry(0.4, 0.5, 1, 20), mat(0x3a4566, { metalness: 0.3 }), 0, 0.5, 0, g);
+    const b = mesh(new T.CylinderGeometry(0.26, 0.26, 0.12, 20), new T.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.4 }), 0, 1.06, 0, g);
+    const lamp = new T.MeshBasicMaterial({ color: 0xff3a2a }); mesh(new T.SphereGeometry(0.1, 12, 10), lamp, 0, 1.35, 0, g, false);
+    solids.push({ x: p.x, z: p.z, r: 0.55 });
+    return { g, b, lamp, press() { b.position.y = 1.0; setTimeout(() => (b.position.y = 1.06), 250); } };
+  }
+  function done(i) {
+    const id = TASKS[i].id; SFX.success(); confetti($('stage'));
+    burst(P.pos.clone().add(new T.Vector3(0, 1.6, 0)), 0xffd27a, 30, 1.6, 1.4);
+    cap(tr(FACT2[id]), 3800); R.done[i] = true;
+    setTimeout(() => award(i), 900);
+  }
+  const mistake = () => { G.nopes = (G.nopes || 0) + 1; SFX.nope(); };
+  const R = { done: {} };
+
+  // ===== Room 1: Planetarium — launch window timing =====
+  const R1 = {};
+  { const i = 0, g = room(TASKS[0].ang, { wall: 0xffffff, floor: 0x141c3e, map: canvasTex(512, 256, (c, w, h) => { c.fillStyle = '#070b22'; c.fillRect(0, 0, w, h); for (let k = 0; k < 260; k++) { c.fillStyle = `rgba(255,255,255,${Math.random()})`; c.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5); } }) }, 0x8fd0ef);
+    backSign(g, i);
+    const c = V3(i, 0, 0, 4.4); R1.c = c; const o = new T.Group(); o.position.copy(c); W.add(o); R1.o = o;
+    mesh(new T.CylinderGeometry(0.45, 0.55, 0.6, 24), mat(0x2b3a66), 0, 0.3, 0, o);
+    { const sunM = new T.Mesh(new T.SphereGeometry(0.38, 24, 16), new T.MeshBasicMaterial({ color: 0xffd27a })); sunM.position.set(0, 0.95, 0); o.add(sunM); }
+    const ringM = (r, col, op) => { const m = new T.Mesh(new T.RingGeometry(r - 0.03, r + 0.03, 128), new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, side: T.DoubleSide })); m.rotation.x = -Math.PI / 2; m.position.y = 0.03; o.add(m); return m; };
+    R1.rE = 1.6; R1.rM = 2.7; ringM(R1.rE, 0x8fd0ef, 0.6); ringM(R1.rM, 0xffb0a0, 0.6);
+    R1.win = new T.Mesh(new T.RingGeometry(R1.rM - 0.25, R1.rM + 0.25, 32, 1, -0.3, 0.6), new T.MeshBasicMaterial({ color: 0x5aff7a, transparent: true, opacity: 0.45, side: T.DoubleSide, depthWrite: false })); R1.win.rotation.x = -Math.PI / 2; R1.win.position.y = 0.04; o.add(R1.win);
+    R1.earth = mesh(new T.SphereGeometry(0.24, 20, 14), mat(0x3a8fd8, { roughness: 0.5 }), 0, 0.7, 0, o); R1.mars = mesh(new T.SphereGeometry(0.2, 20, 14), mat(0xd8573a, { roughness: 0.6 }), 0, 0.7, 0, o);
+    R1.ship = new T.Group(); mesh(new T.ConeGeometry(0.08, 0.28, 10), mat(0xffffff), 0, 0, 0, R1.ship).rotation.x = Math.PI / 2; o.add(R1.ship); R1.ship.visible = false;
+    solids.push({ x: c.x, z: c.z, r: 0.7 });
+    R1.btn = button(i, -2.4, 1.9, 0x3ac06a);
+    R1.trail = new T.Line(new T.BufferGeometry(), new T.LineBasicMaterial({ color: 0xffffff })); o.add(R1.trail); }
+  const wE = 0.7, wM = wE * 0.53, TF = 3.2, LEAD = Math.PI - wM * TF;
+  const angDiff = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  function r1Reset() { R1.aE = 0.4; R1.aM = 0.4 + LEAD + 2.2; R1.fly = null; R1.ship.visible = false; R1.trail.geometry.setFromPoints([]); }
+  const orbitPos = (r, a) => new T.Vector3(Math.cos(a) * r, 0.7, -Math.sin(a) * r);
+  function r1Update(dt, time) {
+    if (!R1.fly) { R1.aE += wE * dt; R1.aM += wM * dt; }
+    else {
+      const f = R1.fly; f.k = Math.min(1, f.k + dt / TF); R1.aE += wE * dt; R1.aM += wM * dt;
+      const a = (R1.rE + R1.rM) / 2, cc = a - R1.rE, b = Math.sqrt(a * a - cc * cc), E = Math.PI * f.k, lx = -cc + a * Math.cos(E), ly = b * Math.sin(E), ca = Math.cos(f.a0), sa = Math.sin(f.a0);
+      const px = lx * ca - ly * sa, py = lx * sa + ly * ca; R1.ship.position.set(px, 0.75, -py); 
+      f.pts.push(R1.ship.position.clone()); R1.trail.geometry.setFromPoints(f.pts);
+      if (f.k >= 1) { const hit = angDiff(R1.aM, f.a0 + Math.PI) < 0.4; R1.fly = null; R1.ship.visible = false; if (hit && !R.done[0]) { burst(R1.o.localToWorld(orbitPos(R1.rM, R1.aM)), 0xffd27a, 30, 1.2, 1); cap(tr(A.hit), 2000); done(0); } else if (!hit) { mistake(); cap(tr(A.miss), 2600); } }
+    }
+    R1.earth.position.copy(orbitPos(R1.rE, R1.aE)); R1.mars.position.copy(orbitPos(R1.rM, R1.aM)); R1.earth.rotation.y = time;
+    R1.win.rotation.z = R1.aE + LEAD; const ok = angDiff(R1.aM, R1.aE + LEAD) < 0.3;
+    R1.win.material.color.set(ok ? 0x5aff7a : 0x3a6a8a); R1.btn.lamp.color.set(ok ? 0x5aff7a : 0xff3a2a);
+  }
+  function r1Acts() { if (R1.fly || R.done[0]) return []; return [actAt(R1.btn.g.position.clone(), 1.5, tr(A.launch), () => { R1.btn.press(); SFX.whoosh(1); R1.fly = { k: 0, a0: R1.aE, pts: [] }; R1.ship.visible = true; })]; }
+
+  // ===== Room 2: Suit room — dress the dummy =====
+  const R2 = { slot: {} };
+  const PART = {
+    helmet: { s: 'head', n: { en: 'Helmet', ar: 'الخوذة' } }, cap: { s: 'head', n: { en: 'Cap', ar: 'القبعة' } }, gloves: { s: 'hands', n: { en: 'Gloves', ar: 'القفازات' } },
+    boots: { s: 'feet', n: { en: 'Space boots', ar: 'أحذية الفضاء' } }, sneakers: { s: 'feet', n: { en: 'Sneakers', ar: 'حذاء رياضي' } }, life: { s: 'back', n: { en: 'Air pack', ar: 'حقيبة الهواء' } },
+  };
+  { const i = 1, g = room(TASKS[1].ang, { wall: 0xe6ebf3, floor: 0x3a4566 }, 0xec8a3c);
+    backSign(g, i);
+    const wm = mat(0xf4f1ea, { roughness: 0.5 });
+    const d = new T.Group(), dp = toW(i, 0, 6.8); d.position.set(dp.x, 0, dp.z); d.rotation.y = dp.a + Math.PI; W.add(d); R2.dummy = d;
+    mesh(new T.CylinderGeometry(0.55, 0.6, 0.2, 24), mat(0x2b3a66), 0, 0.1, 0, d); mesh(new T.CylinderGeometry(0.06, 0.06, 0.5, 8), mat(0x9aa6bd), 0, 0.4, 0, d);
+    mesh(new T.CylinderGeometry(0.32, 0.3, 0.8, 16), wm, 0, 1.25, 0, d); [-0.13, 0.13].forEach((x) => mesh(new T.CylinderGeometry(0.12, 0.11, 0.75, 10), wm, x, 0.55, 0, d)); [-0.42, 0.42].forEach((x) => mesh(new T.CylinderGeometry(0.09, 0.08, 0.7, 10), wm, x, 1.25, 0, d));
+    mesh(new T.SphereGeometry(0.2, 14, 10), mat(0xd9c2a0), 0, 1.85, 0, d);
+    solids.push({ x: dp.x, z: dp.z, r: 0.7 });
+    R2.anchor = { head: new T.Vector3(0, 1.88, 0), hands: new T.Vector3(0, 0.88, 0), feet: new T.Vector3(0, 0.12, 0.04), back: new T.Vector3(0, 1.3, -0.32) };
+    const mk = {
+      helmet: () => { const o = new T.Group(); mesh(new T.SphereGeometry(0.3, 20, 14), wm, 0, 0, 0, o); mesh(new T.SphereGeometry(0.27, 20, 12, Math.PI * 0.15, Math.PI * 0.7, Math.PI * 0.3, Math.PI * 0.38), mat(0xc9a24a, { metalness: 0.6, roughness: 0.25 }), 0, 0, 0.05, o); return o; },
+      cap: () => { const o = new T.Group(); mesh(new T.SphereGeometry(0.22, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat(0x3a8fd8), 0, 0.02, 0, o); mesh(new T.BoxGeometry(0.26, 0.03, 0.22), mat(0x3a8fd8), 0, 0.02, 0.2, o); return o; },
+      gloves: () => { const o = new T.Group(); [-0.45, 0.45].forEach((x) => { mesh(new T.BoxGeometry(0.16, 0.2, 0.14), wm, x, 0, 0, o); mesh(new T.BoxGeometry(0.17, 0.05, 0.15), mat(0x3a8fd8), x, 0.1, 0, o); }); return o; },
+      boots: () => { const o = new T.Group(); [-0.13, 0.13].forEach((x) => mesh(new T.BoxGeometry(0.2, 0.2, 0.34), mat(0x7a8296), x, 0.06, 0.03, o)); return o; },
+      sneakers: () => { const o = new T.Group(); [-0.13, 0.13].forEach((x) => { mesh(new T.BoxGeometry(0.18, 0.12, 0.3), mat(0xd8433a), x, 0.04, 0.03, o); mesh(new T.BoxGeometry(0.19, 0.04, 0.31), mat(0xffffff), x, -0.02, 0.03, o); }); return o; },
+      life: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.5, 0.62, 0.26), mat(0xc9d0de), 0, 0, 0, o); [-0.12, 0, 0.12].forEach((x, k) => mesh(new T.SphereGeometry(0.035, 8, 6), new T.MeshBasicMaterial({ color: [0x9ccc3c, 0xffd27a, 0x6fe0ff][k] }), x, 0.18, 0.14, o)); return o; },
+    };
+    R2.items = [];
+    [['helmet', -2.9, 2.0], ['cap', 2.9, 2.0], ['gloves', -2.9, 3.9], ['boots', 2.9, 3.9], ['sneakers', -2.9, 5.6], ['life', 2.9, 5.6]].forEach(([k, x, z]) => { stand(i, x, z, 0.8, 0.8); R2.items.push(item(i, x, 1.05, z, mk[k](), { k })); });
+    R2.btn = button(i, 2.0, 6.6, 0xffc22e);
+    R2.lamps = ['pressure', 'oxygen', 'cooling'].map((k, n) => { const m = new T.MeshBasicMaterial({ color: 0x444a5a }); const p = V3(i, -1.6 + n * 1.6, 2.7, RD - 0.12); const s = mesh(new T.SphereGeometry(0.17, 14, 10), m, p.x, 2.7, p.z, W, false); return m; });
+    const LBL = { pressure: { en: 'PRESSURE', ar: 'الضغط' }, oxygen: { en: 'OXYGEN', ar: 'الأكسجين' }, cooling: { en: 'COOLING', ar: 'التبريد' } };
+    ['pressure', 'oxygen', 'cooling'].forEach((k, n) => textPlane(g, 1.4, 0.4, plate(LBL[k], null, '#6fe0ff'), -1.6 + n * 1.6, 2.25, RD - 0.08, Math.PI)); }
+  function r2Reset() { R2.slot = {}; R2.items.forEach((o) => sendHome(o)); R2.lamps.forEach((m) => m.color.set(0x444a5a)); }
+  function attach(o) { const s = PART[o.userData.k].s; if (R2.slot[s]) sendHome(R2.slot[s]); R2.slot[s] = o; R2.dummy.add(o); o.position.copy(R2.anchor[s]); o.rotation.set(0, 0, 0); SFX.snap(); }
+  function r2Test() {
+    R2.btn.press(); const k = (s) => R2.slot[s] && R2.slot[s].userData.k;
+    const res = [k('head') === 'helmet' && k('hands') === 'gloves' && k('feet') === 'boots', k('head') === 'helmet' && k('back') === 'life', k('back') === 'life'];
+    res.forEach((ok, n) => R2.lamps[n].color.set(ok ? 0x5aff7a : 0xff3a2a));
+    if (res.every(Boolean)) { R2.dummy.userData.dance = 1.4; done(1); } else { mistake(); cap(tr(A.red), 2200); }
+  }
+  function r2Acts() {
+    if (R.done[1]) return [];
+    const acts = [];
+    const dv = R2.dummy.position.clone(); dv.y = 0;
+    if (carry) acts.push(actAt(dv, 1.9, tr(A.puton), () => attach(release())));
+    else R2.items.forEach((o) => { if (o.parent === W && !o.userData.held) acts.push(actAt(o.position.clone().setY(0), 1.4, tr(A.pick, tr(PART[o.userData.k].n)), () => hold(o))); });
+    if (!carry) acts.push(actAt(R2.btn.g.position.clone(), 1.4, tr(A.test), r2Test));
+    return acts;
+  }
+
+  // ===== Room 3: Cargo bay — load the pod =====
+  const R3 = { loaded: [] };
+  const CARGO = [
+    ['water', 30, true, { en: 'Water', ar: 'ماء' }], ['food', 25, true, { en: 'Food', ar: 'طعام' }], ['med', 15, true, { en: 'Medical kit', ar: 'حقيبة طبية' }], ['tools', 15, true, { en: 'Tools', ar: 'أدوات' }],
+    ['books', 5, false, { en: 'Books', ar: 'كتب' }], ['teddy', 20, false, { en: 'Giant teddy', ar: 'دبّ ضخم' }], ['game', 15, false, { en: 'Game console', ar: 'جهاز ألعاب' }], ['skate', 10, false, { en: 'Skateboard', ar: 'لوح تزلج' }],
+  ];
+  { const i = 2, g = room(TASKS[2].ang, { wall: 0xc9ccd4, floor: 0x55606e }, 0x9ccc3c);
+    backSign(g, i);
+    const stripe = canvasTex(256, 64, (c, w, h) => { for (let k = -2; k < 12; k++) { c.fillStyle = k % 2 ? '#1b1b1b' : '#ffc22e'; c.beginPath(); c.moveTo(k * 28, 0); c.lineTo(k * 28 + 28, 0); c.lineTo(k * 28, h); c.lineTo(k * 28 - 28, h); c.fill(); } });
+    const st = mesh(new T.PlaneGeometry(3, 0.4), new T.MeshBasicMaterial({ map: stripe }), 0, 0.02, 5.6, g, false); st.rotation.x = -Math.PI / 2;
+    const pod = new T.Group(), pp = toW(i, 0, 7.1); pod.position.set(pp.x, 0, pp.z); pod.rotation.y = pp.a; W.add(pod); R3.pod = pod;
+    const pm = mat(0x9aa6bd, { metalness: 0.4, roughness: 0.4 });
+    mesh(new T.BoxGeometry(2.6, 0.12, 1.6), pm, 0, 0.06, 0, pod); mesh(new T.BoxGeometry(2.6, 2.2, 0.1), pm, 0, 1.1, 0.8, pod); [-1.3, 1.3].forEach((x) => mesh(new T.BoxGeometry(0.1, 2.2, 1.6), pm, x, 1.1, 0, pod)); mesh(new T.BoxGeometry(2.7, 0.12, 1.7), pm, 0, 2.2, 0, pod);
+    R3.door = mesh(new T.BoxGeometry(2.5, 2.1, 0.08), mat(0xffc22e, { metalness: 0.2 }), 0, 3.3, -0.82, pod); R3.doorY = 3.3;
+    solids.push({ x: pp.x, z: pp.z, r: 1.35 });
+    R3.screen = textPlane(g, 2.4, 0.9, (c, w, h) => {
+      const tot = R3.loaded.reduce((a, o) => a + o.userData.w, 0), over = tot > 100;
+      c.fillStyle = over ? '#5a0d0d' : '#04122a'; c.fillRect(0, 0, w, h); c.strokeStyle = over ? '#ff3a2a' : '#9ccc3c'; c.lineWidth = 10; c.strokeRect(5, 5, w - 10, h - 10);
+      c.fillStyle = '#fff'; c.font = `800 ${Math.round(h * 0.42)}px ${FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(`${tot} / 100`, w * 0.3, h * 0.5);
+      CARGO.filter((x) => x[2]).forEach(([k], n) => { const has = R3.loaded.some((o) => o.userData.k === k), x = w * 0.64 + n * w * 0.085, y = h * 0.5; c.fillStyle = has ? '#9ccc3c' : '#3a4566'; c.beginPath(); c.arc(x, y, h * 0.12, 0, 7); c.fill(); });
+    }, 0, 2.75, 7.95, Math.PI);
+    R3.lever = lever(i, -2.2, 6.2);
+    const mk = {
+      water: () => { const o = new T.Group(); mesh(new T.CylinderGeometry(0.28, 0.28, 0.62, 18), mat(0x3a8fd8, { roughness: 0.3 }), 0, 0, 0, o); mesh(new T.TorusGeometry(0.28, 0.03, 6, 20), mat(0x1f5aa0), 0, 0.15, 0, o).rotation.x = Math.PI / 2; return o; },
+      food: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.55, 0.45, 0.45), mat(0xec8a3c), 0, 0, 0, o); return o; },
+      med: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.5, 0.36, 0.3), mat(0xffffff), 0, 0, 0, o); mesh(new T.BoxGeometry(0.22, 0.07, 0.31), mat(0xd8433a), 0, 0, 0, o); mesh(new T.BoxGeometry(0.07, 0.22, 0.31), mat(0xd8433a), 0, 0, 0, o); return o; },
+      tools: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.6, 0.3, 0.3), mat(0x7a8296, { metalness: 0.4 }), 0, 0, 0, o); mesh(new T.TorusGeometry(0.12, 0.03, 6, 12, Math.PI), mat(0x2b2726), 0, 0.15, 0, o); return o; },
+      books: () => { const o = new T.Group(); [0xd8433a, 0x3a8fd8, 0x9ccc3c].forEach((c, k) => mesh(new T.BoxGeometry(0.34, 0.07, 0.26), mat(c), 0, -0.07 + k * 0.075, 0, o)); return o; },
+      teddy: () => { const o = new T.Group(), b = mat(0x9a6a3a, { roughness: 0.9 }); mesh(new T.SphereGeometry(0.34, 14, 10), b, 0, 0, 0, o); mesh(new T.SphereGeometry(0.24, 14, 10), b, 0, 0.45, 0, o); [-0.17, 0.17].forEach((x) => mesh(new T.SphereGeometry(0.08, 8, 6), b, x, 0.64, 0, o)); return o; },
+      game: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.42, 0.12, 0.3), mat(0x2b2726), 0, 0, 0, o); mesh(new T.CircleGeometry(0.03, 8), new T.MeshBasicMaterial({ color: 0x6fe0ff }), 0.15, 0.061, 0.08, o).rotation.x = -Math.PI / 2; return o; },
+      skate: () => { const o = new T.Group(); mesh(new T.BoxGeometry(0.8, 0.04, 0.22), mat(0x6a3a8a), 0, 0, 0, o); [-0.28, 0.28].forEach((x) => [-0.08, 0.08].forEach((z) => mesh(new T.CylinderGeometry(0.04, 0.04, 0.04, 8), mat(0xffd27a), x, -0.05, z, o).rotation.x = Math.PI / 2)); return o; },
+    };
+    const spots = [[-2.9, 1.9], [2.9, 1.9], [-1.6, 3.2], [1.6, 3.2], [-2.9, 4.4], [2.9, 4.4], [-1.4, 5.0], [2.9, 5.9]];
+    R3.items = CARGO.map(([k, w, ess, n], idx) => { const [x, z] = spots[idx]; const o = item(i, x, 0.35, z, mk[k](), { k, w, ess, n }); const lb = tag(String(w)); lb.position.set(o.position.x, 1.25, o.position.z); W.add(lb); o.userData.label = lb; return o; }); }
+  function r3Reset() { R3.loaded = []; R3.closed = false; R3.items.forEach((o) => sendHome(o)); R3.door.position.y = R3.doorY; R3.screen.userData.redraw(); }
+  function podSlot(n) { return new T.Vector3(-0.85 + (n % 4) * 0.57, 0.45 + Math.floor(n / 4) * 0.7, 0.25); }
+  function r3Load(o) { R3.loaded.push(o); R3.pod.add(o); o.position.copy(podSlot(R3.loaded.length - 1)); o.rotation.set(0, 0, 0); SFX.snap(); R3.screen.userData.redraw(); }
+  function r3Close() {
+    R3.lever.pull(); const tot = R3.loaded.reduce((a, o) => a + o.userData.w, 0);
+    if (tot > 100) { mistake(); cap(tr(A.heavy), 2200); R3.anim = { k: 0, mode: 'jam' }; return; }
+    const miss = R3.items.filter((o) => o.userData.ess && !R3.loaded.includes(o)).map((o) => tr(o.userData.n));
+    R3.closed = true; R3.anim = { k: 0, mode: miss.length ? 'bounce' : 'shut' };
+    if (miss.length) { mistake(); setTimeout(() => { cap(tr(A.missing, miss.join(LANG === 'ar' ? '، ' : ', ')), 3000); R3.closed = false; }, 900); } else setTimeout(() => done(2), 900);
+  }
+  function r3Update(dt) {
+    const a = R3.anim; if (!a) return; a.k += dt;
+    const shutY = 1.15, openY = R3.doorY;
+    if (a.mode === 'jam') { R3.door.position.y = openY - Math.sin(Math.min(1, a.k / 0.8) * Math.PI) * 1.1; if (a.k > 0.8) R3.anim = null; }
+    else if (a.mode === 'shut') { R3.door.position.y = Math.max(shutY, openY - a.k * 4); }
+    else if (a.mode === 'bounce') { R3.door.position.y = a.k < 0.6 ? Math.max(shutY, openY - a.k * 4) : a.k < 1.4 ? shutY : Math.min(openY, shutY + (a.k - 1.4) * 4); if (a.k > 2) R3.anim = null; }
+  }
+  function r3Acts() {
+    if (R.done[2] || R3.anim) return [];
+    const acts = [], pv = toW(2, 0, 5.6), podAt = new T.Vector3(pv.x, 0, pv.z);
+    if (carry) acts.push(actAt(podAt, 1.7, tr(A.load), () => r3Load(release())));
+    else {
+      R3.items.forEach((o) => { if (o.parent === W && !o.userData.held) acts.push(actAt(o.position.clone().setY(0), 1.3, tr(A.pick, `${tr(o.userData.n)} (${o.userData.w})`), () => hold(o))); });
+      if (R3.loaded.length) acts.push(actAt(podAt, 1.5, tr(A.unload), () => { const o = R3.loaded.pop(); R3.screen.userData.redraw(); hold(o); }));
+      acts.push(actAt(R3.lever.g.position.clone(), 1.4, tr(A.close), r3Close));
+    }
+    return acts;
+  }
+
+  // ===== Room 4: Control room — find and fix =====
+  const R4 = {};
+  const SYSN = { power: { en: 'POWER', ar: 'الطاقة' }, life: { en: 'LIFE SUPPORT', ar: 'دعم الحياة' }, comm: { en: 'COMMUNICATION', ar: 'الاتصال' } };
+  const STAT = { ok: { en: 'OK', ar: 'سليم' }, bat: { en: 'BATTERY LOW', ar: 'البطارية منخفضة' }, sig: { en: 'NO SIGNAL', ar: 'لا توجد إشارة' } };
+  { const i = 3, g = room(TASKS[3].ang, { wall: 0x1d2a4a, floor: 0x26304e }, 0xffd27a);
+    backSign(g, i);
+    R4.panels = ['power', 'life', 'comm'].map((k, n) => textPlane(g, 2.2, 1.1, (c, w, h) => { const bad = R4.fault === k && !R4.fixed; c.fillStyle = '#04122a'; c.fillRect(0, 0, w, h); c.strokeStyle = bad ? '#ff3a2a' : '#9ccc3c'; c.lineWidth = 12; c.strokeRect(6, 6, w - 12, h - 12); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#fff'; c.font = `800 ${Math.round(h * 0.24)}px ${FONT}`; c.fillText(tr(SYSN[k]), w / 2, h * 0.35); c.fillStyle = bad ? '#ff8a7a' : '#9ccc3c'; c.font = `800 ${Math.round(h * 0.2)}px ${FONT}`; c.fillText(tr(bad ? (k === 'power' ? STAT.bat : STAT.sig) : STAT.ok), w / 2, h * 0.7); }, -2.6 + n * 2.6, 2.3, RD - 0.07, Math.PI));
+    R4.lamps = [0, 1, 2].map((n) => { const m = new T.MeshBasicMaterial({ color: 0x5aff7a }); const p = V3(i, -2.6 + n * 2.6, 3.0, RD - 0.15); mesh(new T.SphereGeometry(0.15, 12, 10), m, p.x, 3.0, p.z, W, false); return m; });
+    const sp = V3(i, -2.6, 1.0, RD - 0.2); R4.slot = mesh(new T.BoxGeometry(0.7, 0.45, 0.25), mat(0x161c30), sp.x, 1.0, sp.z, W); R4.slot.rotation.y = toW(i, 0, 0).a;
+    const kp = V3(i, 2.6, 1.0, RD - 0.2); R4.sock = mesh(new T.CylinderGeometry(0.16, 0.16, 0.2, 16), mat(0x2b3a66), kp.x, 1.0, kp.z, W); R4.sock.rotation.x = Math.PI / 2; R4.sock.rotation.z = toW(i, 0, 0).a;
+    const bat = new T.Group(); mesh(new T.BoxGeometry(0.6, 0.38, 0.22), mat(0xffc22e), 0, 0, 0, bat); mesh(new T.BoxGeometry(0.6, 0.12, 0.23), mat(0x2b2726), 0, 0.13, 0, bat); R4.bat = item(i, 2.9, 0.3, 2.2, bat, { k: 'bat' });
+    const plug = new T.Group(); mesh(new T.BoxGeometry(0.2, 0.2, 0.3), mat(0x2b2726), 0, 0, 0, plug); [-0.05, 0.05].forEach((x) => mesh(new T.BoxGeometry(0.03, 0.03, 0.12), mat(0xc9a24a, { metalness: 0.7 }), x, 0, -0.2, plug)); R4.plug = item(i, -2.4, 0.15, 3.4, plug, { k: 'plug' });
+    R4.anchor = V3(i, 3.7, 0.3, RD - 0.3); mesh(new T.BoxGeometry(0.4, 0.6, 0.3), mat(0x3a4566), R4.anchor.x, 0.3, R4.anchor.z, W);
+    R4.cable = new T.Line(new T.BufferGeometry(), new T.LineBasicMaterial({ color: 0x111111 })); W.add(R4.cable);
+    R4.btn = button(i, 0, 4.0, 0x3a8fd8);
+    [-1, 1].forEach((sd) => { for (let k = 0; k < 2; k++) { const p = toW(i, sd * (RW / 2 - 0.45), 1.6 + k * 1.6); const r = mesh(new T.BoxGeometry(0.7, 2.4, 1), mat(0x161c30, { metalness: 0.4 }), p.x, 1.2, p.z, W); r.rotation.y = p.a; } }); }
+  function r4Reset() { R4.fault = Math.random() < 0.5 ? 'power' : 'comm'; R4.fixed = false; sendHome(R4.bat); sendHome(R4.plug);
+    if (R4.fault !== 'power') { R4.bat.position.copy(R4.slot.position); R4.bat.rotation.y = R4.slot.rotation.y; }
+    if (R4.fault !== 'comm') { R4.plug.position.copy(R4.sock.position); }
+    R4.panels.forEach((m) => m.userData.redraw()); }
+  function r4Fix(o) { const tgt = o.userData.k === 'bat' ? R4.slot : R4.sock; o.position.copy(tgt.position); o.rotation.y = R4.slot.rotation.y; R4.fixed = true; SFX.snap(); SFX.discover(); R4.panels.forEach((m) => m.userData.redraw()); }
+  function r4Update(time) {
+    const idx = { power: 0, life: 1, comm: 2 }[R4.fault];
+    R4.lamps.forEach((m, n) => m.color.set(n === idx && !R4.fixed ? (Math.sin(time * 8) > 0 ? 0xff3a2a : 0x401010) : 0x5aff7a));
+    const a = R4.anchor, b = R4.plug.position, pts = []; for (let k = 0; k <= 12; k++) { const t = k / 12; pts.push(new T.Vector3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t - Math.sin(t * Math.PI) * 0.25 * (b.y > 0.5 ? 0.3 : 1), a.z + (b.z - a.z) * t)); } pts.forEach((p) => (p.y = Math.max(0.03, p.y))); R4.cable.geometry.setFromPoints(pts);
+  }
+  function r4Acts() {
+    if (R.done[3]) return [];
+    const acts = [], part = R4.fault === 'power' ? R4.bat : R4.plug, tgt = R4.fault === 'power' ? R4.slot : R4.sock;
+    if (carry) acts.push(actAt(tgt.position.clone().setY(0), 1.6, tr(R4.fault === 'power' ? A.insert : A.plug), () => r4Fix(release())));
+    else {
+      if (!R4.fixed) acts.push(actAt(part.position.clone().setY(0), 1.3, tr(A.pick, tr(R4.fault === 'power' ? { en: 'Battery', ar: 'البطارية' } : { en: 'Cable', ar: 'الكبل' })), () => hold(part)));
+      acts.push(actAt(R4.btn.g.position.clone(), 1.4, tr(A.check), () => { R4.btn.press(); if (R4.fixed) done(3); else { mistake(); cap(tr(A.broken), 2200); } }));
+    }
+    return acts;
+  }
+
+  // ===== Room 5: Power room — share 6 cells =====
+  const R5 = { st: [] };
+  const CELLSYS = [
+    ['life', 3, { en: 'LIFE SUPPORT', ar: 'دعم الحياة' }, -2.6, 7.3, 0], ['heat', 2, { en: 'HEATING', ar: 'التدفئة' }, 0, 7.3, 0], ['comm', 1, { en: 'RADIO', ar: 'الراديو' }, 2.6, 7.3, 0],
+    ['lights', 1, { en: 'LIGHTS', ar: 'الأضواء' }, 3.25, 5.2, -1], ['lab', 2, { en: 'SCIENCE LAB', ar: 'المختبر' }, 3.25, 3.4, -1], ['fun', 1, { en: 'MOVIES', ar: 'الأفلام' }, -3.25, 5.2, 1],
+  ];
+  { const i = 4, g = room(TASKS[4].ang, { wall: 0x2a1d26, floor: 0x2b2733 }, 0xec5a50);
+    backSign(g, i);
+    const beaconM = new T.MeshBasicMaterial({ color: 0xff3a2a }); const bc = new T.Group(); bc.position.set(0, RH - 0.25, RD / 2); g.add(bc); mesh(new T.SphereGeometry(0.16, 12, 10), beaconM, 0, 0, 0, bc, false);
+    const beam = new T.Mesh(new T.ConeGeometry(0.5, 2.5, 16, 1, true), new T.MeshBasicMaterial({ color: 0xff3a2a, transparent: true, opacity: 0.18, side: T.DoubleSide, depthWrite: false })); beam.rotation.z = Math.PI / 2; beam.position.x = 1.25; bc.add(beam);
+    anim.push((t) => { bc.visible = !R.done[4]; bc.rotation.y = t * 3; });
+    CELLSYS.forEach(([k, cost, n, x, z, side]) => {
+      const sg = new T.Group(), p = toW(i, x, z); sg.position.set(p.x, 0, p.z); sg.rotation.y = p.a + (side === 0 ? Math.PI : side * Math.PI / 2); W.add(sg);
+      mesh(new T.BoxGeometry(1.3, 0.9, 0.6), mat(0x3a4566, { metalness: 0.3 }), 0, 0.45, 0, sg);
+      const slots = []; for (let s = 0; s < cost; s++) { const sx = (s - (cost - 1) / 2) * 0.36; mesh(new T.BoxGeometry(0.28, 0.06, 0.28), mat(0x161c30), sx, 0.93, 0, sg); slots.push(new T.Vector3(sx, 1.08, 0)); }
+      const lamp = new T.MeshBasicMaterial({ color: 0x444a5a }); mesh(new T.SphereGeometry(0.12, 12, 10), lamp, 0.55, 1.05, 0.2, sg, false);
+      textPlane(sg, 1.3, 0.42, plate(n, '●'.repeat(cost), '#ffc22e'), 0, 1.6, 0.31, 0);
+      solids.push({ x: p.x, z: p.z, r: 0.75 });
+      R5.st.push({ k, cost, g: sg, slots, cells: [], lamp, at: new T.Vector3(p.x, 0, p.z) });
+    });
+    const rp = toW(i, -3.2, 2.4), rack = new T.Group(); rack.position.set(rp.x, 0, rp.z); rack.rotation.y = rp.a + Math.PI / 2; W.add(rack);
+    mesh(new T.BoxGeometry(1.6, 1, 0.6), mat(0x3a3a46), 0, 0.5, 0, rack); solids.push({ x: rp.x, z: rp.z, r: 0.8 }); R5.rack = rack;
+    R5.cells = []; for (let k = 0; k < 6; k++) { const c = new T.Group(); mesh(new T.CylinderGeometry(0.11, 0.11, 0.3, 12), new T.MeshStandardMaterial({ color: 0x806010, emissive: 0xffc22e, emissiveIntensity: 1 }), 0, 0, 0, c); mesh(new T.CylinderGeometry(0.05, 0.05, 0.06, 8), mat(0x9aa6bd), 0, 0.18, 0, c); W.add(c); c.userData = { k: 'cell', home: rack.localToWorld(new T.Vector3(-0.6 + k * 0.24, 1.16, 0)) }; R5.cells.push(c); }
+    R5.lever = lever(i, 0, 2.2); }
+  function r5Reset() { R5.st.forEach((s) => { s.cells = []; s.lamp.color.set(0x444a5a); }); R5.rack.updateMatrixWorld(true); R5.cells.forEach((c, k) => { W.add(c); c.userData.home = R5.rack.localToWorld(new T.Vector3(-0.6 + k * 0.24, 1.16, 0)); c.position.copy(c.userData.home); c.rotation.set(0, 0, 0); }); }
+  const powered = (s) => s.cells.length === s.cost;
+  function r5Put(s) { if (s.cells.length >= s.cost) { mistake(); cap(tr(A.full), 1600); return; } const c = release(); s.g.add(c); c.position.copy(s.slots[s.cells.length]); c.rotation.set(0, 0, 0); s.cells.push(c); SFX.snap(); s.lamp.color.set(powered(s) ? 0x5aff7a : 0x444a5a); }
+  function r5Take(s) { const c = s.cells.pop(); s.lamp.color.set(0x444a5a); hold(c); }
+  function r5Run() {
+    R5.lever.pull(); const on = (k) => powered(R5.st.find((s) => s.k === k));
+    const r = !on('life') ? 'noLife' : !on('heat') ? 'noHeat' : !on('comm') ? 'noComm' : 'ok';
+    if (r !== 'ok') { mistake(); cap(tr(A[r]), 2600); return; }
+    done(4);
+  }
+  function r5Acts() {
+    if (R.done[4]) return [];
+    const acts = [];
+    R5.st.forEach((s) => { if (carry) acts.push(actAt(s.at, 1.5, tr(A.add), () => r5Put(s))); else if (s.cells.length) acts.push(actAt(s.at, 1.5, tr(A.take), () => r5Take(s))); });
+    if (!carry) { R5.cells.forEach((c) => { if (c.parent === W && !c.userData.held) acts.push(actAt(c.position.clone().setY(0), 1.4, tr(A.cell), () => hold(c))); }); acts.push(actAt(R5.lever.g.position.clone(), 1.4, tr(A.run), r5Run)); }
+    return acts;
+  }
+
+  // ===== Launch bay =====
+  { const g = room(LAUNCH_ANG, { wall: 0xdfe4ee, floor: 0x2b3245 }, 0xfff3d0, 11, 9);
+    const rk = new T.Group(); rk.position.set(0, 0, 6.5); g.add(rk);
+    mesh(new T.CylinderGeometry(2, 2.2, 0.3, 32), mat(0x6a7288), 0, 0.15, 0, rk);
+    mesh(new T.CylinderGeometry(0.75, 0.85, 4.6, 24), mat(0xf4f1ea, { roughness: 0.35 }), 0, 2.6, 0, rk); mesh(new T.ConeGeometry(0.75, 1.8, 24), mat(0xd8433a), 0, 5.8, 0, rk);
+    mesh(new T.TorusGeometry(0.8, 0.08, 8, 32), mat(0x1f3a68), 0, 3.6, 0, rk).rotation.x = Math.PI / 2;
+    for (let k = 0; k < 4; k++) { const f = mesh(new T.BoxGeometry(0.08, 1.2, 0.9), mat(0xd8433a), Math.sin(k * Math.PI / 2) * 0.95, 0.9, Math.cos(k * Math.PI / 2) * 0.95, rk); f.rotation.y = k * Math.PI / 2; }
+    const p = toW(5, 0, 6.5); solids.push({ x: p.x, z: p.z, r: 2.2 }); }
+
+  // ===== Hall decoration =====
+  { const bal = mesh(new T.RingGeometry(HR - 2.2, HR - 0.05, 96), new T.MeshStandardMaterial({ color: 0xe9edf5, side: T.DoubleSide, roughness: 0.5 }), 0, 6.1, 0, W, false); bal.rotation.x = -Math.PI / 2;
+    const edge = new T.Mesh(new T.TorusGeometry(HR - 2.2, 0.05, 6, 96), new T.MeshBasicMaterial({ color: 0x6fe0ff })); edge.rotation.x = Math.PI / 2; edge.position.y = 6.08; W.add(edge);
+    const rail = new T.Mesh(new T.TorusGeometry(HR - 2.2, 0.04, 6, 96), mat(0x9aa6bd, { metalness: 0.5 })); rail.rotation.x = Math.PI / 2; rail.position.y = 6.9; W.add(rail);
+    for (let k = 0; k < 36; k++) { const a = (k / 36) * Math.PI * 2; mesh(new T.CylinderGeometry(0.025, 0.025, 0.8, 4), mat(0x9aa6bd), Math.sin(a) * (HR - 2.2), 6.5, Math.cos(a) * (HR - 2.2), W, false); }
+    [75, 125, 175, -125, -75, -25, 25].forEach((ang) => { const p = at(ang, 9.2); mesh(new T.CylinderGeometry(0.32, 0.38, 6.1, 16), mat(0xf4f1ea, { roughness: 0.4 }), p.x, 3.05, p.z, W); [1.2, 4.6].forEach((y) => { const r = new T.Mesh(new T.TorusGeometry(0.36, 0.04, 6, 24), new T.MeshBasicMaterial({ color: 0x6fe0ff })); r.rotation.x = Math.PI / 2; r.position.set(p.x, y, p.z); W.add(r); }); solids.push({ x: p.x, z: p.z, r: 0.45 }); });
+    [[25, 11.6], [-25, 11.6], [125, 11.6], [-125, 11.6]].forEach(([ang, r]) => { const p = at(ang, r); const b = new T.Group(); b.position.set(p.x, 0, p.z); b.rotation.y = deg(ang) + Math.PI; W.add(b); mesh(new T.BoxGeometry(2, 0.12, 0.6), mat(0xec8a3c), 0, 0.5, 0, b); [-0.8, 0.8].forEach((x) => mesh(new T.BoxGeometry(0.1, 0.5, 0.5), mat(0x9aa6bd), x, 0.25, 0, b)); solids.push({ x: p.x, z: p.z, r: 0.9 }); });
+    [[12, 11.9], [-12, 11.9], [138, 11.9], [-138, 11.9], [-62, 11.9]].forEach(([ang, r]) => { const p = at(ang, r); mesh(new T.CylinderGeometry(0.35, 0.28, 0.6, 14), mat(0xf4f1ea), p.x, 0.3, p.z, W); mesh(new T.IcosahedronGeometry(0.55, 1), mat(0x5fae4c, { flatShading: true, roughness: 0.8 }), p.x, 1.0, p.z, W); solids.push({ x: p.x, z: p.z, r: 0.5 }); });
+    const holoTex = (draw) => canvasTex(256, 160, (c, w, h) => { c.fillStyle = 'rgba(10,40,70,.6)'; c.fillRect(0, 0, w, h); c.strokeStyle = '#6fe0ff'; c.lineWidth = 4; c.strokeRect(3, 3, w - 6, h - 6); draw(c, w, h); });
+    const scr = [holoTex((c) => { c.fillStyle = '#ff8a5a'; c.beginPath(); c.arc(128, 74, 44, 0, 7); c.fill(); }), holoTex((c) => { c.strokeStyle = '#9ccc3c'; c.lineWidth = 4; c.beginPath(); for (let x = 10; x < 246; x += 6) c.lineTo(x, 90 + Math.sin(x / 20) * 30); c.stroke(); }), holoTex((c) => { c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(128, 20); c.lineTo(150, 70); c.lineTo(150, 125); c.lineTo(106, 125); c.lineTo(106, 70); c.fill(); c.fillStyle = '#d8433a'; c.fillRect(96, 110, 64, 18); })];
+    const ring = new T.Group(); ring.position.y = 4.6; W.add(ring);
+    scr.forEach((tx, k) => { const a = (k / 3) * Math.PI * 2, m = new T.Mesh(new T.PlaneGeometry(1.8, 1.1), new T.MeshBasicMaterial({ map: tx, transparent: true, opacity: 0.85, side: T.DoubleSide, depthWrite: false })); m.position.set(Math.sin(a) * 3.2, 0, Math.cos(a) * 3.2); m.rotation.y = a; ring.add(m); });
+    anim.push((t) => (ring.rotation.y = t * 0.15));
+    ROOM_ANGS.forEach((ang) => { for (let k = 0; k < 6; k++) { const p = at(ang, 3 + k * 1.6); const d = new T.Mesh(new T.CircleGeometry(0.09, 10), new T.MeshBasicMaterial({ color: 0x6fe0ff })); d.rotation.x = -Math.PI / 2; d.position.set(p.x, 0.015, p.z); W.add(d); } }); }
+
+  // ===== Room task glue =====
+  const ROOMS = [{ acts: r1Acts, reset: r1Reset }, { acts: r2Acts, reset: r2Reset }, { acts: r3Acts, reset: r3Reset }, { acts: r4Acts, reset: r4Reset }, { acts: r5Acts, reset: r5Reset }];
+  function resetRooms() { if (carry) release(); R.done = {}; ROOMS.forEach((r) => r.reset()); }
+  function startRoom(i) { S.cur = i; S.nope0 = G.nopes || 0; setObjective('l2_task'); SFX.whoosh(0); cap(tr(GOAL[TASKS[i].id]), 3000); if (i === 4) SFX.alarm(); }
+  function roomAct(i) {
+    const acts = ROOMS[i].acts(); let best = null, bd = 1e9;
+    if (carry && carry.userData.home) { const h = carry.userData.home; acts.push(actAt(new T.Vector3(h.x, 0, h.z), 1.2, tr(A.back), () => { const o = release(); sendHome(o); })); }
+    acts.forEach((a) => { const raw = Math.hypot(P.pos.x - a.at.x, P.pos.z - a.at.z), d = raw < a.r ? raw - 100 : raw - a.r; if (d < bd) { bd = d; best = a; } });
+    return best;
+  }
+  function roomUpdate(dt, time) {
+    anim.forEach((f) => f(time)); r1Update(dt, time); r3Update(dt); r4Update(time);
+    if (R2.dummy.userData.dance > 0) { R2.dummy.userData.dance -= dt; R2.dummy.position.y = Math.abs(Math.sin(time * 10)) * 0.15; } else R2.dummy.position.y = 0;
+    if (carry) { carry.position.set(P.pos.x + Math.sin(P.yaw) * 0.5, P.pos.y + 1.0, P.pos.z + Math.cos(P.yaw) * 0.5); carry.rotation.y = P.yaw; }
+    roomLights[4].color.set(S.cur === 4 && !R.done[4] && Math.sin(time * 5) > 0 ? 0xff2a1a : 0xec5a50);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => RELANG2.forEach((f) => f()));
+  // ---------- Small helpers ----------
+  function cap(text, ms = 3200) { const c = $('caption'); c.textContent = text; c.hidden = false; c.style.opacity = 1; clearTimeout(captionTimer); captionTimer = setTimeout(() => { c.style.opacity = 0; setTimeout(() => (c.hidden = true), 350); }, ms); }
+  function panel(fn) { S.panel = fn; G.control = false; const ov = $('lvOverlay'); ov.hidden = false; ov.dir = LANG === 'ar' ? 'rtl' : 'ltr'; fn($('lvPanel')); $('lvPanel').scrollTop = 0; }
+  function closePanel() { if (S.cleanup) { S.cleanup(); S.cleanup = null; } $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; S.panel = null; if (!G.dialog && !G.cine) giveControl(); }
+  const head = (i) => `<div class="eyebrow">${i + 1} / 5</div><h2>${tr(TASKS[i].name)}</h2><div class="nline"><span class="nface"></span><span>${tr(NLINE[TASKS[i].id])}</span></div>`;
+  const science = (id) => `<div class="science"><div class="k">${tr(UI.sci)}</div><p>${tr(SCI[id])}</p><div class="src">NASA</div></div>`;
+  function success(el, i, extra = '') {
+    SFX.success();
+    confetti(); const box = document.createElement('div'); box.className = 'l2-success'; box.innerHTML = extra + winBox(starsFor((G.nopes || 0) - (S.nope0 || 0)), tr(SCI[TASKS[i].id]), 'l2win', tr(UI.cont));
+    el.appendChild(box); box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    box.querySelector('#l2win').onclick = () => award(i);
+  }
+  // generic drag: from a source element to any element with [data-drop]
+  function dragFrom(src, html, onDrop, onMove) {
+    src.addEventListener('pointerdown', (e) => {
+      if (src.classList.contains('used')) return;
+      e.preventDefault(); SFX.pick();
+      const gh = document.createElement('div'); gh.className = 'ghost'; gh.innerHTML = html; document.body.appendChild(gh);
+      const mv = (ev) => { gh.style.left = ev.clientX + 'px'; gh.style.top = ev.clientY + 'px'; onMove && onMove(ev); };
+      mv(e); try { src.setPointerCapture(e.pointerId); } catch (err) {}
+      const up = (ev) => {
+        src.removeEventListener('pointermove', mv); src.removeEventListener('pointerup', up); src.removeEventListener('pointercancel', up); gh.remove();
+        const hit = document.elementsFromPoint(ev.clientX, ev.clientY).map((n) => n.closest && n.closest('[data-drop]')).find(Boolean);
+        onDrop(hit ? hit.dataset.drop : null, ev);
+      };
+      src.addEventListener('pointermove', mv); src.addEventListener('pointerup', up); src.addEventListener('pointercancel', up);
+    });
+  }
+
+  // ---------- Stamps, passport and flow ----------
+  function passport(el, fresh) {
+    const n = Object.keys(S.stamps).length;
+    el.innerHTML = `<div class="eyebrow">${tr(UI.eyebrow)}</div><h2>${tr(UI.passT)}</h2><p>${tr(UI.passP, n)}</p>
+      <div class="passport">${TASKS.map((tk, i) => `<div class="stampslot ${S.stamps[i] ? 'got' : ''} ${fresh === i ? 'new' : ''}"><div class="stamp" style="--c:#${tk.col.toString(16).padStart(6, '0')}"><span class="ic sn">${i + 1}</span><b>${tr(tk.stamp)}</b></div><small>${i + 1}. ${tr(tk.name)}</small></div>`).join('')}</div>
+      ${fresh !== undefined ? `<div class="feedback good">${tr(UI.newStamp)} ${tr(TASKS[fresh].stamp)}</div>` : ''}
+      <div class="actions"><span></span><button class="btn green" id="ppBack">${tr(UI.back)}</button></div>`;
+    el.querySelector('#ppBack').onclick = () => { closePanel(); afterPassport(); };
+  }
+  function award(i) {
+    if (S.cleanup) { S.cleanup(); S.cleanup = null; }
+    S.stamps[i] = true; S.next = Math.max(S.next, i + 1); S.cur = -1;
+    doors[i].signM.map = signTex(String(i + 1), TASKS[i].ic, '#9ccc3c', true); doors[i].signM.needsUpdate = true; doors[i].panelM.emissive.set(0x9ccc3c);
+    renderPassBtn(); SFX.stamp();
+    try { localStorage.setItem('ja_progress', JSON.stringify({ level1: true, level2: Object.keys(S.stamps).map(Number) })); } catch (e) {}
+    stampToast(i); setTimeout(afterPassport, 1900);
+  }
+  function stampToast(i) {
+    const tk = TASKS[i], d = document.createElement('div'); d.className = 'stoast';
+    d.innerHTML = `<div class="stamp" style="--c:#${tk.col.toString(16).padStart(6, '0')}"><span class="ic sn">${i + 1}</span><b>${tr(tk.stamp)}</b></div>`;
+    $('stage').appendChild(d); setTimeout(() => d.remove(), 1900);
+  }
+  function afterPassport() {
+    const n = Object.keys(S.stamps).length;
+    if (n >= 5 && !S.launchOpen) {
+      S.launchOpen = true; setObjective(null);
+      showDialog([
+        { who: 'nuri', expr: 'wow', en: 'All five stamps! The launch bay is open!', ar: 'الأختام الخمسة! انفتحت منصة الإطلاق!' },
+      ], () => { SFX.whoosh(1); S.phase = 'launch'; setObjective('l2_launch'); giveControl(); });
+    } else if (n < 5) { setObjective('l2_go'); cap(tr(TASKS[S.next].name), 2200); }
+  }
+  function finish() {
+    setObjective(null); SFX.fanfare();
+    panel((el) => {
+      el.innerHTML = `<div class="eyebrow">${tr(UI.eyebrow)}</div><h2>${tr(UI.doneT)}</h2><p>${tr(UI.doneP, playerName())}</p><div class="feedback good">${tr(UI.next)}</div><h3>${tr(UI.learned)}</h3><ul class="notebook">${TASKS.map((tk) => `<li>${tr(LEARN[tk.id])}</li>`).join('')}</ul><div class="actions"><button class="btn ghost" id="again">${tr(UI.replay)}</button><button class="btn" id="restart">${tr(UI.restart)}</button></div>`;
+      el.querySelector('#again').onclick = () => { closePanel(); start(); };
+      el.querySelector('#restart').onclick = () => { closePanel(); $('passBtn').hidden = true; $('dnReplay').click(); };
+    });
+  }
+  function renderPassBtn() { const b = $('passBtn'); b.hidden = G.scene !== 'level2'; b.textContent = `★ ${Object.keys(S.stamps).length}/5`; b.title = tr(UI.passT); }
+  $('passBtn').addEventListener('click', () => { if (G.scene !== 'level2' || !G.control) return; panel((el) => passport(el)); });
+
+  function action() {
+    if (!G.control) return null;
+    if (S.phase === 'launch') { const p = pin(LAUNCH_ANG); return { at: p, r: 2.8, text: tr(UI.launchAct), fn: finish }; }
+    if (S.next >= 5) return null;
+    // a locked door the child walks up to
+    for (let i = S.next + 1; i < 5; i++) { if (S.stamps[i]) continue; const p = at(TASKS[i].ang, HR - 1.4); if (Math.hypot(P.pos.x - p.x, P.pos.z - p.z) < 2.2) { if (!S.lockMsg || performance.now() - S.lockMsg > 4000) { S.lockMsg = performance.now(); cap(tr(UI.locked), 2400); } } }
+    if (S.cur >= 0) return roomAct(S.cur);
+    const g0 = at(TASKS[S.next].ang, HR + 2.5);
+    return { at: new T.Vector3(g0.x, 0, g0.z), r: 0, text: '', fn: () => {} };
+  }
+  function update(dt, time) {
+    holo.rotation.y = time * 0.4; hRing.rotation.z = time * 0.3;
+    beamH.material.opacity = 0.1 + 0.04 * Math.sin(time * 2);
+    roomUpdate(dt, time);
+    if (S.cur < 0 && S.next < 5 && S.phase !== 'launch' && !R.done[S.next] && inRoom(P.pos.x, P.pos.z, S.next)) startRoom(S.next);
+    doors.forEach((d, i) => { const act = i === S.next && S.phase !== 'launch'; d.lightP.intensity = act ? 1.6 + 0.6 * Math.sin(time * 4) : S.stamps[i] ? 0.5 : 0; d.panel.visible = !roomOpen(i); d.panelM.emissiveIntensity = 0.5 + 0.3 * Math.sin(time * 6 + i); });
+    launch.panelM.emissiveIntensity = S.launchOpen ? 1.6 : 0.25 + 0.1 * Math.sin(time * 2);
+    launch.panelM.emissive.set(S.launchOpen ? 0xfff3d0 : 0xec5a50);
+    launch.panel.position.y = launch.hgt / 2 + (S.launchOpen ? Math.min(launch.hgt * 0.92, (launch.panel.position.y - launch.hgt / 2) + dt * 2) : 0);
+    launch.lightP.intensity = S.launchOpen ? 2.5 : 0;
+    const al = W.userData.alarm && !$('lvOverlay').hidden; hallLight.color.set(al && Math.sin(time * 6) > 0 ? 0xff4a3a : 0x9fdcff);
+  }
+  function start() {
+    S = fresh(); G.scene = 'level2'; setEnv('level2');
+    $('doneCard').hidden = true; $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; closeChat(); G.chat = []; $('chatLog').innerHTML = '';
+    doors.forEach((d, i) => { d.signM.map = signTex(String(i + 1), TASKS[i].ic, '#' + TASKS[i].col.toString(16).padStart(6, '0'), false); d.signM.needsUpdate = true; d.panelM.emissive.set(TASKS[i].col); });
+    launch.panel.position.y = launch.hgt / 2; W.userData.alarm = false; resetRooms();
+    ship.visible = false; setBeam(ship, 0);
+    girl.visible = true; girl.scale.setScalar(1); girl.userData.reach = 0; setExpr(girl, 'wow');
+    nuri.visible = true; G.nuriJoined = true; G.nuriMet = true; G.done = true; setExpr(nuri, 'happy');
+    P.pos.set(0, 0, 7.2); P.vel.set(0, 0, 0); P.yaw = Math.PI; camYaw = 0; camPitch = 0.3; camDist = 4.8; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
+    $('helpBtn').hidden = false; $('helpLbl').textContent = t('help'); setObjective(null); renderPassBtn(); G.control = false;
+    SFX.success();
+    showDialog([
+      { who: 'nuri', expr: 'happy', en: 'Welcome to the Academy! Finish 5 rooms to earn 5 stamps.', ar: 'مرحباً بك في الأكاديمية! أنهِ 5 غرف لتحصل على 5 أختام.' },
+    ], () => { setExpr(girl, 'happy'); setObjective('l2_go'); giveControl(); });
+  }
+  function relang() {
+    renderPassBtn();
+    if (G.scene !== 'level2' || $('lvOverlay').hidden || !S.panel) return;
+    $('lvOverlay').dir = LANG === 'ar' ? 'rtl' : 'ltr';
+    if (S.cur >= 0) return; // keep a task's progress; its labels update next time it opens
+    S.panel($('lvPanel'));
+  }
+  const gid = () => (S.cur >= 0 ? TASKS[S.cur].id : 'hub');
+  /*TESTHOOK2*/
+  return {
+    start, update, action, relang, walkable,
+    devSkip: () => { if (S.phase === 'launch' || S.next >= 5) { $('lvOverlay').hidden = true; finish(); return; } if (S.cleanup) { S.cleanup(); S.cleanup = null; } $('lvOverlay').hidden = true; award(S.next); },
+    panelOpen: () => !$('lvOverlay').hidden,
+    qa: () => [{ q: UI.chipWhat, a: WHAT[gid()] }, { q: UI.chipHint, hint: true }, ...(gid() !== 'hub' ? [{ q: UI.chipWhy, a: SCI[gid()] }] : [])],
+    hint: () => { const k = gid(), arr = HINTS[k], i = S.hint[k] || 0; S.hint[k] = i + 1; return tr(arr[Math.min(i, arr.length - 1)]); },
+    context: () => `Current part of Level 2 (Junior Astronaut Training Academy): ${gid() === 'hub' ? 'walking around the academy hall to the next training room' : 'training room task "' + TASKS[S.cur].name.en + '"'}. Stamps collected: ${Object.keys(S.stamps).length} of 5. For your private knowledge only (never reveal it directly, only hint toward it step by step): ${SECRET[gid()]}`,
+  };
+})();
+
+
 // ============================== Training Academy (inside) ==============================
 // A round training hall with 4 hands-on stations. Kids click real 3D equipment; no big text screens.
 const ACAD = (() => {
@@ -2151,23 +2967,27 @@ const ACAD = (() => {
   // ---------- Building ----------
   const g = new T.Group(); ENV.academy = g; scene.add(g); g.visible = false;
   const R = 14;
+  // Razan's hall style: dark navy floor with glowing rings, light walls with space windows, a starry dome
   const floorTex = canvasTex(1024, 1024, (c, w) => {
-    c.fillStyle = '#eef2f7'; c.fillRect(0, 0, w, w);
-    c.strokeStyle = '#d7dfe9'; c.lineWidth = 3; for (let i = 0; i <= 16; i++) { c.beginPath(); c.moveTo(i * w / 16, 0); c.lineTo(i * w / 16, w); c.stroke(); c.beginPath(); c.moveTo(0, i * w / 16); c.lineTo(w, i * w / 16); c.stroke(); }
-    c.strokeStyle = '#ec8a3c'; c.lineWidth = 18; c.beginPath(); c.arc(w / 2, w / 2, w * 0.2, 0, 7); c.stroke();
-    c.strokeStyle = '#1f3a68'; c.lineWidth = 10; c.beginPath(); c.arc(w / 2, w / 2, w * 0.24, 0, 7); c.stroke();
-    c.drawImage(patchTex.image, w / 2 - 90, w / 2 - 90, 180, 180);
+    c.fillStyle = '#18224a'; c.fillRect(0, 0, w, w);
+    for (let i = 0; i < 64; i++) { const a = (i / 64) * Math.PI * 2; c.strokeStyle = 'rgba(143,208,239,.08)'; c.lineWidth = 2; c.beginPath(); c.moveTo(w / 2, w / 2); c.lineTo(w / 2 + Math.cos(a) * w, w / 2 + Math.sin(a) * w); c.stroke(); }
+    [0.16, 0.3, 0.44].forEach((r, i) => { c.strokeStyle = i === 1 ? 'rgba(236,138,60,.6)' : 'rgba(143,208,239,.45)'; c.lineWidth = i === 1 ? 10 : 6; c.beginPath(); c.arc(w / 2, w / 2, r * w, 0, 7); c.stroke(); });
+    c.strokeStyle = 'rgba(111,224,255,.8)'; c.lineWidth = 8; c.beginPath(); c.arc(w / 2, w / 2, 0.49 * w, 0, 7); c.stroke();
   });
-  const floor = mesh(new T.CircleGeometry(R, 64), mat(0xffffff, { map: floorTex }), 0, 0, 0, g, false); floor.rotation.x = -Math.PI / 2;
-  const wallTex = canvasTex(2048, 256, (c, w, h) => {
-    c.fillStyle = '#f7f7fb'; c.fillRect(0, 0, w, h); c.fillStyle = '#ec8a3c'; c.fillRect(0, h * 0.62, w, 18); c.fillStyle = '#1f3a68'; c.fillRect(0, h * 0.7, w, 8);
-    for (let i = 0; i < 12; i++) { const x = i * w / 12 + 40; const gr = c.createLinearGradient(0, 30, 0, 130); gr.addColorStop(0, '#8fd0ff'); gr.addColorStop(1, '#f5cf9f'); c.fillStyle = gr; c.fillRect(x, 30, 90, 100); c.strokeStyle = '#c9d2de'; c.lineWidth = 8; c.strokeRect(x, 30, 90, 100); }
+  const floor = mesh(new T.CircleGeometry(R, 72), toonM({ map: floorTex, roughness: 0.55, metalness: 0.2 }), 0, 0, 0, g, false); floor.rotation.x = -Math.PI / 2;
+  const wallTex = canvasTex(1024, 256, (c, w, h) => {
+    c.fillStyle = '#e9edf5'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 4; i++) { const x = i * 256; c.fillStyle = '#d7dde9'; c.fillRect(x + 6, 10, 244, 60); c.fillRect(x + 6, h - 70, 244, 60); c.fillStyle = '#0b1440'; c.fillRect(x + 40, 90, 176, 80); for (let k = 0; k < 18; k++) { c.fillStyle = `rgba(255,255,255,${0.4 + Math.random() * 0.6})`; c.fillRect(x + 42 + Math.random() * 172, 92 + Math.random() * 76, 2, 2); } c.strokeStyle = '#9aa6bd'; c.lineWidth = 6; c.strokeRect(x + 40, 90, 176, 80); }
+    c.fillStyle = '#6fe0ff'; c.fillRect(0, h - 8, w, 4);
   });
-  wallTex.wrapS = T.RepeatWrapping;
-  mesh(new T.CylinderGeometry(R, R, 7, 64, 1, true), mat(0xffffff, { map: wallTex, side: T.BackSide }), 0, 3.5, 0, g, false);
-  const dome = mesh(new T.SphereGeometry(R, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2), mat(0xdfe7f2, { side: T.BackSide }), 0, 7, 0, g, false); dome.scale.y = 0.45;
-  const ringM = new T.MeshBasicMaterial({ color: 0xbfe8ff });
-  [4, 8, 11.5].forEach((r, i) => mesh(new T.TorusGeometry(r, 0.08, 6, 64), ringM, 0, 7.6 + (2 - i) * 1.4, 0, g, false).rotation.x = Math.PI / 2);
+  wallTex.wrapS = T.RepeatWrapping; wallTex.repeat.set(5, 1);
+  mesh(new T.CylinderGeometry(R, R, 7, 64, 1, true), toonM({ map: wallTex, side: T.BackSide }), 0, 3.5, 0, g, false);
+  const domeTex = canvasTex(1024, 512, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#05081c'); gr.addColorStop(1, '#17245a'); c.fillStyle = gr; c.fillRect(0, 0, w, h); for (let i = 0; i < 500; i++) { c.fillStyle = `rgba(255,255,255,${Math.random()})`; c.beginPath(); c.arc(Math.random() * w, Math.random() * h, Math.random() * 1.6, 0, 7); c.fill(); } });
+  const dome = new T.Mesh(new T.SphereGeometry(R, 48, 20, 0, Math.PI * 2, 0, Math.PI / 2), new T.MeshBasicMaterial({ map: domeTex, side: T.BackSide })); dome.position.y = 7; dome.scale.y = 0.5; g.add(dome);
+  const ringM = new T.MeshBasicMaterial({ color: 0x6fe0ff });
+  { const r1 = new T.Mesh(new T.TorusGeometry(R - 0.05, 0.08, 8, 96), ringM); r1.rotation.x = Math.PI / 2; r1.position.y = 7; g.add(r1); }
+  const hallLight = new T.PointLight(0x9fdcff, 1.1, 30, 1.2); hallLight.position.set(0, 6, 0); g.add(hallLight);
+  for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + 0.2; const px = Math.sin(a) * (R - 0.6), pz = Math.cos(a) * (R - 0.6); mesh(new T.CylinderGeometry(0.28, 0.32, 7, 16), toonM({ color: 0xf4f6fb, roughness: 0.4, metalness: 0.2 }), px, 3.5, pz, g); mesh(new T.CylinderGeometry(0.34, 0.34, 0.12, 16), new T.MeshBasicMaterial({ color: 0x6fe0ff }), px, 0.4, pz, g, false); }
   // centre: a slowly turning model rocket on a round platform
   mesh(new T.CylinderGeometry(2.2, 2.4, 0.3, 40), mat(0x1f3a68), 0, 0.15, 0, g);
   const rocket = new T.Group(); rocket.position.set(0, 0.3, 0); g.add(rocket);
@@ -2177,12 +2997,19 @@ const ACAD = (() => {
   // decorations: plants, a space suit on a stand, lockers
   const pot = (x, z) => { mesh(new T.CylinderGeometry(0.35, 0.28, 0.6, 12), mat(0xec8a3c), x, 0.3, z, g); for (let i = 0; i < 5; i++) { const l = mesh(new T.SphereGeometry(0.28, 8, 6), mat(0x4caf50), x + Math.cos(i) * 0.15, 0.8 + i * 0.07, z + Math.sin(i * 2) * 0.15, g); l.scale.y = 1.4; } };
   pot(3.4, 11.6); pot(-1.4, -10.6); pot(1.4, -10.6);
-  const suit = new T.Group(); suit.position.set(-5.6, 0, 11.4); suit.rotation.y = 2.2; g.add(suit);
-  mesh(new T.CylinderGeometry(0.06, 0.06, 1.6, 6), mat(0x9aa4ad), 0, 0.8, 0, suit);
-  mesh(new T.CylinderGeometry(0.42, 0.38, 0.9, 16), mat(0xf7f7fb), 0, 1.65, 0, suit); mesh(new T.SphereGeometry(0.34, 18, 14), mat(0xf7f7fb), 0, 2.4, 0, suit);
-  const suitVisor = mesh(new T.SphereGeometry(0.25, 16, 12), new T.MeshBasicMaterial({ color: 0xffc46b }), 0, 2.42, 0.16, suit); suitVisor.scale.z = 0.5;
-  mesh(new T.BoxGeometry(0.5, 0.5, 0.25), mat(0xd8dde5), 0, 1.75, -0.36, suit);
-  [-1, 1].forEach((s) => { const a = mesh(new T.CylinderGeometry(0.12, 0.11, 0.8, 10), mat(0xf7f7fb), s * 0.52, 1.6, 0, suit); a.rotation.z = s * 0.25; });
+  // a fitting room: walk in, the curtain closes, and you come out in a spacesuit
+  const FIT = { x: -5.0, z: 10.9, front: { x: -5.0, z: 9.3 } };
+  const booth = new T.Group(); booth.position.set(FIT.x, 0, FIT.z); g.add(booth);
+  const bw = toonM({ color: 0xe9edf5 }), bt = mat(0xec8a3c);
+  mesh(new T.BoxGeometry(2.0, 2.6, 0.12), bw, 0, 1.3, 0.95, booth); [-1, 1].forEach((sd) => mesh(new T.BoxGeometry(0.12, 2.6, 2.0), bw, sd * 1.0, 1.3, 0, booth));
+  mesh(new T.BoxGeometry(2.2, 0.25, 2.2), bt, 0, 2.72, 0, booth);
+  mesh(new T.CylinderGeometry(0.03, 0.03, 2.0, 8), mat(0x9aa6bd), 0, 2.45, -0.95, booth).rotation.z = Math.PI / 2;
+  const curtain = new T.Group(); curtain.position.set(-1.0, 0, -0.95); booth.add(curtain);
+  const curtainM = toonM({ color: 0x5fb8ff, side: T.DoubleSide }); for (let i = 0; i < 6; i++) mesh(new T.CylinderGeometry(0.18, 0.18, 2.3, 10, 1, true, 0, Math.PI), curtainM, 0.17 + i * 0.33, 1.25, 0, curtain, false);
+  curtain.scale.x = 0.2;
+  mesh(new T.BoxGeometry(0.6, 1.0, 0.04), toonM({ color: 0xbfe8ff, emissive: 0x6fe0ff, emissiveIntensity: 0.25 }), 0, 1.5, 0.88, booth, false); // mirror
+  { const hook = new T.Group(); hook.position.set(0.7, 1.7, 0.75); booth.add(hook); mesh(new T.SphereGeometry(0.16, 14, 10), mat(0xf4f6fb), 0, 0, 0, hook); mesh(new T.BoxGeometry(0.3, 0.4, 0.15), mat(0xf4f6fb), 0, -0.32, 0, hook); }
+  FIT.curtain = curtain;
   // the Level 2 door: a big round hatch that lights up at the end
   const doorG = new T.Group(); doorG.position.set(DOOR.x, 0, DOOR.z - 0.9); g.add(doorG);
   mesh(new T.TorusGeometry(2.1, 0.35, 12, 40), mat(0x1f3a68), 0, 2.4, 0, doorG);
@@ -2199,6 +3026,7 @@ const ACAD = (() => {
   const textTex = (txt, bg, fg = '#fff') => canvasTex(256, 128, (c, w, h) => { c.fillStyle = bg; c.beginPath(); c.roundRect ? c.roundRect(6, 6, w - 12, h - 12, 28) : c.rect(6, 6, w - 12, h - 12); c.fill(); c.fillStyle = fg; c.font = '800 64px Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, w / 2, h / 2 + 4); });
   const sprite = (tex, s, parent, x, y, z) => { const sp = new T.Sprite(new T.SpriteMaterial({ map: tex, depthWrite: false })); sp.scale.set(s, s, s); sp.position.set(x, y, z); parent.add(sp); return sp; };
   const clickables = [];
+  sprite(textTex('👕 Suit up', '#ec8a3c'), 0.9, booth, 0, 3.2, -1.0);
   const click = (obj, st, fn) => { obj.traverse((o) => { if (o.isMesh || o.isSprite) { o.userData.click = fn; o.userData.st = st; clickables.push(o); } }); return obj; };
 
   const stations = {}, ROOM_SOLIDS = [];
@@ -2208,7 +3036,7 @@ const ACAD = (() => {
     const sx = FACE(k) > 0 ? -1 : 1, cz = p.z, wm = mat(ST[k].col), wm2 = mat(0xfaf7f0), hW = 2.6;
     const wall = (x, z, w, d, m2) => { mesh(new T.BoxGeometry(w, hW, d), m2 || wm2, x, hW / 2, z, g); mesh(new T.BoxGeometry(w + 0.04, 0.3, d + 0.04), wm, x, hW - 0.15, z, g, false); ROOM_SOLIDS.push({ x, z, w, d }); };
     wall(sx * 11.4, cz, 0.25, 6.2, wm); wall(sx * 8.6, cz - 3, 5.6, 0.25); wall(sx * 8.6, cz + 3, 5.6, 0.25); wall(sx * 5.8, cz - 2.05, 0.25, 1.9); wall(sx * 5.8, cz + 2.05, 0.25, 1.9);
-    const fl = mesh(new T.PlaneGeometry(5.6, 6), mat(ST[k].col, { transparent: true, opacity: 0.25 }), sx * 8.6, 0.015, cz, g, false); fl.rotation.x = -Math.PI / 2;
+    const fl = mesh(new T.PlaneGeometry(5.6, 6), mat(0x22305c), sx * 8.6, 0.015, cz, g, false); const fl2 = mesh(new T.PlaneGeometry(5.3, 5.7), mat(ST[k].col, { transparent: true, opacity: 0.18 }), sx * 8.6, 0.02, cz, g, false); fl2.rotation.x = -Math.PI / 2; fl.rotation.x = -Math.PI / 2;
     mesh(new T.BoxGeometry(0.3, 0.5, 2.6), wm, sx * 5.8, hW + 0.25, cz, g); const dsign = sprite(emojiTex(ST[k].ic, '#' + ST[k].col.toString(16).padStart(6, '0')), 1.0, g, sx * 5.3, hW + 0.95, cz);
     const pad = mesh(new T.CircleGeometry(2.6, 40), new T.MeshBasicMaterial({ color: ST[k].col, transparent: true, opacity: 0.25 }), 0, 0.02, 0.8, sg, false); pad.rotation.x = -Math.PI / 2;
     mesh(new T.BoxGeometry(4.2, 0.9, 1.2), mat(0xf7f7fb), 0, 0.45, 0, sg); mesh(new T.BoxGeometry(4.3, 0.08, 1.3), mat(ST[k].col), 0, 0.93, 0, sg);
@@ -2410,13 +3238,14 @@ const ACAD = (() => {
   }
 
   // ---------- secret things to find and play with inside ----------
-  const SEC = [
+  const SEC0 = [
     { k: 'rocket', at: { x: 0, z: 3.4 }, ic: '🚀', t: { en: 'Launch!', ar: 'إطلاق!' }, f: { en: 'Real rockets must fly about 28,000 km per hour to stay in orbit around Earth!', ar: 'الصواريخ الحقيقية لازم تطير تقريباً 28,000 كم بالساعة لتضل تدور حول الأرض!' }, act: { en: 'Launch the rocket', ar: 'أطلق الصاروخ' } },
-    { k: 'suit', at: { x: -4.6, z: 10.0 }, ic: '🧑‍🚀', t: { en: 'A real spacesuit', ar: 'بدلة فضاء حقيقية' }, f: { en: 'A NASA spacesuit weighs more than 100 kg on Earth. It is like a tiny spaceship you wear!', ar: 'بدلة ناسا وزنها أكثر من 100 كيلو على الأرض. هي متل سفينة فضاء صغيرة بتلبسها!' }, act: { en: 'Try the helmet light', ar: 'جرّب ضو الخوذة' } },
+    { k: 'suit', skip: true, at: { x: -4.6, z: 10.0 }, ic: '🧑‍🚀', t: { en: 'A real spacesuit', ar: 'بدلة فضاء حقيقية' }, f: { en: 'A NASA spacesuit weighs more than 100 kg on Earth. It is like a tiny spaceship you wear!', ar: 'بدلة ناسا وزنها أكثر من 100 كيلو على الأرض. هي متل سفينة فضاء صغيرة بتلبسها!' }, act: { en: 'Try the helmet light', ar: 'جرّب ضو الخوذة' } },
     { k: 'scope', at: { x: -7.4, z: 8.8 }, ic: '🔭', t: { en: 'Mars spotted!', ar: 'شفنا المريخ!' }, f: { en: 'Mars is so far away that sunlight takes about 13 minutes to reach it.', ar: 'المريخ بعيد كثير لدرجة إن ضو الشمس بياخد حوالي 13 دقيقة ليوصله.' }, act: { en: 'Look through the telescope', ar: 'طلّع بالتلسكوب' } },
     { k: 'garden', at: { x: 3.4, z: 10.2 }, ic: '🥬', t: { en: 'Space garden', ar: 'حديقة فضائية' }, f: { en: 'Astronauts grow lettuce on the space station in a small garden called Veggie.', ar: 'رواد الفضاء بيزرعوا خس بمحطة الفضاء بحديقة صغيرة اسمها "فيجي".' }, act: { en: 'Water the plant', ar: 'اسقي النبتة' } },
     { k: 'locker', at: { x: 7.0, z: 9.2 }, ic: '🧰', t: { en: 'Tool locker', ar: 'خزانة العدّة' }, f: { en: 'In space, tools float away! Astronauts tie them down with straps and Velcro.', ar: 'بالفضاء العدّة بتطوف! رواد الفضاء بيربطوها بأحزمة ولاصق.' }, act: { en: 'Open the locker', ar: 'افتح الخزانة' } },
   ];
+  const SEC = SEC0.filter((q) => !q.skip);
   const secFX = {};
   // telescope
   { const tg = new T.Group(); tg.position.set(-8.6, 0, 10.2); tg.rotation.y = 2.4; g.add(tg); [0, 2.1, 4.2].forEach((a) => { const l = mesh(new T.CylinderGeometry(0.04, 0.04, 1.4, 6), mat(0x1f3a68), Math.sin(a) * 0.3, 0.65, Math.cos(a) * 0.3, tg); l.rotation.set(Math.cos(a) * 0.3, 0, -Math.sin(a) * 0.3); }); const tube = new T.Group(); tube.position.y = 1.35; tg.add(tube); const tb = mesh(new T.CylinderGeometry(0.14, 0.2, 1.3, 16), mat(0xf4f1ea), 0, 0, 0, tube); tb.rotation.z = 1.1; mesh(new T.TorusGeometry(0.2, 0.04, 8, 20), mat(0xec8a3c), -0.58, 0.28, 0, tube).rotation.y = Math.PI / 2; secFX.scope = tube; }
@@ -2438,7 +3267,6 @@ const ACAD = (() => {
     // rocket hop
     if (k === 'rocket' && tt < 2.4) { const h = Math.sin(Math.min(1, tt / 2.4) * Math.PI) * 4.5; rocket.position.y = 0.3 + h; if (Math.random() < 0.6) burst(new T.Vector3(0, rocket.position.y + 0.3, 0), Math.random() < 0.5 ? 0xffd27a : 0xec8a3c, 2, 0.6, 0.5); } else rocket.position.y = 0.3;
     // helmet light
-    suitVisor.material.color.set(S.sec && S.sec.suit && Math.sin(time * 4) > -0.3 ? 0xfff3a0 : 0xffc46b);
     // telescope turns up toward the dome
     secFX.scope.rotation.y += ((k === 'scope' || (S.sec && S.sec.scope) ? 0.6 : 0) - secFX.scope.rotation.y) * Math.min(1, dt * 2);
     secFX.scope.rotation.z += ((S.sec && S.sec.scope ? -0.25 : 0) - secFX.scope.rotation.z) * Math.min(1, dt * 2);
@@ -2531,10 +3359,18 @@ const ACAD = (() => {
     setObjective('ac_obj');
     showDialog([{ who: 'nuri', expr: 'happy', en: 'Welcome! 🎉 Finish the 4 stations and find the ✨ secrets!', ar: 'أهلاً! 🎉 خلّص المحطات الأربع ودوّر على الأسرار ✨!' }], giveControl);
   }
+  function fitSuit() {
+    G.control = false; P.vel.set(0, 0, 0); P.speed = 0; const on = !girl.userData.suitOn;
+    P.pos.set(FIT.x, 0, FIT.z); P.yaw = Math.PI; girl.position.copy(P.pos); girl.rotation.y = P.yaw; FIT.close = 1; SFX.whoosh(0);
+    setTimeout(() => { setSuit(girl, on); SFX.sparkle(); burst(new T.Vector3(FIT.x, 1.6, FIT.z - 1), 0xffd27a, 20, 1.2, 1); }, 900);
+    setTimeout(() => { FIT.close = 0; P.pos.set(FIT.front.x, 0, FIT.front.z - 0.4); P.yaw = Math.PI; setExpr(girl, 'wow'); toast2(on ? (LANG === 'ar' ? 'أصبحتِ رائدة فضاء حقيقية! 🧑‍🚀' : 'You look like a real astronaut! 🧑‍🚀') : (LANG === 'ar' ? 'رجعتِ لملابسك العادية 👕' : 'Back in your normal clothes 👕')); giveControl(); }, 1900);
+  }
+  function toast2(txt) { const c = $('caption'); c.textContent = txt; c.hidden = false; c.style.opacity = 1; setTimeout(() => { c.style.opacity = 0; setTimeout(() => (c.hidden = true), 350); }, 2600); }
   function action() {
     if (S.mode) return null;
+    if (Math.hypot(P.pos.x - FIT.front.x, P.pos.z - FIT.front.z) < 1.8) return { at: new T.Vector3(FIT.front.x, 0, FIT.front.z), r: 1.8, text: girl.userData.suitOn ? (LANG === 'ar' ? '👕 اخلع بدلة الفضاء' : '👕 Take off the spacesuit') : (LANG === 'ar' ? '🧑‍🚀 البس بدلة الفضاء' : '🧑‍🚀 Put on the spacesuit'), fn: fitSuit };
     for (const s of SEC) { if (S.sec[s.k]) continue; if (Math.hypot(P.pos.x - s.at.x, P.pos.z - s.at.z) < 2.1) return { at: new T.Vector3(s.at.x, 0, s.at.z), r: 2.1, text: `✨ ${tr(s.act)}`, fn: () => playSecret(s) }; }
-    if (S.end) return { at: new T.Vector3(DOOR.x, 0, DOOR.z + 0.5), r: 2.6, text: tr(TX.door) + ' 🚀', fn: () => { SFX.success(); try { localStorage.setItem('ja_progress', JSON.stringify({ level1: true })); } catch (e) {} finalPanel(); } };
+    if (S.end) return { at: new T.Vector3(DOOR.x, 0, DOOR.z + 0.5), r: 2.6, text: tr(TX.door) + ' 🚀', fn: async () => { SFX.success(); try { localStorage.setItem('ja_progress', JSON.stringify({ level1: true })); } catch (e) {} G.control = false; fade(true); await wait(650); $('stHud').hidden = true; L2.start(); fade(false); } };
     let best = null, bd = 1e9; KEYS.forEach((k) => { if (S.done[k]) return; const sp = standPoint(k).pos, d = Math.hypot(P.pos.x - sp.x, P.pos.z - sp.z); if (d < bd) { bd = d; best = k; } });
     if (!best) return null; const sp = standPoint(best).pos;
     return { at: new T.Vector3(sp.x, 0, sp.z), r: 2.2, text: `${ST[best].ic} ${tr(ST[best].t)}`, fn: () => enter(best) };
@@ -2542,6 +3378,7 @@ const ACAD = (() => {
   function target() { if (S.mode) return null; if (S.end) return { x: DOOR.x, z: DOOR.z + 0.5 }; const a = action(); return a ? { x: a.at.x, z: a.at.z } : null; }
   function update(dt, time) {
     rocket.rotation.y = time * 0.4; secretUpdate(dt, time);
+    FIT.curtain.scale.x += (((FIT.close ? 1 : 0.2)) - FIT.curtain.scale.x) * Math.min(1, dt * 6);
     stations && KEYS.forEach((k, i) => { stations[k].icon.position.y = 4.1 + Math.sin(time * 2 + i) * 0.08; });
     // air
     for (const q of A.cubes) { q.t = Math.min(1, q.t + dt * 2.2); const loc = q.to.clone(); const from = new T.Vector3(q.kind === 'o' ? -1.3 : 1.3, 1.9, 0.1); q.c.position.lerpVectors(from, loc, q.t).add(new T.Vector3(0, Math.sin(q.t * Math.PI) * 0.5, 0)); q.c.rotation.y = q.t * 4; }
@@ -2572,13 +3409,14 @@ const ACAD = (() => {
   function cam(dt) { camera.position.lerp(VIEW, Math.min(1, dt * 4)); const look = new T.Vector3(); look.copy(LOOK); camera.lookAt(look); }
   const camLock = () => !!S.mode && G.scene === 'academy';
   function checklist() { return [...KEYS.map((k) => ({ ic: ST[k].ic, t: tr(ST[k].t), done: !!S.done[k] })), { ic: '⭐', t: `${LANG === 'ar' ? 'أسرار مخبّاية' : 'Hidden secrets'} ${secFound()}/${SEC.length}`, done: secFound() === SEC.length }, { ic: '🚪', t: tr(TX.door), done: false, locked: !allDone() }]; }
-  function mapDots() { return [...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, ic: ST[k].ic, done: !!S.done[k] })), ...SEC.map((s) => ({ x: s.at.x, z: s.at.z, ic: '✨', done: !!S.sec[s.k] })), { x: DOOR.x, z: DOOR.z, ic: '🚪', done: false }]; }
+  function mapDots() { return [...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, ic: ST[k].ic, done: !!S.done[k] })), ...SEC.map((s) => ({ x: s.at.x, z: s.at.z, ic: '✨', done: !!S.sec[s.k] })), { x: FIT.x, z: FIT.z, ic: '👕', done: !!girl.userData.suitOn }, { x: DOOR.x, z: DOOR.z, ic: '🚪', done: false }]; }
   function qa() { return [{ q: { en: 'Give me a hint!', ar: 'أعطيني تلميح!' }, hint: true }, ...QA.slice(0, 2)]; }
   function hint() { const k = S.mode || KEYS.find((q) => !S.done[q]) || 'food'; const i = S.hintI[k] || 0; S.hintI[k] = i + 1; return tr(ST[k].hints[Math.min(i, 2)]); }
   for (const [k, v] of Object.entries({ ac_obj: TX.obj, ac_door: TX.objDoor })) TXT[k] = v;
-  ENV_SOLIDS.academy = [{ x: 0, z: 0, r: 2.5 }, ...ROOM_SOLIDS, ...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, w: 1.4, d: 4.4 })), { x: -5.6, z: 11.4, r: 0.6 }, { x: -8.6, z: 10.2, r: 0.5 }, { x: 8.0, z: 10.5, r: 0.6 }, { x: 3.4, z: 11.6, r: 0.4 }, { x: -1.4, z: -10.6, r: 0.4 }, { x: 1.4, z: -10.6, r: 0.4 }];
+  ENV_SOLIDS.academy = [{ x: 0, z: 0, r: 2.5 }, ...ROOM_SOLIDS, ...KEYS.map((k) => ({ x: POSN[k].x, z: POSN[k].z, w: 1.4, d: 4.4 })), { x: FIT.x, z: FIT.z + 0.95, w: 2.0, d: 0.2 }, { x: FIT.x - 1, z: FIT.z, w: 0.2, d: 2.0 }, { x: FIT.x + 1, z: FIT.z, w: 0.2, d: 2.0 }, { x: -8.6, z: 10.2, r: 0.5 }, { x: 8.0, z: 10.5, r: 0.6 }, { x: 3.4, z: 11.6, r: 0.4 }, { x: -1.4, z: -10.6, r: 0.4 }, { x: 1.4, z: -10.6, r: 0.4 }];
   const context = () => `The child is inside the Junior Astronaut Training Academy, doing 4 hands-on stations: air (fill a bottle with 1 oxygen cube and 4 nitrogen cubes to wake a robot), water (fill a tank with 2.5 liters, the daily need, using half-liter buckets, then recycle used water because Mars has no pools), Earth's atmosphere layers (tap troposphere, stratosphere, mesosphere, thermosphere, exosphere from the ground up), and food (a balanced tray: fruit or veggies, bread or rice, chicken/egg/hummus, milk or yogurt). Done: ${KEYS.filter((k) => S.done[k]).join(', ') || 'none'}. Give hints, never the full answer.`;
   /*ACADHOOK*/
+  const FITX = FIT;
   return { start, action, update, cam, camLock, target, checklist, mapDots, qa, hint, context, active: () => G.scene === 'academy', relang: renderHud };
 })();
 
@@ -2658,6 +3496,7 @@ function loop() {
   else if (G.scene === 'title') { titleT += dt; camera.position.set(2.7 + Math.sin(titleT * 0.25) * 0.4, 2.2, 3.3); camera.lookAt(-0.6, 0.8, -1.4); }
   else if (!G.dialog) { if (L1.roverMode()) L1.updateRover(dt); else { updatePlayer(dt); if (ACAD.camLock()) ACAD.cam(dt); else followCamera(dt); } }
   if (G.scene === 'academy') ACAD.update(dt, time);
+  if (G.scene === 'level2') L2.update(dt, time);
   GUIDE.update(dt, time); stage.classList.toggle('has-st', !$('stHud').hidden);
   if (G.scene === 'level1') L1.update(dt, time);
   if (G.scene === 'level1' || G.scene === 'desert' || G.scene === 'landing') L1.ambient(dt, time);
