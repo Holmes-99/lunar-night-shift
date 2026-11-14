@@ -1,10 +1,13 @@
-# Publishes the Junior Astronaut game (public/) to GitHub Pages on every push to main.
+# Publishes the Junior Astronaut game (public/) to GitHub Pages on every push to main,
+# and once a day so the game gets fresh real space weather from NASA DONKI.
 name: Deploy game to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * *'
 
 permissions:
   contents: read
@@ -23,6 +26,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch the last 7 days of real solar flares from NASA DONKI
+        run: python3 .github/scripts/donki.py public/data/space-weather.json || true
       - name: Build site folder
         run: |
           cp -r public _site
