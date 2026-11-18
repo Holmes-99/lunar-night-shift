@@ -441,7 +441,7 @@ body {
 /* ---------- Puzzle + kid speaker ---------- */
 .dialog .avatar.kid { background: radial-gradient(circle at 50% 64%, #f2c39b 0 45%, #7a4a2a 46%); }
 .dialog .avatar.kid::before, .dialog .avatar.kid::after { top: 32px; width: 8px; height: 10px; transform: none; }
-.pz { position: relative; margin: 0 auto; background: #0b1330; border-radius: 14px; overflow: hidden; touch-action: none; transition: height .7s ease; max-width: 100%; }
+.pz { position: relative; margin: 0 auto; flex-shrink: 0; background: #0b1330; border-radius: 14px; overflow: hidden; touch-action: none; transition: height .7s ease; max-width: 100%; }
 .pz-inner { position: absolute; left: 0; top: 0; width: 100%; transition: transform 1.6s cubic-bezier(.4,0,.2,1); }
 .pz-board { position: absolute; left: 0; top: 0; width: 100%; background-color: #101c40; background-image: linear-gradient(rgba(143,208,239,.3) 2px, transparent 2px), linear-gradient(90deg, rgba(143,208,239,.3) 2px, transparent 2px); box-shadow: inset 0 0 0 2px rgba(143,208,239,.45); }
 .pz-piece { position: absolute; background-repeat: no-repeat; border-radius: 7px; box-shadow: 0 0 0 2px #8fd0ef, 0 6px 14px rgba(0,0,0,.55); cursor: grab; touch-action: none; }
@@ -2776,6 +2776,7 @@ const L1 = (() => {
     el.innerHTML = `<div class="eyebrow" id="pzE"></div><h2 id="pzT"></h2><p id="pzP"></p><div class="pz" id="pz" dir="ltr"><div class="pz-inner" id="pzIn"><div class="pz-board" id="pzB"></div></div></div><div class="actions"><span class="count" id="pzC"></span><span id="pzA"></span></div>`;
     mapURL = mapURL || mapData();
     const pz = $('pz'), inner = $('pzIn'), board = $('pzB'), gap = 12;
+    S.pz = { n: 0, done: 0 }; pzLabels(); // fill the title and text first, so their real height is measured
     // measure the real space left on this screen, so the puzzle and its button always fit without scrolling
     const cs = getComputedStyle(el), padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom), ocs = getComputedStyle(ov), ovPad = parseFloat(ocs.paddingTop) + parseFloat(ocs.paddingBottom);
     const headH = () => $('pzE').offsetHeight + $('pzT').offsetHeight + $('pzP').offsetHeight + 70 + 4 * 14;
@@ -2783,9 +2784,12 @@ const L1 = (() => {
     const wide = ov.clientHeight < 560 && ov.clientWidth > ov.clientHeight * 1.3; el.classList.toggle('pz-wide', wide);
     let avail = ov.clientHeight - ovPad - padV - (wide ? 0 : headH());
     if (!wide && avail < 300) { $('pzP').hidden = true; avail = ov.clientHeight - ovPad - padV - headH(); }
-    const Wp = Math.floor(Math.max(150, Math.min(wide ? ov.clientWidth * 0.5 : el.clientWidth - 44, avail - gap, 620))), pw = Wp / 4;
+    let Wp = Math.floor(Math.max(150, Math.min(wide ? ov.clientWidth * 0.5 : el.clientWidth - 44, avail - gap, 620))), pw = Wp / 4;
     el.style.overflow = 'hidden';
-    pz.style.width = Wp + 'px'; pz.style.height = pw * 4 + gap + 'px'; board.style.height = pw * 2 + 'px'; board.style.backgroundSize = `${pw}px ${pw}px`;
+    pz.style.transition = 'none'; pz.style.width = Wp + 'px'; pz.style.height = pw * 4 + gap + 'px';
+    // measure for real: if the panel is still too tall for the screen, shrink the puzzle by exactly that much
+    const over = el.scrollHeight - el.clientHeight; if (over > 0) { Wp = Math.max(140, Math.floor(Wp - over - 6)); pw = Wp / 4; pz.style.width = Wp + 'px'; pz.style.height = pw * 4 + gap + 'px'; }
+    void pz.offsetHeight; pz.style.transition = ''; board.style.height = pw * 2 + 'px'; board.style.backgroundSize = `${pw}px ${pw}px`;
     S.pz = { n: 0, pw, Wp, done: 0 }; pzLabels();
     const cells = [0, 1, 2, 3, 4, 5, 6, 7]; for (let i = 7; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [cells[i], cells[j]] = [cells[j], cells[i]]; }
     const put = (p, x, y) => { p.style.left = x + 'px'; p.style.top = y + 'px'; };
