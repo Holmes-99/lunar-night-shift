@@ -3,7 +3,8 @@
 .bigchip { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 22px; background: rgba(16,26,51,.78); color: #fffaf0; pointer-events: none; z-index: 6; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
 .bigchip .ic { font-size: 46px; line-height: 1; }
 .bigchip b { font-family: var(--f-display); font-size: 24px; font-weight: 800; max-width: 52vw; }
-.bigchip.in { animation: pop2 .3s ease-out; }
+.bigchip.in { animation: chipIn .35s ease-out; }
+@keyframes chipIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 .ruler { position: absolute; top: 80px; inset-inline-start: 12px; width: 220px; padding: 10px; display: flex; flex-direction: column; gap: 5px; pointer-events: none; z-index: 5; }
 .ruler .rk { font-family: var(--f-display); font-weight: 800; font-size: 22px; color: var(--navy); text-align: center; }
 .ruler .rl { display: grid; grid-template-columns: 28px 1fr; gap: 0 6px; align-items: center; padding: 5px 8px; border-radius: 10px; background: #f1ece2; opacity: .55; transition: all .3s; border-inline-start: 6px solid var(--c); }
@@ -177,7 +178,8 @@
 .pos-bar .pb-t { font-weight: 800; color: var(--navy); text-align: center; }
 .pos-bar .pb-row { display: flex; gap: 10px; width: 100%; }
 .pb-b { all: unset; cursor: pointer; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 6px; border-radius: 16px; background: #fff; border: 3px solid #d9d2c3; color: var(--navy); text-align: center; }
-.pb-b b { font-size: 14px; } .pb-b.on { border-color: #ec8a3c; background: #fff3e6; }
+.pb-b b { font-size: 17px; padding: 6px 0; } .pb-b.on { border-color: #ec8a3c; background: #fff3e6; } .pb-b.good { border-color: #5fbf2a; background: #eef9e4; color: #2f6a12; } .pb-b.bad { border-color: #ec5a50; background: #fdeceb; color: #8a1d14; }
+.pos-bar .pb-t.good { color: #2f6a12; } .pos-bar .pb-t.bad { color: #8a1d14; }
 .pl-cv { position: static !important; inset: auto !important; width: 100% !important; height: auto !important; border-radius: 18px; touch-action: none; cursor: pointer; display: block; flex: none; }
 .pl-msg { font-weight: 800; color: var(--navy); background: #eef4ff; border-radius: 12px; padding: 8px 12px; text-align: center; }
 .pl-msg.bad { background: #fde3e0; color: #8a1d14; } .pl-msg.good { background: #f2fae6; color: #2f6a12; }
@@ -252,8 +254,13 @@
 /* fewer things on screen */
 .tools .icon-btn.opt { display: none; } .tools.open .icon-btn.opt { display: grid; }
 #setBtn[aria-expanded="true"] { background: #ffc22e; }
-.bigchip { top: auto !important; bottom: 96px; }
-.lv1 .bigchip { bottom: 150px; }
+.bigchip { top: auto !important; bottom: 150px; transition: bottom .3s ease; }
+.lv1 .bigchip { bottom: 220px; }
+.caption { transition: bottom .3s ease, opacity .35s; }
+.stage:has(#dialog:not([hidden])) .caption { bottom: 240px; }
+.stage:has(.caption:not([hidden])) .bigchip { bottom: 220px; }
+.lv1:has(.caption:not([hidden])) .bigchip { bottom: 230px; }
+.stage:has(#dialog:not([hidden])) .bigchip { bottom: 310px; }
 .clist { pointer-events: auto; cursor: pointer; font-size: 12px; padding: 6px 9px; }
 .clist .cl-i { display: none; } .clist.open .cl-i { display: flex; }
 .cl-h { font-size: 13px; margin-bottom: 0; align-items: center; gap: 4px; } .clist.open .cl-h { margin-bottom: 4px; }
@@ -270,6 +277,14 @@
 .m4tog, .pz5 { pointer-events: auto; border: 0; background: #eef1f6; color: #1f3a68; border-radius: 8px; width: 26px; height: 22px; display: grid; place-items: center; cursor: pointer; padding: 0; }
 .m4box.closed .m4more { display: none; }
 .m4box.closed .m4btns { grid-template-columns: repeat(6, 1fr); gap: 3px; } .m4box.closed .m4btns .btn span { display: none; } .m4box.closed .m4btns .btn { padding: 5px 0 4px; }
+
+.pos3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pos3b { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border-radius: 18px; border: 3px solid #e4dccb; background: #fff; color: var(--navy); font: 800 15px Nunito, 'Baloo Bhaijaan 2', sans-serif; cursor: pointer; }
+.pos3b:hover { border-color: #ffc22e; } .pos3b.good { border-color: #5fbf2a; background: #f2fae6; color: #2f6a12; } .pos3b.bad { border-color: #ec5a50; background: #fde9e6; color: #8a1d14; }
+@media (max-width: 520px) { .pos3b svg { width: 64px; height: 64px; } }
+#clist { pointer-events: auto; cursor: pointer; } .map-hud { z-index: 9; }
+.lvp.pz-wide { display: grid; grid-template-columns: minmax(200px, 1fr) auto; grid-template-rows: auto auto auto 1fr; column-gap: 24px; row-gap: 10px; width: min(960px, 100%); align-items: start; }
+.lvp.pz-wide > * { grid-column: 1; } .lvp.pz-wide > .pz { grid-column: 2; grid-row: 1 / span 4; margin: 0; } .lvp.pz-wide h2 { font-size: 24px; } .lvp.pz-wide p { font-size: 15px; }
 </style></head><body>
 <meta charset="utf-8">
 <title>Junior Astronaut</title>
@@ -1679,9 +1694,10 @@ function updatePlayer(dt) {
   }
   if (G.scene === 'bedroom') { P.pos.x = Math.max(-3.65, Math.min(3.65, P.pos.x)); P.pos.z = Math.max(-3.65, Math.min(3.65, P.pos.z)); }
   else { const R = Math.hypot(P.pos.x, P.pos.z), lim = G.scene === 'yard' ? 13 : G.scene === 'level1' ? 80 : G.scene === 'academy' ? 12.6 : G.scene === 'cabin' ? 2.8 : G.scene === 'level2' ? 99 : 70; if (R > lim) { P.pos.x *= lim / R; P.pos.z *= lim / R; } }
-  const gy = groundY(P.pos.x, P.pos.z);
+  if (G.indoor) { const I = G.indoor; P.pos.x = Math.max(I.x0, Math.min(I.x1, P.pos.x)); P.pos.z = Math.max(I.z0, Math.min(I.z1, P.pos.z)); }
+  const gy = G.indoor ? G.indoor.y : groundY(P.pos.x, P.pos.z);
   // Mars has about a third of Earth's gravity: walking turns into long, floaty bounces
-  if (onMars && G.control && P.onGround && Math.hypot(P.vel.x, P.vel.z) > 1.2 && P.pos.y - gy < 0.02) { P.vy = 1.7; P.onGround = false; }
+  if (onMars && !G.indoor && G.control && P.onGround && Math.hypot(P.vel.x, P.vel.z) > 1.2 && P.pos.y - gy < 0.02) { P.vy = 1.7; P.onGround = false; }
   P.vy -= (onMars ? 3.71 : 9.81) * dt; P.pos.y += P.vy * dt;
   if (P.pos.y <= gy) { P.pos.y = gy; P.vy = 0; P.onGround = true; } else if (P.pos.y - gy > 0.05) P.onGround = false;
   P.speed = Math.hypot(P.vel.x, P.vel.z);
@@ -1696,6 +1712,7 @@ function followCamera(dt, snap = false) {
   if (G.scene === 'academy') { const r = Math.hypot(cx, cz); if (r > 12.8) { cx *= 12.8 / r; cz *= 12.8 / r; } cy = Math.min(cy, 6); }
   else if (G.scene === 'level2') { for (let i = 0; i < 12 && !L2.walkable(cx, cz, 0.15); i++) { cx = tgt.x + (cx - tgt.x) * 0.82; cz = tgt.z + (cz - tgt.z) * 0.82; } cy = Math.max(0.6, Math.min(cy, Math.hypot(P.pos.x, P.pos.z) > HR_ACADEMY ? 4.0 : 5.6)); }
   if (G.scene === 'cabin') { const r = Math.hypot(cx, cz); if (r > 3.15) { cx *= 3.15 / r; cz *= 3.15 / r; } const hd = Math.hypot(cx - tgt.x, cz - tgt.z); if (hd < 1.7) cy += (1.7 - hd) * 0.9; cy = Math.max(0.5, Math.min(cy, 2.95)); }
+  if (G.indoor) { const I = G.indoor; cx = Math.max(I.x0 - 0.2, Math.min(I.x1 + 0.2, cx)); cz = Math.max(I.z0 - 0.2, Math.min(I.z1 + 0.2, cz)); cy = Math.max(I.y + 0.6, Math.min(cy, I.y + 2.6)); }
   const want = new T.Vector3(cx, cy, cz);
   if (snap) camera.position.copy(want); else camera.position.lerp(want, Math.min(1, dt * 7));
   camera.lookAt(tgt);
@@ -2555,7 +2572,7 @@ const L1 = (() => {
   const bonusAt = (k) => (k === 'flamingo' ? { x: LAGOON.x, z: LAGOON.z, r: LAGOON.r + 3 } : k === 'dishes' ? { x: ALMA.x, z: ALMA.z, r: 11 } : { x: vic[0].position.x, z: vic[0].position.z, r: 5 });
   const stIc = (k, s = 22) => (STICK[k].svg ? ico(STICK[k].svg, s) : STICK[k].ic);
   function renderTray() {
-    const tray = $('tray'); tray.hidden = G.scene !== 'level1' || ['intro', 'puzzle', 'flyover', 'station'].includes(S.step);
+    const tray = $('tray'); tray.hidden = G.scene !== 'level1' || S.step !== 'rover';
     tray.innerHTML = [...SPOTS, ...BONUS].map((k) => { const got = S.found[k] || S.bonus[k]; return `<div class="slot2 ${STICK[k].bonus ? 'bonus' : ''} ${got ? 'got' : ''}" title="${got ? tr(STICK[k].t) : ''}">${got ? stIc(k) : STICK[k].bonus ? '★' : '?'}</div>`; }).join('');
   }
   function showSticker(k, label, onDone) {
@@ -2759,7 +2776,15 @@ const L1 = (() => {
     el.innerHTML = `<div class="eyebrow" id="pzE"></div><h2 id="pzT"></h2><p id="pzP"></p><div class="pz" id="pz" dir="ltr"><div class="pz-inner" id="pzIn"><div class="pz-board" id="pzB"></div></div></div><div class="actions"><span class="count" id="pzC"></span><span id="pzA"></span></div>`;
     mapURL = mapURL || mapData();
     const pz = $('pz'), inner = $('pzIn'), board = $('pzB'), gap = 12;
-    const Wp = Math.floor(Math.min(el.clientWidth - 44, Math.max(220, ov.clientHeight - 330))), pw = Wp / 4;
+    // measure the real space left on this screen, so the puzzle and its button always fit without scrolling
+    const cs = getComputedStyle(el), padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom), ocs = getComputedStyle(ov), ovPad = parseFloat(ocs.paddingTop) + parseFloat(ocs.paddingBottom);
+    const headH = () => $('pzE').offsetHeight + $('pzT').offsetHeight + $('pzP').offsetHeight + 70 + 4 * 14;
+    // a short, wide screen (a phone held sideways): text on the left, puzzle on the right
+    const wide = ov.clientHeight < 560 && ov.clientWidth > ov.clientHeight * 1.3; el.classList.toggle('pz-wide', wide);
+    let avail = ov.clientHeight - ovPad - padV - (wide ? 0 : headH());
+    if (!wide && avail < 300) { $('pzP').hidden = true; avail = ov.clientHeight - ovPad - padV - headH(); }
+    const Wp = Math.floor(Math.max(150, Math.min(wide ? ov.clientWidth * 0.5 : el.clientWidth - 44, avail - gap, 620))), pw = Wp / 4;
+    el.style.overflow = 'hidden';
     pz.style.width = Wp + 'px'; pz.style.height = pw * 4 + gap + 'px'; board.style.height = pw * 2 + 'px'; board.style.backgroundSize = `${pw}px ${pw}px`;
     S.pz = { n: 0, pw, Wp, done: 0 }; pzLabels();
     const cells = [0, 1, 2, 3, 4, 5, 6, 7]; for (let i = 7; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [cells[i], cells[j]] = [cells[j], cells[i]]; }
@@ -2782,6 +2807,7 @@ const L1 = (() => {
     }
   }
   function solved() {
+    $('lvPanel').style.overflow = '';
     S.pz.done = 1; pzLabels(); SFX.success();
     const { pw, Wp } = S.pz, cx = 0.3075 * Wp, cy = 0.633 * pw * 2;
     const dot = document.createElement('div'); dot.className = 'pz-dot'; dot.style.left = cx + 'px'; dot.style.top = cy + 'px'; $('pzIn').appendChild(dot);
@@ -2789,7 +2815,7 @@ const L1 = (() => {
     setTimeout(() => { if (!$('pz') || S.step !== 'puzzle') return; S.pz.done = 2; $('pzA').innerHTML = '<button class="btn green" id="pzGo"></button>'; $('pzGo').onclick = afterMap; pzLabels(); SFX.discover(); $('pzGo').focus({ preventScroll: true }); }, 2900);
   }
   function afterMap() {
-    $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; S.step = 'flyover'; setObjective(null);
+    $('lvPanel').style.overflow = ''; $('lvPanel').classList.remove('pz-wide'); $('lvOverlay').hidden = true; $('lvPanel').innerHTML = ''; S.step = 'flyover'; setObjective(null);
     // the UI steps away and the camera sweeps wide over the real desert
     const c0 = new T.Vector3(P.pos.x, P.pos.y, P.pos.z), from = camera.position.clone(); SFX.whoosh(1);
     runCine(7, (tt) => {
@@ -4683,19 +4709,22 @@ const LAUNCH = (() => {
   const fig = { stand: '<path d="M24 6a5 5 0 1 0 .1 0M24 16v16M24 32l-6 12M24 32l6 12M16 22h16" />', up: '<path d="M18 6a5 5 0 1 0 .1 0M18 16v16h14v12M18 22h12M34 14v24" />', rec: '<path d="M10 20a5 5 0 1 0 .1 0M15 24l20 8 6-10M20 30l6-8M6 34l36 4" />' };
   function renderBar() {
     posBar.dir = LANG === 'ar' ? 'rtl' : 'ltr';
-    posBar.innerHTML = `<div class="pb-t">${l3(L3.oPos)}</div><div class="pb-row">${['stand', 'up', 'rec'].map((k) => `<button class="pb-b ${S3.pose === k ? 'on' : ''}" data-k="${k}"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${fig[k]}</svg><b>${l3(L3[k])}</b></button>`).join('')}</div>`;
+    const fb = S3.tried ? (S3.pose === 'stand' ? L3.fStand : S3.pose === 'up' ? L3.fUp : L3.fRec) : L3.oPos;
+    posBar.innerHTML = `<div class="pb-t ${S3.tried ? (S3.pose === 'rec' ? 'good' : 'bad') : ''}">${l3(fb)}</div><div class="pb-row">${['stand', 'up', 'rec'].map((k) => `<button class="pb-b ${S3.tried && S3.pose === k ? (k === 'rec' ? 'good' : 'bad') : S3.pose === k ? 'on' : ''}" data-k="${k}"><b>${l3(L3[k])}</b></button>`).join('')}</div>`;
     posBar.querySelectorAll('.pb-b').forEach((b) => (b.onclick = () => choose(b.dataset.k)));
   }
   function choose(k) {
-    if (S3.phase !== 'train' || S3.lock) return; S3.pose = k; renderBar(); arrows(k); SFX.whoosh(0);
-    if (k !== 'rec') { say3(k === 'stand' ? L3.fStand : L3.fUp, 4200); return; }
-    S3.lock = true; SFX.success(); say3(L3.fRec, 4200);
-    setTimeout(() => { posBar.hidden = true; showDialog([{ who: 'nuri', expr: 'wow', en: 'Exactly! During launch, astronauts recline so the seat supports their bodies as the rocket speeds up.', ar: 'بالضبط! أثناء الإطلاق يستلقي رواد الفضاء، فيسند المقعد أجسامهم بينما يتسارع الصاروخ.' }], () => { S3.lock = false; while (fx.children.length) fx.remove(fx.children[0]); S3.walk = true; followCamera(0, true); setObjective('l3_oSeat'); S3.phase = 'toSeat'; giveControl(); }); }, 3600);
+    if (S3.phase !== 'train' || S3.lock) return; S3.pose = k; S3.tried = true; renderBar(); arrows(k); SFX.whoosh(0);
+    if (k !== 'rec') { SFX.nope(); return; }
+    S3.lock = true; SFX.success();
+    setTimeout(() => { posBar.hidden = true; S3.tried = false; girl.visible = true; nuri.visible = true; mini.scale.setScalar(1); showDialog([{ who: 'nuri', expr: 'wow', en: 'Exactly! During launch, astronauts recline so the seat supports their bodies as the rocket speeds up.', ar: 'بالضبط! أثناء الإطلاق يستلقي رواد الفضاء، فيسند المقعد أجسامهم بينما يتسارع الصاروخ.' }], () => { S3.lock = false; while (fx.children.length) fx.remove(fx.children[0]); S3.walk = true; followCamera(0, true); setObjective('l3_oSeat'); S3.phase = 'toSeat'; giveControl(); }); }, 3600);
   }
   function openTraining() {
     S3.phase = 'train'; S3.walk = false; G.control = false; P.vel.set(0, 0, 0); P.speed = 0; S3.pose = 'stand'; arrows('stand'); setObjective('l3_oPos');
-    camera.position.set(HOLO.x - 1.75, 1.35, HOLO.z + 0.2); camera.lookAt(HOLO.x, 1.15, HOLO.z);
-    renderBar(); posBar.hidden = false; SFX.open();
+    // the girl on her training seat fills the screen, seen from the side so each position is clear
+    girl.visible = false; nuri.visible = false; mini.scale.setScalar(1.25);
+    camera.position.set(HOLO.x - 2.0, 1.25, HOLO.z + 0.12); camera.lookAt(HOLO.x, 1.08, HOLO.z + 0.02);
+    S3.tried = false; renderBar(); posBar.hidden = false; SFX.open();
   }
   async function sitDown() {
     S3.phase = 'sitting'; G.control = false; S3.walk = false; setObjective(null);
@@ -4764,7 +4793,7 @@ const LAUNCH = (() => {
   }
   function update(dt, time) {
     if (G.scene !== 'cabin') return;
-    poseUpdate(dt); holoRing.rotation.z = time; holoBeam.material.opacity = S3.phase === 'train' ? 0.18 : 0.08; holoG.children[holoG.children.indexOf(mini)].rotation.y = S3.phase === 'train' ? 0 : Math.sin(time * 0.5) * 0.6;
+    poseUpdate(dt); holoRing.rotation.z = time; holoBeam.material.opacity = S3.phase === 'train' ? 0.04 : 0.08; holoG.children[holoG.children.indexOf(mini)].rotation.y = S3.phase === 'train' ? 0 : Math.sin(time * 0.5) * 0.6;
     objUpdate(dt);
     if (routeLine.visible) routeLine.material.color.setHSL(0.25, 0.7, 0.5 + 0.15 * Math.sin(time * 4));
     lockers.forEach((L, i) => { if (!L.strap.visible && S3.phase === 'float') L.lamp.color.set(Math.sin(time * 4 + i) > 0 ? 0xec5a50 : 0x5a1a14); });
@@ -5859,6 +5888,7 @@ const MARS = (() => {
   function action4() {
     if (S.over) return null;
     if (S.drive) return driveAction();
+    if (S.inHome) return homeAction();
     if (S.build) return 'placed';
     let best = null, bd = 2.2; for (const n of nodes) { if (n.taken) continue; const d = Math.hypot(P.pos.x - n.x, P.pos.z - n.z); if (d < bd) { bd = d; best = n; } }
     if (best) { const at = best.m.position; if (bagTotal() >= BAG_MAX) return { at, r: 2.2, text: `<span class="why r">${ico('pack', 18)} ${tr3(T4.full)}</span>`, fn: () => SFX.nope() }; return { at, r: 2.2, text: `${ico(best.kind, 20)} ${tr3(T4.pick)}`, fn: () => collect(best) }; }
@@ -5875,12 +5905,12 @@ const MARS = (() => {
       if (p.type === 'greenhouse') return (p.crop || 0) >= 1 ? { at: p.obj.position, r: 2.6, text: `${ico('greenhouse', 20)} ${tr3(T5.harvest)} <span class="why g">${tr3(T5.harvestD)}</span>`, fn: () => harvest(p) } : { at: p.obj.position, r: 2.6, text: `${ico('greenhouse', 20)} ${tr3(T5.growing, Math.round((p.crop || 0) * 100))}`, fn: () => SFX.nope() };
       if (p.type === 'lab' && S.store.sample + S.bag.sample > 0) return { at: p.obj.position, r: 2.6, text: `${ico('sample', 20)} ${tr3(T5.lab)} ×${S.store.sample + S.bag.sample}`, fn: () => study(p) };
     }
-    if (Math.hypot(P.pos.x - DOOR.x, P.pos.z - DOOR.z) < 1.8) return { at: new T.Vector3(DOOR.x, 0, DOOR.z), r: 1.8, text: `${ico('hab', 20)} ${tr3(HM.door)} <span class="why ${S.m.energy >= 4 ? 'y' : 'g'}">${ico('eat', 16)} ${ico('bed', 16)}</span>`, fn: homePanel };
+    if (Math.hypot(P.pos.x - DOOR.x, P.pos.z - DOOR.z) < 1.8) return { at: new T.Vector3(DOOR.x, 0, DOOR.z), r: 1.8, text: `${ico('hab', 20)} ${tr3(HM.door)} <span class="why ${S.m.energy >= 4 ? 'y' : 'g'}">${ico('eat', 16)} ${ico('bed', 16)}</span>`, fn: enterHome };
     if (Math.hypot(P.pos.x - tank.position.x, P.pos.z - tank.position.z) < 1.8) return { at: tank.position, r: 1.8, text: `${ico('tank', 20)} ${tr3(T4.tank)}`, fn: () => chip('tank', T4.tank, 3500) };
     return null;
   }
   function target4() {
-    if (S.hold || S.over || S.build) return null; const m = S.m;
+    if (S.hold || S.over || S.build || S.inHome) return null; const m = S.m;
     const door = { x: DOOR.x, z: DOOR.z + 0.6 }, at = (p) => ({ x: p.obj.position.x, z: p.obj.position.z });
     if (m.stormIn > 0 || m.stormOn > 0) return Math.hypot(P.pos.x, P.pos.z - 1.2) < 4.2 ? null : door;
     if (S.drive) { if (S.mis.rescue === 1) return { x: 0, z: 5 }; if (S.rv.bat < 1.5) return { x: GAR.x, z: GAR.z }; return null; }
@@ -5946,6 +5976,80 @@ const MARS = (() => {
       setTimeout(() => {
         m.energy = 10; m.hurt = 0; if (m.hearts < HMAX) m.hearts++; m.t = m.sol * SOL - 0.3; u.helmet.visible = true; z.hidden = true; S.sleeping = false;
         followCamera(0, true); fade(false); giveControl(); setTimeout(() => S && chip('sun', HM.morning, 3000), 900); renderMeters();
+      }, 2600);
+    }, false);
+  }
+  // ---------- home: walk inside the habitat, take off the helmet, eat at the table, sleep in the bed ----------
+  const HOME = { x: 50, z: -38 }, HW = 8, HD = 6; let homeG = null, homeY = 0; const homeSol = [];
+  const HI = { bed: L4('Sleep in the bed', 'نَم في السرير'), table: L4('Eat at the table', 'كُل على الطاولة'), out: L4('Go outside', 'اخرج'),
+    inT: L4('Home! There is air inside, so the helmet comes off.', 'البيت! يوجد هواء في الداخل، لذلك تُخلع الخوذة.'), outT: L4('Helmet on. Back to work!', 'لبست الخوذة. نعود إلى العمل!') };
+  function buildHome() {
+    homeY = groundY(HOME.x, HOME.z) + 0.05; const g = new T.Group(); g.position.set(HOME.x, homeY, HOME.z); W4.add(g); g.visible = false; homeG = g;
+    const wall = mat(0xf3ede2, { roughness: 0.9 }), trim = mat(0xec8a3c, { roughness: 0.6 }), wood = mat(0xb07a4a, { roughness: 0.8 });
+    mesh(new T.BoxGeometry(HW, 0.1, HD), mat(0xcdb89c, { roughness: 0.9 }), 0, -0.05, 0, g);
+    mesh(new T.CylinderGeometry(1.4, 1.4, 0.02, 40), mat(0x5fb8ff, { roughness: 0.9 }), 0.3, 0.01, 0.4, g);
+    mesh(new T.BoxGeometry(HW, 0.1, HD), mat(0xe8e0d0), 0, 3, 0, g);
+    mesh(new T.BoxGeometry(HW, 3, 0.12), wall, 0, 1.5, -HD / 2, g); mesh(new T.BoxGeometry(0.12, 3, HD), wall, -HW / 2, 1.5, 0, g); mesh(new T.BoxGeometry(0.12, 3, HD), wall, HW / 2, 1.5, 0, g);
+    mesh(new T.BoxGeometry(HW / 2 - 0.7, 3, 0.12), wall, -(HW / 4 + 0.35), 1.5, HD / 2, g); mesh(new T.BoxGeometry(HW / 2 - 0.7, 3, 0.12), wall, HW / 4 + 0.35, 1.5, HD / 2, g); mesh(new T.BoxGeometry(1.4, 0.75, 0.12), wall, 0, 2.62, HD / 2, g);
+    mesh(new T.BoxGeometry(1.3, 2.2, 0.05), new T.MeshStandardMaterial({ color: 0x9ccc3c, emissive: 0x9ccc3c, emissiveIntensity: 0.35 }), 0, 1.1, HD / 2 + 0.02, g);
+    mesh(new T.BoxGeometry(HW, 0.12, 0.14), trim, 0, 0.06, -HD / 2 + 0.08, g);
+    // a round window with Mars outside
+    const win = canvasTex(256, 256, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#f2c49a'); gr.addColorStop(0.6, '#e08a5a'); gr.addColorStop(0.61, '#b8603a'); gr.addColorStop(1, '#9a4a2a'); c.fillStyle = gr; c.fillRect(0, 0, w, h); c.fillStyle = '#c96e44'; c.beginPath(); c.moveTo(0, h * 0.62); c.quadraticCurveTo(w * 0.3, h * 0.45, w * 0.55, h * 0.6); c.quadraticCurveTo(w * 0.8, h * 0.5, w, h * 0.62); c.lineTo(w, h); c.lineTo(0, h); c.fill(); c.fillStyle = '#fff6d0'; c.beginPath(); c.arc(w * 0.72, h * 0.25, 12, 0, 7); c.fill(); });
+    mesh(new T.CircleGeometry(0.75, 40), new T.MeshBasicMaterial({ map: win }), 1.2, 1.75, -HD / 2 + 0.07, g, false); mesh(new T.TorusGeometry(0.78, 0.07, 10, 40), trim, 1.2, 1.75, -HD / 2 + 0.08, g);
+    // the bed
+    const BX = -2.75, BZ = -1.4;
+    mesh(new T.BoxGeometry(1.5, 0.36, 2.5), wood, BX, 0.18, BZ, g); mesh(new T.BoxGeometry(1.4, 0.18, 2.4), mat(0xffffff, { roughness: 0.8 }), BX, 0.45, BZ, g);
+    mesh(new T.BoxGeometry(1.44, 0.1, 1.5), mat(0xb07aff, { roughness: 0.85 }), BX, 0.56, BZ + 0.45, g); mesh(new T.BoxGeometry(0.9, 0.16, 0.45), mat(0xfffaf0), BX, 0.6, BZ - 0.92, g);
+    mesh(new T.BoxGeometry(1.5, 1.0, 0.12), wood, BX, 0.6, BZ - 1.28, g);
+    // the table, a bowl of food and two stools
+    const TX = 2.4, TZ = -0.6;
+    mesh(new T.CylinderGeometry(0.75, 0.75, 0.08, 28), wood, TX, 0.76, TZ, g); mesh(new T.CylinderGeometry(0.08, 0.12, 0.74, 12), wood, TX, 0.37, TZ, g);
+    mesh(new T.SphereGeometry(0.2, 18, 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mat(0xec8a3c), TX, 1.0, TZ, g); mesh(new T.CylinderGeometry(0.17, 0.17, 0.03, 18), mat(0x9ccc3c), TX, 0.95, TZ, g);
+    [[-0.95, 0.2], [0.2, 0.95]].forEach(([dx, dz]) => mesh(new T.CylinderGeometry(0.25, 0.25, 0.45, 16), trim, TX + dx, 0.23, TZ + dz, g));
+    // a plant, a shelf and a warm lamp
+    mesh(new T.CylinderGeometry(0.22, 0.17, 0.4, 14), trim, 3.4, 0.2, -2.5, g); mesh(new T.SphereGeometry(0.35, 14, 10), mat(0x5fbf2a), 3.4, 0.62, -2.5, g);
+    mesh(new T.BoxGeometry(1.6, 0.08, 0.35), wood, -0.6, 1.6, -HD / 2 + 0.22, g); mesh(new T.BoxGeometry(0.3, 0.38, 0.25), mat(0x3a9cf0), -1.1, 1.83, -HD / 2 + 0.22, g); mesh(new T.SphereGeometry(0.16, 14, 10), mat(0xd8573a), -0.3, 1.8, -HD / 2 + 0.22, g);
+    mesh(new T.SphereGeometry(0.22, 16, 12), new T.MeshBasicMaterial({ color: 0xfff1c8 }), 0, 2.78, 0, g, false);
+    const L = new T.PointLight(0xffe6c0, 1.4, 14, 1.2); L.position.set(0, 2.5, 0); g.add(L); const L2 = new T.PointLight(0xffffff, 0.5, 10, 1.5); L2.position.set(0, 2, 2); g.add(L2);
+    homeSol.push({ x: HOME.x + BX, z: HOME.z + BZ, w: 1.5, d: 2.5 }, { x: HOME.x + TX, z: HOME.z + TZ, r: 0.8 }, { x: HOME.x + 3.4, z: HOME.z - 2.5, r: 0.35 });
+    homeG.userData.bed = { x: HOME.x + BX, z: HOME.z + BZ }; homeG.userData.table = { x: HOME.x + TX, z: HOME.z + TZ };
+  }
+  function enterHome() {
+    if (!homeG) buildHome(); G.control = false; fade(true); SFX.open();
+    setTimeout(() => {
+      homeG.visible = true; S.inHome = true; solids.push(...homeSol);
+      G.indoor = { y: homeY, x0: HOME.x - HW / 2 + 0.45, x1: HOME.x + HW / 2 - 0.45, z0: HOME.z - HD / 2 + 0.45, z1: HOME.z + HD / 2 - 0.45 };
+      P.pos.set(HOME.x, homeY, HOME.z + HD / 2 - 0.7); P.vel.set(0, 0, 0); P.vy = 0; P.yaw = Math.PI; girl.position.copy(P.pos); girl.rotation.set(0, Math.PI, 0);
+      girl.userData.helmet.visible = false; setExpr(girl, 'happy'); camYaw = 0; camPitch = 0.55; camDist = 4.4; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
+      fade(false); giveControl(); chip('helmet', HI.inT, 3200);
+    }, 650);
+  }
+  function exitHome() {
+    G.control = false; fade(true); SFX.open();
+    setTimeout(() => {
+      homeG.visible = false; S.inHome = false; G.indoor = null; homeSol.forEach((h) => { const i = solids.indexOf(h); if (i >= 0) solids.splice(i, 1); });
+      girl.userData.helmet.visible = true; girl.rotation.set(0, 0, 0);
+      P.pos.set(DOOR.x, groundY(DOOR.x, DOOR.z + 1.4), DOOR.z + 1.4); P.vel.set(0, 0, 0); P.yaw = 0; girl.position.copy(P.pos); camYaw = 0; camPitch = 0.4; camDist = 6; followCamera(0, true); updateNuriFollow(1); nuri.position.copy(nuriTarget);
+      fade(false); giveControl(); chip('helmet', HI.outT, 2400);
+    }, 650);
+  }
+  function homeAction() {
+    const u = homeG.userData, d = (q) => Math.hypot(P.pos.x - q.x, P.pos.z - q.z), door = { x: HOME.x, z: HOME.z + HD / 2 - 0.4 };
+    const late = (S.m.t % SOL) > DAY - 45;
+    if (d(door) < 1.4) return { at: new T.Vector3(door.x, homeY, door.z), r: 1.4, text: `${ico('door', 20)} ${tr3(HI.out)}`, fn: exitHome };
+    if (d(u.bed) < 1.9) return { at: new T.Vector3(u.bed.x, homeY, u.bed.z), r: 1.9, text: `${ico('bed', 20)} ${tr3(HI.bed)} <span class="why ${late ? 'g' : 'y'}">${tr3(late ? HM.sleepD : HM.early)}</span>`, fn: () => (late ? sleepBed() : (SFX.pick(), chip('sun', HM.early, 2600))) };
+    if (d(u.table) < 1.7) return { at: new T.Vector3(u.table.x, homeY, u.table.z), r: 1.7, text: `${ico('eat', 20)} ${tr3(HI.table)} <span class="why y">${tr3(T4.eatD)}</span>`, fn: eat };
+    return null;
+  }
+  function sleepBed() {
+    const m = S.m, b = homeG.userData.bed; G.control = false; S.sleeping = true; SFX.open();
+    const lie = () => { girl.position.set(b.x, homeY + 0.55, b.z + 0.7); girl.rotation.set(-Math.PI / 2, 0, 0); };
+    runCine(2.6, (tt) => { lie(); camera.position.set(b.x + 2.4, homeY + 2.1, b.z + 1.4); camera.lookAt(b.x, homeY + 0.6, b.z - 0.2); }, () => {
+      fade(true); const z = $('sleepZ'); z.querySelector('b').textContent = tr3(HM.night); z.hidden = false;
+      setTimeout(() => {
+        m.energy = 10; m.hurt = 0; if (m.hearts < HMAX) m.hearts++; m.t = m.sol * SOL - 0.3; z.hidden = true; S.sleeping = false;
+        girl.rotation.set(0, 0, 0); P.pos.set(b.x + 1.3, homeY, b.z + 0.6); P.yaw = Math.PI / 2; girl.position.copy(P.pos); camYaw = -Math.PI / 2 + 0.6; followCamera(0, true);
+        fade(false); giveControl(); setTimeout(() => S && chip('sun', HM.morning, 3000), 900); renderMeters();
       }, 2600);
     }, false);
   }
@@ -6811,7 +6915,7 @@ const GUIDE = (() => {
   }
   $('mmap').addEventListener('click', () => $('clist').classList.toggle('open')); $('clist').addEventListener('click', () => $('clist').classList.toggle('open'));
   function update(dt, time) {
-    SHOP.hud();
+    SHOP.hud(); if (G.scene !== 'level1' && !$('tray').hidden) $('tray').hidden = true;
     const p = prov(), hud = $('mapHud');
     const show = !!p && G.scene !== 'title' && !G.cine && $('lvOverlay').hidden;
     hud.hidden = !show; if (show) { hud.dir = LANG === 'ar' ? 'rtl' : 'ltr'; draw(p, time); list(p); }
