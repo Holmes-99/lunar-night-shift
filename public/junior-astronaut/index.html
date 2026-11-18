@@ -180,7 +180,7 @@
 .pb-b { all: unset; cursor: pointer; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 6px; border-radius: 16px; background: #fff; border: 3px solid #d9d2c3; color: var(--navy); text-align: center; }
 .pb-b b { font-size: 17px; padding: 6px 0; } .pb-b.on { border-color: #ec8a3c; background: #fff3e6; } .pb-b.good { border-color: #5fbf2a; background: #eef9e4; color: #2f6a12; } .pb-b.bad { border-color: #ec5a50; background: #fdeceb; color: #8a1d14; }
 .pos-bar .pb-t.good { color: #2f6a12; } .pos-bar .pb-t.bad { color: #8a1d14; }
-.pl-cv { position: static !important; inset: auto !important; width: 100% !important; height: auto !important; border-radius: 18px; touch-action: none; cursor: pointer; display: block; flex: none; }
+.pl-cv { position: static !important; inset: auto !important; max-width: 100%; margin: 0 auto; border-radius: 18px; touch-action: none; cursor: pointer; display: block; flex: none; }
 .pl-msg { font-weight: 800; color: var(--navy); background: #eef4ff; border-radius: 12px; padding: 8px 12px; text-align: center; }
 .pl-msg.bad { background: #fde3e0; color: #8a1d14; } .pl-msg.good { background: #f2fae6; color: #2f6a12; }
 #plGo.pl-ok { background: #2f9a4a; box-shadow: 0 5px 0 #1f6a32; animation: ckPulse 1s ease-in-out infinite; }
@@ -3276,7 +3276,7 @@ const L2 = (() => {
       const f = R1.fly; f.k = Math.min(1, f.k + dt / TF);
       const a = (PL.earth.r + PL.mars.r) / 2, cc = a - PL.earth.r, b = Math.sqrt(a * a - cc * cc), E = Math.PI * f.k, lx = -cc + a * Math.cos(E), ly = b * Math.sin(E), ca = Math.cos(f.a0), sa = Math.sin(f.a0);
       R1.ship.position.set(lx * ca - ly * sa, 0.98, -(lx * sa + ly * ca)); f.pts.push(R1.ship.position.clone()); R1.trail.geometry.setFromPoints(f.pts);
-      if (f.k >= 1) { const hit = angDiff(aM, f.a0 + Math.PI) < 0.42; R1.fly = null; R1.ship.visible = false; if (hit && !R.done[0]) { burst(R1.o.localToWorld(orbitPos(PL.mars.r, aM)), 0xffd27a, 30, 1.2, 1); cap(tr(RT.hit), 2000); R.done[0] = true; R1.screen.userData.redraw(); setTimeout(() => done(0), 600); } else if (!hit) { mistake(); cap(tr(RT.miss), 2600); } }
+      if (f.k >= 1) { const hit = angDiff(aM, f.a0 + Math.PI) < 0.42; R1.fly = null; R1.ship.visible = false; if (hit && !R.done[0]) { burst(R1.o.localToWorld(orbitPos(PL.mars.r, aM)), 0xffd27a, 30, 1.2, 1); cap(tr(RT.hit), 2000); R.done[0] = true; R1.screen.userData.redraw(); setTimeout(() => done(0), S.panel ? 2300 : 600); } else if (!hit) { mistake(); cap(tr(RT.miss), 2600); } }
     }
     for (const k in PL) { R1.p[k].position.copy(orbitPos(PL[k].r, R1.a[k])); if (R1.tag[k]) R1.tag[k].position.copy(R1.p[k].position).add(new T.Vector3(0, 0.42, 0)); }
     R1.p.earth.rotation.y = time;
@@ -3301,7 +3301,7 @@ const L2 = (() => {
     fly: { en: 'This is our path: the shortest trip. About 7 months!', ar: 'هذا مسارنا: أقصر رحلة. نحو 7 أشهر!' },
     done: { en: 'Route saved! Earth to Mars in about 7 months.', ar: 'حُفظ المسار! من الأرض إلى المريخ في نحو 7 أشهر.' },
     st1: { en: 'Start', ar: 'البداية' }, st2: { en: 'Destination', ar: 'الوجهة' }, st3: { en: 'Path', ar: 'المسار' },
-    long: { en: 'Longer path', ar: 'مسار أطول' }, short: { en: 'Shortest path', ar: 'أقصر مسار' },
+    long: { en: 'Longer path', ar: 'مسار أطول' }, there: { en: 'Mars in 7 months', ar: 'المريخ بعد 7 أشهر' }, short: { en: 'Shortest path', ar: 'أقصر مسار' },
   };
   function openPlanner() {
     panel((el) => {
@@ -3310,7 +3310,11 @@ const L2 = (() => {
       const cv = el.querySelector('#plCv'), c = cv.getContext('2d'), W = 560, H = 400, cx = W / 2, cy = H / 2, sc = 170 / PL.mars.r, FN = '800 16px Nunito, "Baloo Bhaijaan 2", sans-serif';
       const P2 = (r, a) => [cx + Math.cos(a) * r * sc, cy - Math.sin(a) * r * sc];
       const stars = Array.from({ length: 90 }, () => [Math.random() * W, Math.random() * H, Math.random()]);
-      const ph = { k: R.done[0] ? 'done' : R1.tag.mars ? 'wait' : R1.tag.earth ? 'mars' : 'earth', t: 0 };
+      const ph = { k: R.done[0] ? 'done' : R1.tag.mars ? 'wait' : R1.tag.earth ? 'mars' : 'earth', t: 0, freeze: null, a0: null };
+      // fit the map to the space left on this screen (phones and tablets too)
+      const fitMap = () => { let w = Math.min(el.clientWidth - 44, 560), h = w * H / W; cv.style.width = w + 'px'; cv.style.height = h + 'px'; const over = el.scrollHeight - el.clientHeight; if (over > 0) { h = Math.max(150, h - over - 4); w = h * W / H; cv.style.width = w + 'px'; cv.style.height = h + 'px'; } };
+      // planet angles as drawn: frozen while the path is explained and after arrival, so the line always meets Mars
+      const A = (k) => (ph.freeze ? ph.freeze[k] : R1.a[k]);
       let tip = null, tipT = null;
       const setTip = (t) => { tip = t; clearTimeout(tipT); tipT = setTimeout(() => (tip = null), 2600); };
       // the shortest path: half an ellipse that touches Earth's orbit and Mars's orbit
@@ -3328,11 +3332,11 @@ const L2 = (() => {
       function draw() {
         if (!el.querySelector('#plCv')) return;
         const dt = 0.033; ph.t += dt;
-        if (ph.k === 'wait') { const d = angDiff(R1.a.mars, R1.a.earth + LEAD); if (d < 0.06) { R1.a.mars = R1.a.earth + LEAD; ph.k = 'paths'; ph.t = 0; R1.step = 3; R1.screen.userData.redraw(); goal(); SFX.whoosh(0); } else for (const k in PL) R1.a[k] += wE * PL[k].w * dt * 9; }
-        if (ph.k === 'paths') { R1.a.mars = R1.a.earth + LEAD; if (ph.t > 4.2) { ph.k = 'fly'; ph.t = 0; R1.btn.press(); SFX.whoosh(1); R1.fly = { k: 0, a0: R1.a.earth, pts: [] }; R1.ship.visible = true; } }
-        if (ph.k === 'fly' && R.done[0]) { ph.k = 'done'; ph.t = 0; }
+        if (ph.k === 'wait') { const d = angDiff(R1.a.mars, R1.a.earth + LEAD); if (d < 0.06) { R1.a.mars = R1.a.earth + LEAD; ph.k = 'paths'; ph.t = 0; ph.freeze = Object.assign({}, R1.a); ph.a0 = R1.a.earth; R1.step = 3; R1.screen.userData.redraw(); goal(); SFX.whoosh(0); } else for (const k in PL) R1.a[k] += wE * PL[k].w * dt * 9; }
+        if (ph.k === 'paths') { if (ph.t > 4.2) { Object.assign(R1.a, ph.freeze); ph.freeze = null; ph.k = 'fly'; ph.t = 0; R1.btn.press(); SFX.whoosh(1); R1.fly = { k: 0, a0: ph.a0, pts: [] }; R1.ship.visible = true; } else Object.assign(R1.a, ph.freeze); }
+        if (ph.k === 'fly' && R.done[0]) { ph.k = 'done'; ph.t = 0; ph.freeze = Object.assign({}, R1.a); }
         if (ph.k !== lastK) { lastK = ph.k; steps(); }
-        const aE = ph.k === 'fly' ? R1.fly ? R1.fly.a0 : R1.a.earth : R1.a.earth;
+        const aE = ph.a0 != null ? ph.a0 : R1.a.earth;
         c.fillStyle = '#060b22'; c.fillRect(0, 0, W, H); stars.forEach(([x, y, b]) => { c.fillStyle = `rgba(255,255,255,${0.3 + b * 0.6})`; c.fillRect(x, y, 1.6, 1.6); });
         for (const k in PL) { c.strokeStyle = 'rgba(143,184,255,.35)'; c.lineWidth = 1.5; c.beginPath(); c.arc(cx, cy, PL[k].r * sc, 0, 7); c.stroke(); }
         if (ph.k === 'paths') {
@@ -3341,9 +3345,11 @@ const L2 = (() => {
           if (k2 > 0) { stroke(hoh, aE, k2, '#ffc22e', 5); if (k2 >= 1) { const [x, y] = hoh(aE, 0.5); label(tr(PLN.short), x, y + (y > cy ? 30 : -30), '#ffc22e'); } }
         }
         if (ph.k === 'fly' || ph.k === 'done') { stroke(hoh, aE, 1, ph.k === 'done' ? '#9ccc3c' : '#ffc22e', 5); }
+        // where Mars will be when the ship arrives
+        if (ph.k === 'paths' || ph.k === 'fly') { const [x, y] = hoh(aE, 1); c.setLineDash([5, 5]); c.strokeStyle = 'rgba(255,140,110,.9)'; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 15, 0, 7); c.stroke(); c.setLineDash([]); label(tr(PLN.there), x, y + (y < cy ? 34 : -34), '#ffb0a0'); }
         const g = c.createRadialGradient(cx, cy, 2, cx, cy, 30); g.addColorStop(0, '#fff6c0'); g.addColorStop(1, 'rgba(255,200,80,0)'); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, 30, 0, 7); c.fill(); c.fillStyle = '#ffd27a'; c.beginPath(); c.arc(cx, cy, 16, 0, 7); c.fill();
         for (const k in PL) {
-          const [x, y] = P2(PL[k].r, R1.a[k]), rad = 7 + PL[k].s * 40, want = (ph.k === 'earth' && k === 'earth') || (ph.k === 'mars' && k === 'mars');
+          const [x, y] = P2(PL[k].r, A(k)), rad = 7 + PL[k].s * 40, want = (ph.k === 'earth' && k === 'earth') || (ph.k === 'mars' && k === 'mars');
           if (want) { c.strokeStyle = `rgba(255,255,255,${0.35 + 0.35 * Math.sin(ph.t * 5)})`; c.lineWidth = 3; c.beginPath(); c.arc(x, y, rad + 12, 0, 7); c.stroke(); }
           c.fillStyle = '#' + PL[k].col.toString(16).padStart(6, '0'); c.beginPath(); c.arc(x, y, rad, 0, 7); c.fill();
           if (R1.tag[k]) { c.strokeStyle = '#fff'; c.lineWidth = 3; c.beginPath(); c.arc(x, y, rad + 6, 0, 7); c.stroke(); c.fillStyle = '#fff'; c.font = FN; c.textAlign = 'center'; c.fillText(tr(PL[k].n), x, y - rad - 12); }
@@ -3360,8 +3366,8 @@ const L2 = (() => {
       });
       el.querySelector('#plClose').onclick = closePanel;
       let closing = false;
-      const iv = setInterval(() => { draw(); if (R.done[0] && !closing) { closing = true; setTimeout(() => { if (S.panel) closePanel(); }, 2600); } }, 33);
-      S.cleanup = () => { clearInterval(iv); clearTimeout(tipT); }; steps(); draw();
+      const iv = setInterval(() => { draw(); if (R.done[0] && !closing) { closing = true; setTimeout(() => { if (S.panel) closePanel(); }, 1800); } }, 33);
+      S.cleanup = () => { clearInterval(iv); clearTimeout(tipT); }; steps(); draw(); fitMap(); requestAnimationFrame(fitMap);
     });
   }
   function r1Acts() {
