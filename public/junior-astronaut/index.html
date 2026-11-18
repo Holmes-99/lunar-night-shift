@@ -2572,7 +2572,7 @@ const L1 = (() => {
   const bonusAt = (k) => (k === 'flamingo' ? { x: LAGOON.x, z: LAGOON.z, r: LAGOON.r + 3 } : k === 'dishes' ? { x: ALMA.x, z: ALMA.z, r: 11 } : { x: vic[0].position.x, z: vic[0].position.z, r: 5 });
   const stIc = (k, s = 22) => (STICK[k].svg ? ico(STICK[k].svg, s) : STICK[k].ic);
   function renderTray() {
-    const tray = $('tray'); tray.hidden = G.scene !== 'level1' || S.step !== 'rover';
+    const tray = $('tray'); tray.hidden = true; // the discovery tray is gone: the task list already counts the research points
     tray.innerHTML = [...SPOTS, ...BONUS].map((k) => { const got = S.found[k] || S.bonus[k]; return `<div class="slot2 ${STICK[k].bonus ? 'bonus' : ''} ${got ? 'got' : ''}" title="${got ? tr(STICK[k].t) : ''}">${got ? stIc(k) : STICK[k].bonus ? '★' : '?'}</div>`; }).join('');
   }
   function showSticker(k, label, onDone) {
